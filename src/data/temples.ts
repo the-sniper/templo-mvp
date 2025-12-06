@@ -22,6 +22,15 @@ export interface Temple {
   deity: string;
   poojaTimings: PoojaTiming[];
   announcements: Announcement[];
+  contact?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export const temples: Temple[] = [
@@ -33,6 +42,12 @@ export const temples: Temple[] = [
     description: 'One of the most sacred and visited Hindu temples in the world, dedicated to Lord Venkateswara, a form of Vishnu.',
     image: '/temples/tirupati.jpg',
     deity: 'Lord Venkateswara',
+    contact: {
+      phone: '+91 877 2277777',
+      email: 'info@tirumala.org',
+      website: 'https://tirumala.org',
+    },
+    coordinates: { lat: 13.6833, lng: 79.3500 },
     poojaTimings: [
       { name: 'Suprabhatam', time: '3:00 AM', description: 'Morning awakening ritual' },
       { name: 'Thomala Seva', time: '4:00 AM', description: 'Flower garland offering' },
@@ -54,6 +69,12 @@ export const temples: Temple[] = [
     description: 'The holiest Gurdwara of Sikhism, known as Sri Harmandir Sahib, featuring stunning gold-plated architecture.',
     image: '/temples/golden-temple.jpg',
     deity: 'Guru Granth Sahib',
+    contact: {
+      phone: '+91 183 2553957',
+      email: 'info@sgpc.net',
+      website: 'https://sgpc.net',
+    },
+    coordinates: { lat: 31.6200, lng: 74.8765 },
     poojaTimings: [
       { name: 'Prakash', time: '4:00 AM', description: 'Morning opening ceremony' },
       { name: 'Morning Kirtan', time: '4:30 AM - 9:00 AM', description: 'Devotional singing' },
@@ -74,6 +95,12 @@ export const temples: Temple[] = [
     description: 'Historic Hindu temple dedicated to Goddess Meenakshi and Lord Sundareswarar, famous for its magnificent gopurams.',
     image: '/temples/meenakshi.jpg',
     deity: 'Goddess Meenakshi',
+    contact: {
+      phone: '+91 452 2349890',
+      email: 'info@meenakshitemple.org',
+      website: 'https://maduraimeenakshi.org',
+    },
+    coordinates: { lat: 9.9195, lng: 78.1193 },
     poojaTimings: [
       { name: 'Morning Opening', time: '5:00 AM', description: 'Temple doors open' },
       { name: 'Kalasanthi Pooja', time: '8:00 AM', description: 'Mid-morning worship' },
@@ -95,6 +122,12 @@ export const temples: Temple[] = [
     description: 'One of the twelve Jyotirlingas, this ancient temple dedicated to Lord Shiva sits on the banks of the holy Ganges.',
     image: '/temples/kashi.jpg',
     deity: 'Lord Shiva',
+    contact: {
+      phone: '+91 542 2392629',
+      email: 'info@shrikashivishwanath.org',
+      website: 'https://shrikashivishwanath.org',
+    },
+    coordinates: { lat: 25.3109, lng: 83.0107 },
     poojaTimings: [
       { name: 'Mangala Aarti', time: '3:00 AM', description: 'First aarti of the day' },
       { name: 'Bhog Aarti', time: '11:15 AM', description: 'Mid-day offering' },
@@ -115,6 +148,12 @@ export const temples: Temple[] = [
     description: 'Sacred temple dedicated to Lord Jagannath, famous for the annual Rath Yatra festival.',
     image: '/temples/jagannath.jpg',
     deity: 'Lord Jagannath',
+    contact: {
+      phone: '+91 6752 222002',
+      email: 'info@jagannath.nic.in',
+      website: 'https://jagannath.nic.in',
+    },
+    coordinates: { lat: 19.8048, lng: 85.8181 },
     poojaTimings: [
       { name: 'Dwara Phita', time: '5:00 AM', description: 'Opening of doors' },
       { name: 'Mailam', time: '6:00 AM', description: 'Cleaning ritual' },
@@ -136,6 +175,12 @@ export const temples: Temple[] = [
     description: 'Famous Ganesh temple known for wish-fulfilling prayers, visited by millions annually.',
     image: '/temples/siddhivinayak.jpg',
     deity: 'Lord Ganesha',
+    contact: {
+      phone: '+91 22 24373626',
+      email: 'info@siddhivinayak.org',
+      website: 'https://siddhivinayak.org',
+    },
+    coordinates: { lat: 19.0169, lng: 72.8302 },
     poojaTimings: [
       { name: 'Morning Pooja', time: '5:30 AM', description: 'First darshan' },
       { name: 'Abhishekam', time: '7:00 AM', description: 'Holy bathing ritual' },

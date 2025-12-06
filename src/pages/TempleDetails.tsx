@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
@@ -184,6 +184,104 @@ const TempleDetails = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Contact Information */}
+          {temple.contact && (
+            <Card className="border-border bg-card">
+              <CardHeader className="border-b border-border bg-accent/50">
+                <CardTitle className="flex items-center gap-2 font-serif text-xl">
+                  <Phone className="h-5 w-5 text-primary" />
+                  Contact Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 space-y-4">
+                {temple.contact.phone && (
+                  <a 
+                    href={`tel:${temple.contact.phone}`}
+                    className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                      <Phone className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Phone</p>
+                      <p className="font-medium">{temple.contact.phone}</p>
+                    </div>
+                  </a>
+                )}
+                {temple.contact.email && (
+                  <a 
+                    href={`mailto:${temple.contact.email}`}
+                    className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                      <Mail className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="font-medium">{temple.contact.email}</p>
+                    </div>
+                  </a>
+                )}
+                {temple.contact.website && (
+                  <a 
+                    href={temple.contact.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                      <Globe className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Website</p>
+                      <p className="font-medium flex items-center gap-1">
+                        {temple.contact.website.replace('https://', '')}
+                        <ExternalLink className="h-3 w-3" />
+                      </p>
+                    </div>
+                  </a>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Location Map */}
+          {temple.coordinates && (
+            <Card className="border-border bg-card">
+              <CardHeader className="border-b border-border bg-accent/50">
+                <CardTitle className="flex items-center gap-2 font-serif text-xl">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  Location
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="aspect-video overflow-hidden rounded-lg bg-muted">
+                  <iframe
+                    title={`${temple.name} location`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${temple.coordinates.lat},${temple.coordinates.lng}&zoom=15`}
+                  />
+                </div>
+                <div className="mt-3">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="sm" className="w-full gap-2">
+                      <ExternalLink className="h-4 w-4" />
+                      Open in Google Maps
+                    </Button>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
 

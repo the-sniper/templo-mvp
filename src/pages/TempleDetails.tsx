@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
@@ -104,18 +104,32 @@ const TempleDetails = () => {
         {/* Action Bar */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
           <p className="max-w-2xl text-muted-foreground">{temple.description}</p>
-          <Button
-            onClick={() => toggleFollowTemple(temple.id)}
-            variant={following ? "default" : "outline"}
-            size="lg"
-            className={cn(
-              "gap-2",
-              following && "bg-primary text-primary-foreground"
-            )}
-          >
-            <Heart className={cn("h-5 w-5", following && "fill-current")} />
-            {following ? 'Following' : 'Follow Temple'}
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to={`/donate/${temple.id}`}>
+              <Button variant="outline" size="lg" className="gap-2">
+                <CreditCard className="h-5 w-5" />
+                Donate
+              </Button>
+            </Link>
+            <Link to={`/book/${temple.id}`}>
+              <Button variant="outline" size="lg" className="gap-2">
+                <CalendarCheck className="h-5 w-5" />
+                Book Slot
+              </Button>
+            </Link>
+            <Button
+              onClick={() => toggleFollowTemple(temple.id)}
+              variant={following ? "default" : "outline"}
+              size="lg"
+              className={cn(
+                "gap-2",
+                following && "bg-primary text-primary-foreground"
+              )}
+            >
+              <Heart className={cn("h-5 w-5", following && "fill-current")} />
+              {following ? 'Following' : 'Follow Temple'}
+            </Button>
+          </div>
         </div>
 
         {/* Content Grid */}

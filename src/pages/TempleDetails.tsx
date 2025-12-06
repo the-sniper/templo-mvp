@@ -75,8 +75,8 @@ const TempleDetails = () => {
           Back to all temples
         </Link>
 
-        {/* Hero Image */}
-        <div className="relative mb-8 aspect-[21/9] overflow-hidden rounded-xl bg-muted">
+        {/* Hero Image - Mobile Optimized */}
+        <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl bg-muted sm:mb-8 sm:aspect-[21/9]">
           <img
             src={temple.image}
             alt={temple.name}
@@ -86,54 +86,54 @@ const TempleDetails = () => {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <Badge variant="secondary" className="mb-3 bg-card/90 backdrop-blur">
+          <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+            <Badge variant="secondary" className="mb-2 bg-card/90 text-xs backdrop-blur sm:mb-3 sm:text-sm">
               <Sparkles className="mr-1 h-3 w-3" />
               {temple.deity}
             </Badge>
-            <h1 className="mb-2 font-serif text-3xl font-bold text-primary-foreground sm:text-4xl md:text-5xl">
+            <h1 className="mb-1 font-serif text-2xl font-bold text-primary-foreground sm:mb-2 sm:text-4xl md:text-5xl">
               {temple.name}
             </h1>
-            <div className="flex items-center gap-2 text-primary-foreground/80">
+            <div className="flex items-center gap-2 text-sm text-primary-foreground/80 sm:text-base">
               <MapPin className="h-4 w-4" />
               <span>{temple.location}</span>
             </div>
           </div>
         </div>
 
-        {/* Action Bar */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
-          <p className="max-w-2xl text-muted-foreground">{temple.description}</p>
-          <div className="flex flex-wrap items-center gap-3">
-            <Link to={`/donate/${temple.id}`}>
-              <Button variant="outline" size="lg" className="gap-2">
+        {/* Action Bar - Mobile First */}
+        <div className="mb-6 space-y-4 rounded-lg border border-border bg-card p-4 sm:mb-8">
+          <p className="text-sm text-muted-foreground sm:text-base">{temple.description}</p>
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:justify-end sm:gap-3">
+            <Link to={`/donate/${temple.id}`} className="contents">
+              <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CreditCard className="h-5 w-5" />
-                Donate
+                <span className="text-xs sm:text-sm">Donate</span>
               </Button>
             </Link>
-            <Link to={`/book/${temple.id}`}>
-              <Button variant="outline" size="lg" className="gap-2">
+            <Link to={`/book/${temple.id}`} className="contents">
+              <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CalendarCheck className="h-5 w-5" />
-                Book Slot
+                <span className="text-xs sm:text-sm">Book Slot</span>
               </Button>
             </Link>
             <Button
               onClick={() => toggleFollowTemple(temple.id)}
               variant={following ? "default" : "outline"}
-              size="lg"
+              size="default"
               className={cn(
-                "gap-2",
+                "h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4",
                 following && "bg-primary text-primary-foreground"
               )}
             >
               <Heart className={cn("h-5 w-5", following && "fill-current")} />
-              {following ? 'Following' : 'Follow Temple'}
+              <span className="text-xs sm:text-sm">{following ? 'Following' : 'Follow'}</span>
             </Button>
           </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        {/* Content Grid - Stack on Mobile */}
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           {/* Pooja Timings */}
           <Card className="border-border bg-card">
             <CardHeader className="border-b border-border bg-accent/50">

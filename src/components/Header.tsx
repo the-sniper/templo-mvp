@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, User, LogOut } from 'lucide-react';
+import { Heart, User, LogOut, Menu, X, Home, MapPin } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -10,35 +11,56 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
 const Header = () => {
   const { followedTemples } = useTemple();
   const { user, isAuthenticated, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const MobileNavLink = ({ to, children, icon: Icon }: { to: string; children: React.ReactNode; icon: React.ComponentType<{ className?: string }> }) => (
+    <Link
+      to={to}
+      onClick={() => setMobileMenuOpen(false)}
+      className="flex items-center gap-3 rounded-lg px-4 py-3 text-foreground transition-colors hover:bg-accent"
+    >
+      <Icon className="h-5 w-5 text-primary" />
+      <span className="font-medium">{children}</span>
+    </Link>
+  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <span className="text-xl">🙏</span>
+        <div className="flex h-14 items-center justify-between sm:h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary sm:h-10 sm:w-10">
+              <span className="text-lg sm:text-xl">🙏</span>
             </div>
             <div>
-              <h1 className="font-serif text-xl font-bold text-foreground">Divine Temple</h1>
-              <p className="text-xs text-muted-foreground">Connect with the Divine</p>
+              <h1 className="font-serif text-lg font-bold text-foreground sm:text-xl">Divine Temple</h1>
+              <p className="hidden text-xs text-muted-foreground sm:block">Connect with the Divine</p>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-4 sm:gap-6">
+          {/* Desktop Navigation */}
+          <nav className="hidden items-center gap-6 md:flex">
             <Link
               to="/"
-              className="hidden text-sm font-medium text-foreground transition-colors hover:text-primary sm:block"
+              className="text-sm font-medium text-foreground transition-colors hover:text-primary"
             >
               Temples
             </Link>
             <Link
               to="/ancestral"
-              className="hidden text-sm font-medium text-foreground transition-colors hover:text-primary sm:block"
+              className="text-sm font-medium text-foreground transition-colors hover:text-primary"
             >
               Find Ancestral Temple
             </Link>
@@ -52,7 +74,7 @@ const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
                     <User className="h-4 w-4" />
-                    <span className="hidden sm:inline">{user?.name}</span>
+                    <span>{user?.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48 bg-card">
@@ -74,6 +96,70 @@ const Header = () => {
               </Link>
             )}
           </nav>
+
+          {/* Mobile Navigation */}
+          <div className="flex items-center gap-2 md:hidden">
+            <div className="flex items-center gap-1.5 rounded-full bg-accent/50 px-2.5 py-1 text-sm">
+              <Heart className="h-4 w-4 fill-primary text-primary" />
+              <span className="font-medium text-foreground">{followedTemples.length}</span>
+            </div>
+            
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] bg-card p-0">
+                <SheetHeader className="border-b border-border p-4">
+                  <SheetTitle className="flex items-center gap-2 text-left">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+                      <span className="text-lg">🙏</span>
+                    </div>
+                    <span className="font-serif">Divine Temple</span>
+                  </SheetTitle>
+                </SheetHeader>
+                
+                <nav className="flex flex-col p-2">
+                  <MobileNavLink to="/" icon={Home}>
+                    Temples
+                  </MobileNavLink>
+                  <MobileNavLink to="/ancestral" icon={MapPin}>
+                    Find Ancestral Temple
+                  </MobileNavLink>
+                  
+                  <div className="my-2 border-t border-border" />
+                  
+                  {isAuthenticated ? (
+                    <>
+                      <div className="flex items-center gap-3 px-4 py-3 text-muted-foreground">
+                        <User className="h-5 w-5" />
+                        <span>{user?.name}</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setMobileMenuOpen(false);
+                        }}
+                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-destructive transition-colors hover:bg-destructive/10"
+                      >
+                        <LogOut className="h-5 w-5" />
+                        <span className="font-medium">Sign Out</span>
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="mx-2 mt-2"
+                    >
+                      <Button className="w-full">Sign In</Button>
+                    </Link>
+                  )}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>

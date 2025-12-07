@@ -1,10 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { CheckCircle, Download, Share2, Home } from 'lucide-react';
+import { CheckCircle, Download, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useDonation } from '@/context/DonationContext';
+import ShareButton from '@/components/ShareButton';
 
 const DonationReceipt = () => {
   const { id } = useParams<{ id: string }>();
@@ -104,10 +105,13 @@ const DonationReceipt = () => {
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
-            <Button variant="outline" className="h-12">
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
+            <ShareButton
+              title={`Donation to ${donation.templeName}`}
+              text={`🙏 I donated ₹${donation.amount.toLocaleString()} to ${donation.templeName}. Join me in supporting our temples!`}
+              url={window.location.href}
+              variant="outline"
+              className="h-12"
+            />
           </div>
           <Link to="/" className="block">
             <Button variant="default" className="w-full h-12">

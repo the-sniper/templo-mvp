@@ -1,3 +1,6 @@
+import { GalleryImage } from '@/components/TempleGallery';
+import { TempleHistoryData } from '@/components/TempleHistory';
+
 export interface PoojaTiming {
   name: string;
   time: string;
@@ -31,6 +34,8 @@ export interface Temple {
     lat: number;
     lng: number;
   };
+  gallery?: GalleryImage[];
+  history?: TempleHistoryData;
 }
 
 export const temples: Temple[] = [
@@ -60,6 +65,27 @@ export const temples: Temple[] = [
       { id: 'a1', title: 'Brahmotsavam 2024', date: '2024-10-04', content: 'Annual Brahmotsavam festival will be celebrated from October 4-12. Special darshan arrangements available.', type: 'festival' },
       { id: 'a2', title: 'Online Seva Booking', date: '2024-09-15', content: 'Book your special darshan and seva online through the official TTD website.', type: 'general' },
     ],
+    gallery: [
+      { id: 'g1', url: '/temples/tirupati.jpg', caption: 'Main Temple View', category: 'architecture' },
+      { id: 'g2', url: '/temples/tirupati.jpg', caption: 'Morning Darshan', category: 'daily_darshan' },
+      { id: 'g3', url: '/temples/tirupati.jpg', caption: 'Brahmotsavam Festival', category: 'festival' },
+      { id: 'g4', url: '/temples/tirupati.jpg', caption: 'Golden Gopuram', category: 'architecture' },
+    ],
+    history: {
+      originStory: 'According to legend, Lord Vishnu descended to Earth in the form of Venkateshwara during the Kali Yuga to guide and protect devotees. The temple on the seven hills (Saptagiri) is one of the oldest and most sacred pilgrimage sites in India.',
+      deitySignificance: 'Lord Venkateswara, also known as Balaji, Govinda, and Srinivasa, is considered the most powerful manifestation of Lord Vishnu. Devotees believe that any wish made with true devotion in front of the deity comes true.',
+      famousMiracles: [
+        'The self-manifested deity (Swayambhu) that appeared on the hill',
+        'Countless testimonies of wishes fulfilled by devotees',
+        'The ever-fresh flowers on the deity despite being offered daily',
+      ],
+      famousPoojas: ['Suprabhatam', 'Thomala Seva', 'Archana', 'Sahasranamarchana'],
+      pastKumbabishekams: [
+        { year: 1958, description: 'First major renovation after temple administration reorganization' },
+        { year: 2006, description: 'Maha Samprokshanam performed with elaborate rituals' },
+      ],
+      architecturalSignificance: 'The temple complex showcases Dravidian architecture with its towering gopurams and intricate carvings. The main sanctum is covered with gold-plated sheets, giving the temple its characteristic golden appearance.',
+    },
   },
   {
     id: '2',
@@ -86,6 +112,15 @@ export const temples: Temple[] = [
       { id: 'b1', title: 'Guru Nanak Jayanti', date: '2024-11-15', content: 'Special celebrations for the 555th birth anniversary of Guru Nanak Dev Ji.', type: 'festival' },
       { id: 'b2', title: 'Langar Seva', date: '2024-09-20', content: 'Volunteers needed for langar seva. Register at the main office.', type: 'event' },
     ],
+    history: {
+      originStory: 'The Golden Temple was founded by Guru Ram Das in 1577 and completed by Guru Arjan Dev in 1604. The sacred scripture, Guru Granth Sahib, was installed here for the first time.',
+      deitySignificance: 'The Guru Granth Sahib is the central religious scripture of Sikhism, treated as the eternal Guru. The temple represents the spiritual and cultural center of Sikhism.',
+      famousMiracles: [
+        'The healing properties of the sacred pool (Amrit Sarovar)',
+        'Countless stories of spiritual transformation of devotees',
+      ],
+      architecturalSignificance: 'The temple is covered in 750 kg of pure gold and features a blend of Hindu and Islamic architectural styles. It has four entrances symbolizing openness to all.',
+    },
   },
   {
     id: '3',

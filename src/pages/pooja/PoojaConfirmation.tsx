@@ -1,10 +1,11 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, Calendar, Clock, User, Phone, MapPin, Heart } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import ShareButton from '@/components/ShareButton';
 
 const PoojaConfirmation = () => {
   const { id } = useParams<{ id: string }>();
@@ -67,6 +68,13 @@ const PoojaConfirmation = () => {
         </div>
 
         <div className="space-y-3">
+          <ShareButton
+            title="Pooja Request"
+            text="🙏 I've requested a special pooja. Seek blessings for your family too!"
+            url={window.location.href}
+            variant="outline"
+            className="w-full h-12"
+          />
           <Link to="/" className="block">
             <Button variant="default" className="w-full h-12">
               Back to Home

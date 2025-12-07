@@ -8,6 +8,8 @@ export interface Donation {
   donorName: string;
   donorPhone: string;
   donorEmail?: string;
+  occasion?: string;
+  inMemoryOf?: string;
   paymentMethod: 'upi' | 'card' | 'netbanking';
   status: 'pending' | 'completed' | 'failed';
   transactionId: string;

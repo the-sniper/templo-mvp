@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
@@ -104,7 +104,7 @@ const TempleDetails = () => {
         {/* Action Bar - Mobile First */}
         <div className="mb-6 space-y-4 rounded-lg border border-border bg-card p-4 sm:mb-8">
           <p className="text-sm text-muted-foreground sm:text-base">{temple.description}</p>
-          <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:justify-end sm:gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-end sm:gap-3">
             <Link to={`/donate/${temple.id}`} className="contents">
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CreditCard className="h-5 w-5" />
@@ -115,6 +115,12 @@ const TempleDetails = () => {
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CalendarCheck className="h-5 w-5" />
                 <span className="text-xs sm:text-sm">Book Slot</span>
+              </Button>
+            </Link>
+            <Link to={`/pooja/${temple.id}`} className="contents">
+              <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
+                <Palmtree className="h-5 w-5" />
+                <span className="text-xs sm:text-sm">Request Pooja</span>
               </Button>
             </Link>
             <Button

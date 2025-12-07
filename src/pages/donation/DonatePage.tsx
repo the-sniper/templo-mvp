@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, CreditCard, Smartphone, Building2 } from 'lucide-react';
+import { ArrowLeft, Heart, CreditCard, Smartphone, Building2, Gift, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useTemple } from '@/context/TempleContext';
 import { useDonation } from '@/context/DonationContext';
@@ -27,6 +28,8 @@ const DonatePage = () => {
   const [donorName, setDonorName] = useState('');
   const [donorPhone, setDonorPhone] = useState('');
   const [donorEmail, setDonorEmail] = useState('');
+  const [occasion, setOccasion] = useState('');
+  const [inMemoryOf, setInMemoryOf] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!temple) {
@@ -172,6 +175,40 @@ const DonatePage = () => {
                   <Label htmlFor="netbanking" className="flex-1 cursor-pointer">Net Banking</Label>
                 </div>
               </RadioGroup>
+            </CardContent>
+          </Card>
+
+          {/* Special Occasion / In Memory Of */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Gift className="h-5 w-5 text-primary" />
+                Dedicate This Donation
+              </CardTitle>
+              <CardDescription>Optional: Add a personal touch to your offering</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="occasion">On Occasion Of</Label>
+                <Input
+                  id="occasion"
+                  placeholder="e.g., Birthday, Anniversary, Festival"
+                  value={occasion}
+                  onChange={(e) => setOccasion(e.target.value)}
+                  maxLength={100}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="inMemoryOf">In Loving Memory Of</Label>
+                <Textarea
+                  id="inMemoryOf"
+                  placeholder="Name(s) of departed loved ones"
+                  value={inMemoryOf}
+                  onChange={(e) => setInMemoryOf(e.target.value)}
+                  maxLength={200}
+                  rows={2}
+                />
+              </div>
             </CardContent>
           </Card>
 

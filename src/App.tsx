@@ -8,6 +8,7 @@ import { AncestralProvider } from "@/context/AncestralContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { DonationProvider } from "@/context/DonationContext";
 import { BookingProvider } from "@/context/BookingContext";
+import { PoojaProvider } from "@/context/PoojaContext";
 import Index from "./pages/Index";
 import TempleDetails from "./pages/TempleDetails";
 import NotFound from "./pages/NotFound";
@@ -33,6 +34,10 @@ import DonationReceipt from "./pages/donation/DonationReceipt";
 import BookSlotPage from "./pages/booking/BookSlotPage";
 import BookingConfirmation from "./pages/booking/BookingConfirmation";
 
+// Pooja Flow
+import RequestPoojaPage from "./pages/pooja/RequestPoojaPage";
+import PoojaConfirmation from "./pages/pooja/PoojaConfirmation";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -43,37 +48,43 @@ const App = () => (
           <AncestralProvider>
             <DonationProvider>
               <BookingProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/temple/:id" element={<TempleDetails />} />
-                    
-                    {/* Ancestral Temple Flow */}
-                    <Route path="/ancestral" element={<AncestralIntro />} />
-                    <Route path="/ancestral/form" element={<AncestralForm />} />
-                    <Route path="/ancestral/searching" element={<AncestralSearching />} />
-                    <Route path="/ancestral/results" element={<AncestralResults />} />
-                    <Route path="/ancestral/add-temple" element={<AddAncestralTemple />} />
-                    <Route path="/ancestral/confirmation" element={<AncestralConfirmation />} />
-                    
-                    {/* Auth Routes */}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    
-                    {/* Donation Flow */}
-                    <Route path="/donate/:id" element={<DonatePage />} />
-                    <Route path="/donation/receipt/:id" element={<DonationReceipt />} />
-                    
-                    {/* Booking Flow */}
-                    <Route path="/book/:id" element={<BookSlotPage />} />
-                    <Route path="/booking/confirmation/:id" element={<BookingConfirmation />} />
-                    
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </BrowserRouter>
+                <PoojaProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/temple/:id" element={<TempleDetails />} />
+                      
+                      {/* Ancestral Temple Flow */}
+                      <Route path="/ancestral" element={<AncestralIntro />} />
+                      <Route path="/ancestral/form" element={<AncestralForm />} />
+                      <Route path="/ancestral/searching" element={<AncestralSearching />} />
+                      <Route path="/ancestral/results" element={<AncestralResults />} />
+                      <Route path="/ancestral/add-temple" element={<AddAncestralTemple />} />
+                      <Route path="/ancestral/confirmation" element={<AncestralConfirmation />} />
+                      
+                      {/* Auth Routes */}
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                      
+                      {/* Donation Flow */}
+                      <Route path="/donate/:id" element={<DonatePage />} />
+                      <Route path="/donation/receipt/:id" element={<DonationReceipt />} />
+                      
+                      {/* Booking Flow */}
+                      <Route path="/book/:id" element={<BookSlotPage />} />
+                      <Route path="/booking/confirmation/:id" element={<BookingConfirmation />} />
+                      
+                      {/* Pooja Flow */}
+                      <Route path="/pooja/:id" element={<RequestPoojaPage />} />
+                      <Route path="/pooja/confirmation/:id" element={<PoojaConfirmation />} />
+                      
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </PoojaProvider>
               </BookingProvider>
             </DonationProvider>
           </AncestralProvider>

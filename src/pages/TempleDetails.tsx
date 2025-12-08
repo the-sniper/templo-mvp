@@ -1,20 +1,23 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, Share2 } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
+import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import ShareButton from '@/components/ShareButton';
 import TempleGallery from '@/components/TempleGallery';
 import TempleHistory from '@/components/TempleHistory';
+import TempleMusicPlayer from '@/components/TempleMusicPlayer';
+import LiveDarshan from '@/components/LiveDarshan';
 
 const TempleDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { getTempleById, loading, toggleFollowTemple, isFollowing } = useTemple();
+  const { t } = useLanguage();
   
   const temple = id ? getTempleById(id) : undefined;
   const following = id ? isFollowing(id) : false;
@@ -48,7 +51,7 @@ const TempleDetails = () => {
           <Link to="/">
             <Button variant="default">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Temples
+              {t('back')}
             </Button>
           </Link>
         </div>
@@ -75,7 +78,7 @@ const TempleDetails = () => {
         {/* Back Button */}
         <Link to="/" className="mb-6 inline-flex items-center text-sm text-muted-foreground transition-colors hover:text-primary">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to all temples
+          {t('back')}
         </Link>
 
         {/* Hero Image - Mobile Optimized */}
@@ -121,25 +124,25 @@ const TempleDetails = () => {
             <Link to={`/donate/${temple.id}`} className="contents">
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CreditCard className="h-5 w-5" />
-                <span className="text-xs sm:text-sm">Donate</span>
+                <span className="text-xs sm:text-sm">{t('donate')}</span>
               </Button>
             </Link>
             <Link to={`/recurring-donate/${temple.id}`} className="contents">
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <RefreshCw className="h-5 w-5" />
-                <span className="text-xs sm:text-sm">Recurring</span>
+                <span className="text-xs sm:text-sm">{t('recurringDonation')}</span>
               </Button>
             </Link>
             <Link to={`/book/${temple.id}`} className="contents">
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <CalendarCheck className="h-5 w-5" />
-                <span className="text-xs sm:text-sm">Book Slot</span>
+                <span className="text-xs sm:text-sm">{t('bookSlot')}</span>
               </Button>
             </Link>
             <Link to={`/pooja/${temple.id}`} className="contents">
               <Button variant="outline" size="default" className="h-12 flex-col gap-1 px-3 sm:h-10 sm:flex-row sm:gap-2 sm:px-4">
                 <Palmtree className="h-5 w-5" />
-                <span className="text-xs sm:text-sm">Request Pooja</span>
+                <span className="text-xs sm:text-sm">{t('requestPooja')}</span>
               </Button>
             </Link>
             <Button
@@ -152,7 +155,7 @@ const TempleDetails = () => {
               )}
             >
               <Heart className={cn("h-5 w-5", following && "fill-current")} />
-              <span className="text-xs sm:text-sm">{following ? 'Following' : 'Follow'}</span>
+              <span className="text-xs sm:text-sm">{following ? t('following') : t('follow')}</span>
             </Button>
           </div>
         </div>
@@ -164,7 +167,7 @@ const TempleDetails = () => {
             <CardHeader className="border-b border-border bg-accent/50">
               <CardTitle className="flex items-center gap-2 font-serif text-xl">
                 <Clock className="h-5 w-5 text-primary" />
-                Pooja Timings
+                {t('timings')}
               </CardTitle>
             </CardHeader>
             <CardContent className="divide-y divide-border p-0">
@@ -192,7 +195,7 @@ const TempleDetails = () => {
             <CardHeader className="border-b border-border bg-accent/50">
               <CardTitle className="flex items-center gap-2 font-serif text-xl">
                 <Bell className="h-5 w-5 text-primary" />
-                Announcements
+                {t('announcements')}
               </CardTitle>
             </CardHeader>
             <CardContent className="divide-y divide-border p-0">
@@ -305,16 +308,7 @@ const TempleDetails = () => {
                     referrerPolicy="no-referrer-when-downgrade"
                     src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${temple.coordinates.lat},${temple.coordinates.lng}&zoom=15`}
                   />
-          {/* Gallery */}
-          {temple.gallery && temple.gallery.length > 0 && (
-            <TempleGallery images={temple.gallery} templeName={temple.name} templeId={temple.id} />
-          )}
-
-          {/* Temple History */}
-          {temple.history && (
-            <TempleHistory history={temple.history} templeName={temple.name} templeId={temple.id} />
-          )}
-        </div>
+                </div>
                 <div className="mt-3">
                   <a
                     href={`https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lng}`}
@@ -330,6 +324,27 @@ const TempleDetails = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Gallery */}
+          {temple.gallery && temple.gallery.length > 0 && (
+            <TempleGallery images={temple.gallery} templeName={temple.name} templeId={temple.id} />
+          )}
+
+          {/* Temple History */}
+          {temple.history && (
+            <TempleHistory history={temple.history} templeName={temple.name} templeId={temple.id} />
+          )}
+
+          {/* Live Darshan */}
+          <LiveDarshan 
+            templeName={temple.name} 
+            templeId={temple.id}
+            isLive={false}
+            scheduledTime="6:00 AM - 8:00 PM"
+          />
+
+          {/* Temple Music Player */}
+          <TempleMusicPlayer templeName={temple.name} tracks={[]} />
         </div>
       </main>
 

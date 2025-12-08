@@ -18,6 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import LanguageSelector from './LanguageSelector';
 
 const Header = () => {
   const { followedTemples } = useTemple();
@@ -68,6 +69,8 @@ const Header = () => {
               <Heart className="h-4 w-4 fill-primary text-primary" />
               <span className="font-medium">{followedTemples.length}</span>
             </div>
+            
+            <LanguageSelector />
             
             {isAuthenticated ? (
               <DropdownMenu>

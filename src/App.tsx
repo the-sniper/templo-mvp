@@ -10,6 +10,7 @@ import { DonationProvider } from "@/context/DonationContext";
 import { BookingProvider } from "@/context/BookingContext";
 import { PoojaProvider } from "@/context/PoojaContext";
 import { RecurringDonationProvider } from "@/context/RecurringDonationContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
 import TempleDetails from "./pages/TempleDetails";
 import NotFound from "./pages/NotFound";
@@ -46,14 +47,15 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <TempleProvider>
-          <AncestralProvider>
-            <DonationProvider>
-              <RecurringDonationProvider>
-                <BookingProvider>
-                  <PoojaProvider>
-                    <Toaster />
+      <LanguageProvider>
+        <AuthProvider>
+          <TempleProvider>
+            <AncestralProvider>
+              <DonationProvider>
+                <RecurringDonationProvider>
+                  <BookingProvider>
+                    <PoojaProvider>
+                      <Toaster />
                     <Sonner />
                     <BrowserRouter>
                       <Routes>
@@ -90,13 +92,14 @@ const App = () => (
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </BrowserRouter>
-                  </PoojaProvider>
-                </BookingProvider>
-              </RecurringDonationProvider>
-            </DonationProvider>
-          </AncestralProvider>
-        </TempleProvider>
-      </AuthProvider>
+                    </PoojaProvider>
+                  </BookingProvider>
+                </RecurringDonationProvider>
+              </DonationProvider>
+            </AncestralProvider>
+          </TempleProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

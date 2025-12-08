@@ -13,6 +13,7 @@ import TempleGallery from '@/components/TempleGallery';
 import TempleHistory from '@/components/TempleHistory';
 import TempleMusicPlayer from '@/components/TempleMusicPlayer';
 import LiveDarshan from '@/components/LiveDarshan';
+import TemplePatrons from '@/components/TemplePatrons';
 
 const TempleDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -345,6 +346,9 @@ const TempleDetails = () => {
 
           {/* Temple Music Player */}
           <TempleMusicPlayer templeName={temple.name} tracks={[]} />
+
+          {/* Our Patrons */}
+          <TemplePatrons templeId={temple.id} templeName={temple.name} />
         </div>
       </main>
 

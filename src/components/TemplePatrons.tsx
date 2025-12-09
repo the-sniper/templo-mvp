@@ -56,17 +56,17 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
   const allPatrons = filteredPatrons;
 
   return (
-    <Card className="border-border bg-card lg:col-span-2">
-      <CardHeader className="border-b border-border bg-accent/50">
-        <CardTitle className="flex items-center gap-2 font-serif text-xl">
-          <Users className="h-5 w-5 text-primary" />
+    <Card className="border-border bg-card">
+      <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
+        <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
+          <Users className="h-6 w-6 text-primary" />
           Our Patrons
         </CardTitle>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-base text-muted-foreground mt-2">
           With blessings to our devoted supporters
         </p>
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className="p-4 sm:p-6">
         <Tabs defaultValue="leaderboard" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="leaderboard">Top Supporters</TabsTrigger>

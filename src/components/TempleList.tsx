@@ -3,6 +3,7 @@ import { useTemple } from '@/context/TempleContext';
 import TempleCard from './TempleCard';
 import SearchBar from './SearchBar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Search, Sparkles } from 'lucide-react';
 
 const TempleList = () => {
   const { temples, loading, error } = useTemple();
@@ -30,41 +31,75 @@ const TempleList = () => {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 md:space-y-8">
-      <div className="mx-auto max-w-2xl">
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+    <div className="space-y-8">
+      {/* Section Header */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <span className="text-sm font-medium uppercase tracking-wider text-primary">
+              Sacred Places
+            </span>
+          </div>
+          <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
+            Explore Temples
+          </h2>
+        </div>
+        
+        <div className="w-full sm:w-80">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        </div>
       </div>
 
+      {/* Results Count */}
+      {!loading && filteredTemples.length > 0 && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Search className="h-4 w-4" />
+          <span>
+            Showing <strong className="text-foreground">{filteredTemples.length}</strong> sacred {filteredTemples.length === 1 ? 'temple' : 'temples'}
+          </span>
+        </div>
+      )}
+
       {loading ? (
-        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="space-y-3 rounded-lg border border-border bg-card p-3 sm:space-y-4 sm:p-4">
-              <Skeleton className="aspect-[4/3] w-full rounded-md" />
-              <Skeleton className="h-5 w-3/4 sm:h-6" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-12 w-full sm:h-16" />
+            <div 
+              key={i} 
+              className="overflow-hidden rounded-2xl border border-border bg-card"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <Skeleton className="aspect-[4/3] w-full" />
+              <div className="p-5 space-y-3">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-16 w-full" />
+              </div>
             </div>
           ))}
         </div>
       ) : filteredTemples.length === 0 ? (
-        <div className="py-12 text-center sm:py-20">
-          <div className="mb-3 text-5xl sm:mb-4 sm:text-6xl">🔍</div>
-          <h3 className="mb-2 font-serif text-lg font-bold text-foreground sm:text-xl">No temples found</h3>
-          <p className="text-sm text-muted-foreground sm:text-base">
+        <div className="py-20 text-center">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+            <Search className="h-10 w-10 text-muted-foreground" />
+          </div>
+          <h3 className="mb-2 font-serif text-xl font-bold text-foreground">No temples found</h3>
+          <p className="text-muted-foreground">
             Try searching with a different term
           </p>
         </div>
       ) : (
-        <>
-          <p className="text-center text-xs text-muted-foreground sm:text-sm">
-            Showing {filteredTemples.length} sacred {filteredTemples.length === 1 ? 'temple' : 'temples'}
-          </p>
-          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredTemples.map((temple) => (
-              <TempleCard key={temple.id} temple={temple} />
-            ))}
-          </div>
-        </>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredTemples.map((temple, index) => (
+            <div 
+              key={temple.id} 
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <TempleCard temple={temple} />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

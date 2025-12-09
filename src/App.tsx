@@ -14,6 +14,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
 import TempleDetails from "./pages/TempleDetails";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Ancestral Temple Flow
 import AncestralIntro from "./pages/ancestral/AncestralIntro";
@@ -58,6 +59,7 @@ const App = () => (
                       <Toaster />
                     <Sonner />
                     <BrowserRouter>
+                      <ScrollToTop />
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/temple/:id" element={<TempleDetails />} />

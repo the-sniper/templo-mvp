@@ -17,36 +17,39 @@ const TempleCard = ({ temple }: TempleCardProps) => {
 
   return (
     <Card className="group overflow-hidden border-border bg-card transition-all duration-300 hover:shadow-lg">
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        <img
-          src={temple.image}
-          alt={temple.name}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={(e) => {
-            e.currentTarget.src = '/placeholder.svg';
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
-        <div className="absolute bottom-3 left-3 right-3">
-          <Badge variant="secondary" className="bg-card/90 text-card-foreground backdrop-blur">
-            {temple.deity}
-          </Badge>
+      <Link to={`/temple/${temple.id}`} className="block">
+        <div className="relative aspect-[4/3] overflow-hidden bg-muted cursor-pointer">
+          <img
+            src={temple.image}
+            alt={temple.name}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.src = '/placeholder.svg';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-3 right-3">
+            <Badge variant="secondary" className="bg-card/90 text-card-foreground backdrop-blur">
+              {temple.deity}
+            </Badge>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "absolute right-3 top-3 h-9 w-9 rounded-full bg-card/90 backdrop-blur transition-all hover:bg-card",
+              following && "text-primary"
+            )}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleFollowTemple(temple.id);
+            }}
+          >
+            <Heart className={cn("h-5 w-5", following && "fill-current")} />
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "absolute right-3 top-3 h-9 w-9 rounded-full bg-card/90 backdrop-blur transition-all hover:bg-card",
-            following && "text-primary"
-          )}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleFollowTemple(temple.id);
-          }}
-        >
-          <Heart className={cn("h-5 w-5", following && "fill-current")} />
-        </Button>
-      </div>
+      </Link>
       
       <CardContent className="p-4">
         <Link to={`/temple/${temple.id}`} className="block">

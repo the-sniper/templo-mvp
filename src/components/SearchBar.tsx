@@ -8,22 +8,24 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-const SearchBar = ({ value, onChange, placeholder = 'Search temples by name, city, or deity...' }: SearchBarProps) => {
+const SearchBar = ({ value, onChange, placeholder = 'Search temples...' }: SearchBarProps) => {
   return (
     <div className="relative">
-      <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+      <div className="pointer-events-none absolute left-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-primary/10">
+        <Search className="h-4 w-4 text-primary" />
+      </div>
       <Input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-12 rounded-lg border-border bg-card pl-12 pr-12 text-base shadow-sm transition-shadow focus:shadow-md"
+        className="h-12 rounded-xl border-2 border-border bg-card pl-14 pr-12 text-base shadow-sm transition-all focus:border-primary focus:shadow-lg focus:shadow-primary/10"
       />
       {value && (
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-2 top-1/2 h-8 w-8 -translate-y-1/2"
+          className="absolute right-2 top-1/2 h-8 w-8 -translate-y-1/2 rounded-lg hover:bg-destructive/10 hover:text-destructive"
           onClick={() => onChange('')}
         >
           <X className="h-4 w-4" />

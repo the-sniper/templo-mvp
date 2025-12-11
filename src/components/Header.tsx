@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart, User, LogOut, Menu, Home, MapPin, Sparkles } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ import LanguageSelector from './LanguageSelector';
 const Header = () => {
   const { followedTemples } = useTemple();
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const MobileNavLink = ({ to, children, icon: Icon }: { to: string; children: React.ReactNode; icon: React.ComponentType<{ className?: string }> }) => (
@@ -49,7 +51,7 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-foreground">Templo</h1>
-              <p className="hidden text-xs text-muted-foreground sm:block">Sacred Connections</p>
+              <p className="hidden text-xs text-muted-foreground sm:block">{t('sacredConnections')}</p>
             </div>
           </Link>
 
@@ -59,13 +61,13 @@ const Header = () => {
               to="/"
               className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
             >
-              Temples
+              {t('temples')}
             </Link>
             <Link
               to="/ancestral"
               className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
             >
-              Ancestral Temple
+              {t('ancestralTemple')}
             </Link>
             
             <div className="mx-2 h-6 w-px bg-border" />
@@ -75,7 +77,7 @@ const Header = () => {
               className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all hover:bg-primary/20"
             >
               <Heart className="h-4 w-4 fill-primary" />
-              <span>{followedTemples.length} Followed</span>
+              <span>{followedTemples.length} {t('followed')}</span>
             </Link>
             
             <LanguageSelector />
@@ -94,20 +96,20 @@ const Header = () => {
                   <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
                     <Link to="/ancestral" className="cursor-pointer">
                       <MapPin className="mr-2 h-4 w-4" />
-                      Find Ancestral Temple
+                      {t('findAncestralTemple')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout} className="cursor-pointer rounded-lg px-3 py-2 text-destructive focus:text-destructive">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    {t('signOut')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Link to="/login">
                 <Button size="sm" className="rounded-full px-6 shadow-lg shadow-primary/25">
-                  Sign In
+                  {t('signIn')}
                 </Button>
               </Link>
             )}
@@ -137,17 +139,17 @@ const Header = () => {
                     </div>
                     <div>
                       <span className="text-lg font-bold">Templo</span>
-                      <p className="text-xs font-normal text-muted-foreground">Sacred Connections</p>
+                      <p className="text-xs font-normal text-muted-foreground">{t('sacredConnections')}</p>
                     </div>
                   </SheetTitle>
                 </SheetHeader>
                 
                 <nav className="flex flex-col gap-1 p-3">
                   <MobileNavLink to="/" icon={Home}>
-                    Explore Temples
+                    {t('exploreTemples')}
                   </MobileNavLink>
                   <MobileNavLink to="/ancestral" icon={MapPin}>
-                    Find Ancestral Temple
+                    {t('findAncestralTemple')}
                   </MobileNavLink>
                   
                   <div className="my-3 border-t border-border" />
@@ -174,7 +176,7 @@ const Header = () => {
                         className="mt-2 flex items-center gap-3 rounded-xl px-4 py-4 text-destructive transition-colors hover:bg-destructive/10"
                       >
                         <LogOut className="h-5 w-5" />
-                        <span className="font-medium">Sign Out</span>
+                        <span className="font-medium">{t('signOut')}</span>
                       </button>
                     </>
                   ) : (
@@ -184,7 +186,7 @@ const Header = () => {
                       className="mt-2 px-3"
                     >
                       <Button className="w-full rounded-xl py-6 text-base shadow-lg shadow-primary/25">
-                        Sign In
+                        {t('signIn')}
                       </Button>
                     </Link>
                   )}

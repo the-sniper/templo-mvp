@@ -3,8 +3,11 @@ import TempleList from '@/components/TempleList';
 import { Sparkles, MapPin, Heart, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Index = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -23,31 +26,31 @@ const Index = () => {
             {/* Badge */}
             <div className="mb-6 inline-flex animate-fade-in items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
               <Sparkles className="h-4 w-4" />
-              Your Sacred Journey Starts Here
+              {t('heroTagline')}
             </div>
             
             {/* Main Heading */}
             <h1 className="mb-6 animate-fade-in font-serif text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl" style={{ animationDelay: '0.1s' }}>
-              Discover India's
+              {t('discoverIndias')}
               <span className="block bg-gradient-to-r from-primary via-primary to-accent-foreground bg-clip-text text-transparent">
-                Sacred Temples
+                {t('sacredTemples')}
               </span>
             </h1>
             
             {/* Subtitle */}
             <p className="mx-auto mb-8 max-w-xl animate-fade-in text-lg text-muted-foreground sm:text-xl" style={{ animationDelay: '0.2s' }}>
-              Connect with divine spaces, follow your favorite temples, and never miss a pooja or festival.
+              {t('heroSubtitle')}
             </p>
             
             {/* CTA Buttons */}
             <div className="flex animate-fade-in flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4" style={{ animationDelay: '0.3s' }}>
               <Button size="lg" className="w-full rounded-full px-8 py-6 text-base shadow-xl shadow-primary/30 sm:w-auto">
                 <MapPin className="mr-2 h-5 w-5" />
-                Explore Temples
+                {t('exploreTemples')}
               </Button>
               <Link to="/ancestral">
                 <Button variant="outline" size="lg" className="w-full rounded-full border-2 px-8 py-6 text-base sm:w-auto">
-                  Find Ancestral Temple
+                  {t('findAncestralTemple')}
                 </Button>
               </Link>
             </div>
@@ -56,16 +59,16 @@ const Index = () => {
           {/* Feature Pills */}
           <div className="mt-16 flex animate-fade-in flex-wrap items-center justify-center gap-3 sm:gap-4" style={{ animationDelay: '0.4s' }}>
             {[
-              { icon: Heart, label: 'Follow Temples' },
-              { icon: Bell, label: 'Get Updates' },
-              { icon: MapPin, label: 'Find Nearby' },
-            ].map((item, i) => (
+              { icon: Heart, labelKey: 'followTemples' },
+              { icon: Bell, labelKey: 'getUpdates' },
+              { icon: MapPin, labelKey: 'findNearby' },
+            ].map((item) => (
               <div
-                key={item.label}
+                key={item.labelKey}
                 className="flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-2 text-sm backdrop-blur-sm"
               >
                 <item.icon className="h-4 w-4 text-primary" />
-                <span className="text-foreground">{item.label}</span>
+                <span className="text-foreground">{t(item.labelKey)}</span>
               </div>
             ))}
           </div>
@@ -90,11 +93,11 @@ const Index = () => {
               </div>
               <div>
                 <p className="font-bold text-foreground">Templo</p>
-                <p className="text-xs text-muted-foreground">Sacred Connections</p>
+                <p className="text-xs text-muted-foreground">{t('sacredConnections')}</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 Templo. Connecting devotees with sacred spaces.
+              {t('copyright')}
             </p>
           </div>
         </div>

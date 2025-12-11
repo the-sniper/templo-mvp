@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useTemple } from '@/context/TempleContext';
+import { useLanguage } from '@/context/LanguageContext';
 import TempleCard from './TempleCard';
 import SearchBar from './SearchBar';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -7,6 +8,7 @@ import { Search, Sparkles } from 'lucide-react';
 
 const TempleList = () => {
   const { temples, loading, error } = useTemple();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredTemples = useMemo(() => {
@@ -38,11 +40,11 @@ const TempleList = () => {
           <div className="mb-2 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium uppercase tracking-wider text-primary">
-              Sacred Places
+              {t('discoverTemples')}
             </span>
           </div>
           <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
-            Explore Temples
+            {t('exploreTemples')}
           </h2>
         </div>
         
@@ -83,9 +85,9 @@ const TempleList = () => {
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
             <Search className="h-10 w-10 text-muted-foreground" />
           </div>
-          <h3 className="mb-2 font-serif text-xl font-bold text-foreground">No temples found</h3>
+          <h3 className="mb-2 font-serif text-xl font-bold text-foreground">{t('noTemplesFound')}</h3>
           <p className="text-muted-foreground">
-            Try searching with a different term
+            {t('tryDifferentSearch')}
           </p>
         </div>
       ) : (

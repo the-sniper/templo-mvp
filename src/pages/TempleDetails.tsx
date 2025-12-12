@@ -15,6 +15,7 @@ import TempleHistory from '@/components/TempleHistory';
 import TempleMusicPlayer from '@/components/TempleMusicPlayer';
 import LiveDarshan from '@/components/LiveDarshan';
 import TemplePatrons from '@/components/TemplePatrons';
+import TempleReviews from '@/components/TempleReviews';
 import { useState } from 'react';
 
 const footerContent = (
@@ -27,11 +28,11 @@ const footerContent = (
           </div>
           <div>
             <p className="font-bold text-foreground">Templo</p>
-            <p className="text-xs text-muted-foreground">Sacred Connections</p>
+            <p className="text-xs text-muted-foreground">Divine Connections</p>
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          © 2024 Templo. Connecting devotees with sacred spaces.
+          © 2024 Templo. Connecting devotees with divine spaces.
         </p>
       </div>
     </div>
@@ -371,6 +372,9 @@ const TempleDetails = () => {
 
           {/* Temple Music Player */}
           <TempleMusicPlayer templeName={temple.name} tracks={[]} />
+
+          {/* Reviews & Ratings */}
+          <TempleReviews templeId={temple.id} templeName={temple.name} />
         </div>
 
         {/* Our Patrons - Collapsible Section */}

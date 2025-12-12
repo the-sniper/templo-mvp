@@ -13,6 +13,7 @@ import { RecurringDonationProvider } from "@/context/RecurringDonationContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
 import TempleDetails from "./pages/TempleDetails";
+import Following from "./pages/Following";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -63,6 +64,7 @@ const App = () => (
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/temple/:id" element={<TempleDetails />} />
+                        <Route path="/following" element={<Following />} />
                         
                         {/* Ancestral Temple Flow */}
                         <Route path="/ancestral" element={<AncestralIntro />} />

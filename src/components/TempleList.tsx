@@ -4,17 +4,22 @@ import { useLanguage } from '@/context/LanguageContext';
 import TempleCard from './TempleCard';
 import AdvancedSearch, { SearchFilters } from './AdvancedSearch';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Sparkles } from 'lucide-react';
+import { Search, Sparkles, Navigation } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const TempleList = () => {
   const { temples, loading, error } = useTemple();
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     deity: '',
     city: '',
     state: '',
   });
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [sortByDistance, setSortByDistance] = useState(false);
 
   // Extract unique values for filters
   const availableDeities = useMemo(() => {
@@ -29,8 +34,55 @@ const TempleList = () => {
     return [...new Set(temples.map(t => t.state))].sort();
   }, [temples]);
 
+  // Calculate distance between two points
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  const handleNearbyClick = () => {
+    if (!navigator.geolocation) {
+      toast({
+        title: "Location not supported",
+        description: "Your browser doesn't support location services.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoadingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+        setSortByDistance(true);
+        setIsLoadingLocation(false);
+        toast({
+          title: t('nearby'),
+          description: "Showing temples sorted by distance",
+        });
+      },
+      (error) => {
+        setIsLoadingLocation(false);
+        toast({
+          title: "Location access denied",
+          description: "Please enable location access to find nearby temples.",
+          variant: "destructive",
+        });
+      }
+    );
+  };
+
   const filteredTemples = useMemo(() => {
-    return temples.filter((temple) => {
+    let result = temples.filter((temple) => {
       // Text search
       if (filters.query.trim()) {
         const query = filters.query.toLowerCase();
@@ -61,7 +113,21 @@ const TempleList = () => {
 
       return true;
     });
-  }, [temples, filters]);
+
+    // Sort by distance if user location is available
+    if (sortByDistance && userLocation) {
+      result = result
+        .map(temple => ({
+          ...temple,
+          distance: temple.coordinates 
+            ? calculateDistance(userLocation.lat, userLocation.lng, temple.coordinates.lat, temple.coordinates.lng)
+            : Infinity
+        }))
+        .sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
+    }
+
+    return result;
+  }, [temples, filters, sortByDistance, userLocation]);
 
   if (error) {
     return (
@@ -72,7 +138,7 @@ const TempleList = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Section Header */}
       <div className="text-center">
         <div className="mb-3 flex items-center justify-center gap-2">
@@ -93,6 +159,8 @@ const TempleList = () => {
         availableDeities={availableDeities}
         availableCities={availableCities}
         availableStates={availableStates}
+        onNearbyClick={handleNearbyClick}
+        isLoadingLocation={isLoadingLocation}
       />
 
       {/* Results Count */}
@@ -100,7 +168,13 @@ const TempleList = () => {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Search className="h-4 w-4" />
           <span>
-            {t('showingResults')} <strong className="text-foreground">{filteredTemples.length}</strong> {t('sacredTemplesCount')}
+            <strong className="text-foreground">{filteredTemples.length}</strong> {t('resultsFound')}
+            {sortByDistance && userLocation && (
+              <span className="ml-2 inline-flex items-center gap-1 text-primary">
+                <Navigation className="h-3 w-3" />
+                sorted by distance
+              </span>
+            )}
           </span>
         </div>
       )}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, User, LogOut, Menu, Home, MapPin, Sparkles } from 'lucide-react';
+import { Heart, User, LogOut, Menu, Home, MapPin, Sparkles, Calendar } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -51,7 +51,7 @@ const Header = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold tracking-tight text-foreground">Templo</h1>
-              <p className="hidden text-xs text-muted-foreground sm:block">{t('sacredConnections')}</p>
+              <p className="hidden text-xs text-muted-foreground sm:block">{t('divineConnections')}</p>
             </div>
           </Link>
 
@@ -73,7 +73,7 @@ const Header = () => {
             <div className="mx-2 h-6 w-px bg-border" />
             
             <Link
-              to="/"
+              to="/following"
               className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all hover:bg-primary/20"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -93,6 +93,12 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-xl bg-card p-2 shadow-xl">
+                  <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
+                    <Link to="/following" className="cursor-pointer">
+                      <Heart className="mr-2 h-4 w-4" />
+                      {t('myTemples')}
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
                     <Link to="/ancestral" className="cursor-pointer">
                       <MapPin className="mr-2 h-4 w-4" />
@@ -118,7 +124,7 @@ const Header = () => {
           {/* Mobile Navigation */}
           <div className="flex items-center gap-3 md:hidden">
             <Link
-              to="/"
+              to="/following"
               className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -139,7 +145,7 @@ const Header = () => {
                     </div>
                     <div>
                       <span className="text-lg font-bold">Templo</span>
-                      <p className="text-xs font-normal text-muted-foreground">{t('sacredConnections')}</p>
+                      <p className="text-xs font-normal text-muted-foreground">{t('divineConnections')}</p>
                     </div>
                   </SheetTitle>
                 </SheetHeader>
@@ -147,6 +153,9 @@ const Header = () => {
                 <nav className="flex flex-col gap-1 p-3">
                   <MobileNavLink to="/" icon={Home}>
                     {t('exploreTemples')}
+                  </MobileNavLink>
+                  <MobileNavLink to="/following" icon={Heart}>
+                    {t('myTemples')}
                   </MobileNavLink>
                   <MobileNavLink to="/ancestral" icon={MapPin}>
                     {t('findAncestralTemple')}

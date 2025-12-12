@@ -2,27 +2,66 @@ import { useState, useMemo } from 'react';
 import { useTemple } from '@/context/TempleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import TempleCard from './TempleCard';
-import SearchBar from './SearchBar';
+import AdvancedSearch, { SearchFilters } from './AdvancedSearch';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Sparkles } from 'lucide-react';
 
 const TempleList = () => {
   const { temples, loading, error } = useTemple();
   const { t } = useLanguage();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<SearchFilters>({
+    query: '',
+    deity: '',
+    city: '',
+    state: '',
+  });
+
+  // Extract unique values for filters
+  const availableDeities = useMemo(() => {
+    return [...new Set(temples.map(t => t.deity))].sort();
+  }, [temples]);
+
+  const availableCities = useMemo(() => {
+    return [...new Set(temples.map(t => t.city))].sort();
+  }, [temples]);
+
+  const availableStates = useMemo(() => {
+    return [...new Set(temples.map(t => t.state))].sort();
+  }, [temples]);
 
   const filteredTemples = useMemo(() => {
-    if (!searchQuery.trim()) return temples;
-    
-    const query = searchQuery.toLowerCase();
-    return temples.filter(
-      (temple) =>
-        temple.name.toLowerCase().includes(query) ||
-        temple.city.toLowerCase().includes(query) ||
-        temple.deity.toLowerCase().includes(query) ||
-        temple.location.toLowerCase().includes(query)
-    );
-  }, [temples, searchQuery]);
+    return temples.filter((temple) => {
+      // Text search
+      if (filters.query.trim()) {
+        const query = filters.query.toLowerCase();
+        const matchesText = 
+          temple.name.toLowerCase().includes(query) ||
+          temple.city.toLowerCase().includes(query) ||
+          temple.state.toLowerCase().includes(query) ||
+          temple.deity.toLowerCase().includes(query) ||
+          temple.location.toLowerCase().includes(query) ||
+          temple.description.toLowerCase().includes(query);
+        if (!matchesText) return false;
+      }
+
+      // Deity filter
+      if (filters.deity && filters.deity !== 'all' && temple.deity !== filters.deity) {
+        return false;
+      }
+
+      // City filter
+      if (filters.city && filters.city !== 'all' && temple.city !== filters.city) {
+        return false;
+      }
+
+      // State filter
+      if (filters.state && filters.state !== 'all' && temple.state !== filters.state) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [temples, filters]);
 
   if (error) {
     return (
@@ -35,30 +74,33 @@ const TempleList = () => {
   return (
     <div className="space-y-8">
       {/* Section Header */}
-      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="mb-2 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium uppercase tracking-wider text-primary">
-              {t('discoverTemples')}
-            </span>
-          </div>
-          <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
-            {t('exploreTemples')}
-          </h2>
+      <div className="text-center">
+        <div className="mb-3 flex items-center justify-center gap-2">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <span className="text-sm font-medium uppercase tracking-wider text-primary">
+            {t('discoverTemples')}
+          </span>
         </div>
-        
-        <div className="w-full sm:w-80">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        </div>
+        <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
+          {t('exploreTemples')}
+        </h2>
       </div>
+
+      {/* Advanced Search */}
+      <AdvancedSearch
+        filters={filters}
+        onFiltersChange={setFilters}
+        availableDeities={availableDeities}
+        availableCities={availableCities}
+        availableStates={availableStates}
+      />
 
       {/* Results Count */}
       {!loading && filteredTemples.length > 0 && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Search className="h-4 w-4" />
           <span>
-            Showing <strong className="text-foreground">{filteredTemples.length}</strong> sacred {filteredTemples.length === 1 ? 'temple' : 'temples'}
+            {t('showingResults')} <strong className="text-foreground">{filteredTemples.length}</strong> {t('sacredTemplesCount')}
           </span>
         </div>
       )}

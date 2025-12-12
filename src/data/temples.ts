@@ -20,6 +20,7 @@ export interface Temple {
   name: string;
   location: string;
   city: string;
+  state: string;
   description: string;
   image: string;
   deity: string;
@@ -44,6 +45,7 @@ export const temples: Temple[] = [
     name: 'Sri Venkateswara Temple',
     location: 'Tirumala Hills, Tirupati',
     city: 'Tirupati',
+    state: 'Andhra Pradesh',
     description: 'One of the most sacred and visited Hindu temples in the world, dedicated to Lord Venkateswara, a form of Vishnu.',
     image: '/temples/tirupati.jpg',
     deity: 'Lord Venkateswara',
@@ -92,6 +94,7 @@ export const temples: Temple[] = [
     name: 'Golden Temple',
     location: 'Amritsar, Punjab',
     city: 'Amritsar',
+    state: 'Punjab',
     description: 'The holiest Gurdwara of Sikhism, known as Sri Harmandir Sahib, featuring stunning gold-plated architecture.',
     image: '/temples/golden-temple.jpg',
     deity: 'Guru Granth Sahib',
@@ -127,6 +130,7 @@ export const temples: Temple[] = [
     name: 'Meenakshi Temple',
     location: 'Madurai, Tamil Nadu',
     city: 'Madurai',
+    state: 'Tamil Nadu',
     description: 'Historic Hindu temple dedicated to Goddess Meenakshi and Lord Sundareswarar, famous for its magnificent gopurams.',
     image: '/temples/meenakshi.jpg',
     deity: 'Goddess Meenakshi',
@@ -154,6 +158,7 @@ export const temples: Temple[] = [
     name: 'Kashi Vishwanath Temple',
     location: 'Varanasi, Uttar Pradesh',
     city: 'Varanasi',
+    state: 'Uttar Pradesh',
     description: 'One of the twelve Jyotirlingas, this ancient temple dedicated to Lord Shiva sits on the banks of the holy Ganges.',
     image: '/temples/kashi.jpg',
     deity: 'Lord Shiva',
@@ -180,6 +185,7 @@ export const temples: Temple[] = [
     name: 'Jagannath Temple',
     location: 'Puri, Odisha',
     city: 'Puri',
+    state: 'Odisha',
     description: 'Sacred temple dedicated to Lord Jagannath, famous for the annual Rath Yatra festival.',
     image: '/temples/jagannath.jpg',
     deity: 'Lord Jagannath',
@@ -207,6 +213,7 @@ export const temples: Temple[] = [
     name: 'Siddhivinayak Temple',
     location: 'Prabhadevi, Mumbai',
     city: 'Mumbai',
+    state: 'Maharashtra',
     description: 'Famous Ganesh temple known for wish-fulfilling prayers, visited by millions annually.',
     image: '/temples/siddhivinayak.jpg',
     deity: 'Lord Ganesha',

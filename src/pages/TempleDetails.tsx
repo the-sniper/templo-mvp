@@ -1,13 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, Star } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import ShareButton from '@/components/ShareButton';
 import TempleGallery from '@/components/TempleGallery';
@@ -17,27 +17,6 @@ import LiveDarshan from '@/components/LiveDarshan';
 import TemplePatrons from '@/components/TemplePatrons';
 import TempleReviews from '@/components/TempleReviews';
 import { useState } from 'react';
-
-const footerContent = (
-  <footer className="mt-12 border-t border-border bg-card/50 py-10">
-    <div className="container mx-auto px-4">
-      <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <p className="font-bold text-foreground">Templo</p>
-            <p className="text-xs text-muted-foreground">Divine Connections</p>
-          </div>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          © 2024 Templo. Connecting devotees with divine spaces.
-        </p>
-      </div>
-    </div>
-  </footer>
-);
 
 const TempleDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,7 +33,7 @@ const TempleDetails = () => {
         <Header />
         <div className="container mx-auto px-4 py-8">
           <Skeleton className="mb-6 h-8 w-32" />
-          <Skeleton className="mb-8 aspect-[21/9] w-full rounded-lg" />
+          <Skeleton className="mb-8 aspect-[21/9] w-full rounded-2xl" />
           <Skeleton className="mb-4 h-10 w-3/4" />
           <Skeleton className="mb-8 h-6 w-1/2" />
         </div>
@@ -96,15 +75,9 @@ const TempleDetails = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-6 sm:py-8">
-        {/* Back Button */}
-        <Link to="/" className="mb-4 sm:mb-6 inline-flex items-center text-base font-medium text-muted-foreground transition-colors hover:text-primary">
-          <ArrowLeft className="mr-2 h-5 w-5" />
-          {t('back')}
-        </Link>
-
-        {/* Hero Image */}
-        <div className="relative mb-6 aspect-[16/10] overflow-hidden rounded-2xl bg-muted sm:aspect-[21/9]">
+      <main>
+        {/* Hero Section */}
+        <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
           <img
             src={temple.image}
             alt={temple.name}
@@ -113,62 +86,73 @@ const TempleDetails = () => {
               e.currentTarget.src = '/placeholder.svg';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8">
-            <Badge variant="secondary" className="mb-2 bg-card/90 text-sm backdrop-blur sm:mb-3 sm:text-base px-3 py-1">
-              <Sparkles className="mr-1.5 h-4 w-4" />
-              {temple.deity}
-            </Badge>
-            <h1 className="mb-2 font-serif text-2xl font-bold text-primary-foreground sm:text-4xl md:text-5xl">
-              {temple.name}
-            </h1>
-            <div className="flex items-center gap-2 text-base text-primary-foreground/90 sm:text-lg">
-              <MapPin className="h-5 w-5" />
-              <span>{temple.location}</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+          
+          {/* Back Button - Floating */}
+          <Link 
+            to="/" 
+            className="absolute top-4 left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm text-foreground transition-all hover:bg-background hover:scale-105 shadow-lg"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          
+          {/* Share Button - Floating */}
+          <div className="absolute top-4 right-4 z-10">
+            <ShareButton
+              title={temple.name}
+              text={`Visit ${temple.name} on Templo 🙏`}
+              url={window.location.href}
+              variant="outline"
+              size="icon"
+              showLabel={false}
+              className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border-0 shadow-lg hover:bg-background"
+            />
+          </div>
+          
+          {/* Hero Content */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+            <div className="container mx-auto">
+              <Badge className="mb-3 bg-primary/90 text-primary-foreground text-sm px-3 py-1.5 backdrop-blur-sm">
+                <Sparkles className="mr-1.5 h-4 w-4" />
+                {temple.deity}
+              </Badge>
+              <h1 className="mb-2 font-serif text-3xl font-bold text-foreground sm:text-4xl md:text-5xl">
+                {temple.name}
+              </h1>
+              <div className="flex items-center gap-2 text-base text-muted-foreground sm:text-lg">
+                <MapPin className="h-5 w-5" />
+                <span>{temple.location}, {temple.state}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Quick Actions - Large Touch Targets */}
-        <Card className="mb-6 border-border bg-card">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-start justify-between gap-3 mb-4">
-              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed flex-1">{temple.description}</p>
-              <ShareButton
-                title={temple.name}
-                text={`Visit ${temple.name} on Divine Temple Platform 🙏`}
-                url={window.location.href}
-                variant="outline"
-                size="icon"
-                showLabel={false}
-                className="h-12 w-12 shrink-0"
-              />
-            </div>
-            
-            {/* Main Actions Grid - Large Buttons */}
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-              <Link to={`/donate/${temple.id}`} className="contents">
-                <Button variant="default" size="lg" className="h-16 flex-col gap-1.5 text-base font-medium">
-                  <CreditCard className="h-6 w-6" />
-                  <span>{t('donate')}</span>
+        {/* Sticky Action Bar */}
+        <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <Link to={`/donate/${temple.id}`}>
+                <Button size="lg" className="gap-2 rounded-full shrink-0">
+                  <CreditCard className="h-5 w-5" />
+                  <span className="hidden sm:inline">{t('donate')}</span>
                 </Button>
               </Link>
-              <Link to={`/book/${temple.id}`} className="contents">
-                <Button variant="outline" size="lg" className="h-16 flex-col gap-1.5 text-base font-medium">
-                  <CalendarCheck className="h-6 w-6" />
-                  <span>{t('bookSlot')}</span>
+              <Link to={`/book/${temple.id}`}>
+                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
+                  <CalendarCheck className="h-5 w-5" />
+                  <span className="hidden sm:inline">{t('bookSlot')}</span>
                 </Button>
               </Link>
-              <Link to={`/pooja/${temple.id}`} className="contents">
-                <Button variant="outline" size="lg" className="h-16 flex-col gap-1.5 text-base font-medium">
-                  <Palmtree className="h-6 w-6" />
-                  <span>{t('requestPooja')}</span>
+              <Link to={`/pooja/${temple.id}`}>
+                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
+                  <Palmtree className="h-5 w-5" />
+                  <span className="hidden sm:inline">{t('requestPooja')}</span>
                 </Button>
               </Link>
-              <Link to={`/recurring-donate/${temple.id}`} className="contents">
-                <Button variant="outline" size="lg" className="h-16 flex-col gap-1.5 text-base font-medium">
-                  <RefreshCw className="h-6 w-6" />
-                  <span className="text-sm">{t('recurringDonation')}</span>
+              <Link to={`/recurring-donate/${temple.id}`}>
+                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
+                  <RefreshCw className="h-5 w-5" />
+                  <span className="hidden sm:inline text-sm">{t('recurringDonation')}</span>
                 </Button>
               </Link>
               <Button
@@ -176,234 +160,271 @@ const TempleDetails = () => {
                 variant={following ? "default" : "outline"}
                 size="lg"
                 className={cn(
-                  "h-16 flex-col gap-1.5 text-base font-medium col-span-2 sm:col-span-1",
+                  "gap-2 rounded-full shrink-0 ml-auto",
                   following && "bg-primary text-primary-foreground"
                 )}
               >
-                <Heart className={cn("h-6 w-6", following && "fill-current")} />
+                <Heart className={cn("h-5 w-5", following && "fill-current")} />
                 <span>{following ? t('following') : t('follow')}</span>
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* Main Content - Simplified 2 Column Layout */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Pooja Timings */}
-          <Card className="border-border bg-card">
-            <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
-              <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
-                <Clock className="h-6 w-6 text-primary" />
-                {t('timings')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="divide-y divide-border p-0">
-              {temple.poojaTimings.map((timing, index) => (
-                <div
-                  key={index}
-                  className="flex items-start justify-between gap-4 p-4 sm:p-5 transition-colors hover:bg-accent/30"
-                >
-                  <div className="flex-1">
-                    <h4 className="text-base sm:text-lg font-medium text-foreground">{timing.name}</h4>
-                    {timing.description && (
-                      <p className="mt-1 text-sm sm:text-base text-muted-foreground">{timing.description}</p>
-                    )}
+        {/* Description Section */}
+        <section className="container mx-auto px-4 py-8">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+            {temple.description}
+          </p>
+        </section>
+
+        {/* Main Content Tabs */}
+        <div className="container mx-auto px-4 pb-8">
+          <Tabs defaultValue="info" className="w-full">
+            <TabsList className="w-full grid grid-cols-4 h-auto p-1 rounded-2xl bg-muted/50 mb-6">
+              <TabsTrigger value="info" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Clock className="h-4 w-4 mr-2 hidden sm:inline" />
+                Info
+              </TabsTrigger>
+              <TabsTrigger value="explore" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Play className="h-4 w-4 mr-2 hidden sm:inline" />
+                Explore
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Star className="h-4 w-4 mr-2 hidden sm:inline" />
+                Reviews
+              </TabsTrigger>
+              <TabsTrigger value="patrons" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <Users className="h-4 w-4 mr-2 hidden sm:inline" />
+                Patrons
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Info Tab */}
+            <TabsContent value="info" className="mt-0 space-y-8">
+              {/* Timings Section */}
+              <section>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <Clock className="h-5 w-5 text-primary" />
                   </div>
-                  <Badge variant="outline" className="shrink-0 border-primary/30 bg-primary/5 text-primary text-sm sm:text-base px-3 py-1">
-                    {timing.time}
-                  </Badge>
+                  <h2 className="font-serif text-2xl font-semibold text-foreground">{t('timings')}</h2>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          {/* Announcements */}
-          <Card className="border-border bg-card">
-            <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
-              <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
-                <Bell className="h-6 w-6 text-primary" />
-                {t('announcements')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="divide-y divide-border p-0">
-              {temple.announcements.length === 0 ? (
-                <div className="p-6 sm:p-8 text-center text-lg text-muted-foreground">
-                  No announcements at this time
-                </div>
-              ) : (
-                temple.announcements.map((announcement) => (
-                  <div key={announcement.id} className="p-4 sm:p-5 transition-colors hover:bg-accent/30">
-                    <div className="mb-2 flex items-start justify-between gap-3">
-                      <h4 className="text-base sm:text-lg font-medium text-foreground">{announcement.title}</h4>
-                      <Badge className={cn("shrink-0 capitalize text-sm", getAnnouncementBadgeColor(announcement.type))}>
-                        {announcement.type}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {temple.poojaTimings.map((timing, index) => (
+                    <div
+                      key={index}
+                      className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-muted/30 transition-all hover:bg-muted/50"
+                    >
+                      <div className="flex-1">
+                        <h4 className="text-base sm:text-lg font-medium text-foreground">{timing.name}</h4>
+                        {timing.description && (
+                          <p className="mt-1 text-sm text-muted-foreground">{timing.description}</p>
+                        )}
+                      </div>
+                      <Badge variant="outline" className="shrink-0 border-primary/30 bg-primary/5 text-primary font-semibold px-3 py-1.5">
+                        {timing.time}
                       </Badge>
                     </div>
-                    <p className="mb-3 text-sm sm:text-base text-muted-foreground">{announcement.content}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(announcement.date).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Announcements Section */}
+              <section>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <Bell className="h-5 w-5 text-primary" />
                   </div>
-                ))
+                  <h2 className="font-serif text-2xl font-semibold text-foreground">{t('announcements')}</h2>
+                </div>
+                {temple.announcements.length === 0 ? (
+                  <div className="p-8 text-center text-lg text-muted-foreground rounded-2xl bg-muted/30">
+                    No announcements at this time
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {temple.announcements.map((announcement) => (
+                      <div key={announcement.id} className="p-4 sm:p-5 rounded-2xl bg-muted/30 transition-all hover:bg-muted/50">
+                        <div className="mb-2 flex items-start justify-between gap-3">
+                          <h4 className="text-base sm:text-lg font-medium text-foreground">{announcement.title}</h4>
+                          <Badge className={cn("shrink-0 capitalize text-sm rounded-full px-3", getAnnouncementBadgeColor(announcement.type))}>
+                            {announcement.type}
+                          </Badge>
+                        </div>
+                        <p className="mb-3 text-sm sm:text-base text-muted-foreground">{announcement.content}</p>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4" />
+                          {new Date(announcement.date).toLocaleDateString('en-IN', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              {/* Contact & Location Row */}
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* Contact Information */}
+                {temple.contact && (
+                  <section>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                        <Phone className="h-5 w-5 text-primary" />
+                      </div>
+                      <h2 className="font-serif text-2xl font-semibold text-foreground">Contact</h2>
+                    </div>
+                    <div className="space-y-3">
+                      {temple.contact.phone && (
+                        <a 
+                          href={`tel:${temple.contact.phone}`}
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <Phone className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Phone</p>
+                            <p className="text-lg font-medium">{temple.contact.phone}</p>
+                          </div>
+                        </a>
+                      )}
+                      {temple.contact.email && (
+                        <a 
+                          href={`mailto:${temple.contact.email}`}
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <Mail className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Email</p>
+                            <p className="text-lg font-medium">{temple.contact.email}</p>
+                          </div>
+                        </a>
+                      )}
+                      {temple.contact.website && (
+                        <a 
+                          href={temple.contact.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <Globe className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Website</p>
+                            <p className="text-lg font-medium flex items-center gap-2">
+                              {temple.contact.website.replace('https://', '')}
+                              <ExternalLink className="h-4 w-4" />
+                            </p>
+                          </div>
+                        </a>
+                      )}
+                    </div>
+                  </section>
+                )}
+
+                {/* Location Map */}
+                {temple.coordinates && (
+                  <section>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                        <MapPin className="h-5 w-5 text-primary" />
+                      </div>
+                      <h2 className="font-serif text-2xl font-semibold text-foreground">Location</h2>
+                    </div>
+                    <div className="rounded-2xl overflow-hidden bg-muted/30">
+                      <div className="aspect-video">
+                        <iframe
+                          title={`${temple.name} location`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${temple.coordinates.lat},${temple.coordinates.lng}&zoom=15`}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" size="lg" className="w-full gap-2 rounded-full">
+                            <ExternalLink className="h-5 w-5" />
+                            Open in Google Maps
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Explore Tab */}
+            <TabsContent value="explore" className="mt-0 space-y-8">
+              {/* Gallery */}
+              {temple.gallery && temple.gallery.length > 0 && (
+                <TempleGallery images={temple.gallery} templeName={temple.name} templeId={temple.id} />
               )}
-            </CardContent>
-          </Card>
 
-          {/* Contact Information */}
-          {temple.contact && (
-            <Card className="border-border bg-card">
-              <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
-                <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
-                  <Phone className="h-6 w-6 text-primary" />
-                  Contact Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6 space-y-4">
-                {temple.contact.phone && (
-                  <a 
-                    href={`tel:${temple.contact.phone}`}
-                    className="flex items-center gap-4 p-3 rounded-xl bg-accent/30 text-foreground hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                      <Phone className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Phone</p>
-                      <p className="text-lg font-medium">{temple.contact.phone}</p>
-                    </div>
-                  </a>
-                )}
-                {temple.contact.email && (
-                  <a 
-                    href={`mailto:${temple.contact.email}`}
-                    className="flex items-center gap-4 p-3 rounded-xl bg-accent/30 text-foreground hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                      <Mail className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Email</p>
-                      <p className="text-lg font-medium">{temple.contact.email}</p>
-                    </div>
-                  </a>
-                )}
-                {temple.contact.website && (
-                  <a 
-                    href={temple.contact.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-3 rounded-xl bg-accent/30 text-foreground hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                      <Globe className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Website</p>
-                      <p className="text-lg font-medium flex items-center gap-2">
-                        {temple.contact.website.replace('https://', '')}
-                        <ExternalLink className="h-4 w-4" />
-                      </p>
-                    </div>
-                  </a>
-                )}
-              </CardContent>
-            </Card>
-          )}
+              {/* Temple History */}
+              {temple.history && (
+                <TempleHistory history={temple.history} templeName={temple.name} templeId={temple.id} />
+              )}
 
-          {/* Location Map */}
-          {temple.coordinates && (
-            <Card className="border-border bg-card">
-              <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
-                <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
-                  <MapPin className="h-6 w-6 text-primary" />
-                  Location
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6">
-                <div className="aspect-video overflow-hidden rounded-xl bg-muted">
-                  <iframe
-                    title={`${temple.name} location`}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${temple.coordinates.lat},${temple.coordinates.lng}&zoom=15`}
-                  />
-                </div>
-                <div className="mt-4">
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button variant="outline" size="lg" className="w-full gap-2 text-base">
-                      <ExternalLink className="h-5 w-5" />
-                      Open in Google Maps
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+              {/* Live Darshan */}
+              <LiveDarshan 
+                templeName={temple.name} 
+                templeId={temple.id}
+                isLive={false}
+                scheduledTime="6:00 AM - 8:00 PM"
+              />
 
-          {/* Gallery */}
-          {temple.gallery && temple.gallery.length > 0 && (
-            <TempleGallery images={temple.gallery} templeName={temple.name} templeId={temple.id} />
-          )}
+              {/* Temple Music Player */}
+              <TempleMusicPlayer templeName={temple.name} tracks={[]} />
+            </TabsContent>
 
-          {/* Temple History */}
-          {temple.history && (
-            <TempleHistory history={temple.history} templeName={temple.name} templeId={temple.id} />
-          )}
+            {/* Reviews Tab */}
+            <TabsContent value="reviews" className="mt-0">
+              <TempleReviews templeId={temple.id} templeName={temple.name} />
+            </TabsContent>
 
-          {/* Live Darshan */}
-          <LiveDarshan 
-            templeName={temple.name} 
-            templeId={temple.id}
-            isLive={false}
-            scheduledTime="6:00 AM - 8:00 PM"
-          />
-
-          {/* Temple Music Player */}
-          <TempleMusicPlayer templeName={temple.name} tracks={[]} />
-
-          {/* Reviews & Ratings */}
-          <TempleReviews templeId={temple.id} templeName={temple.name} />
-        </div>
-
-        {/* Our Patrons - Collapsible Section */}
-        <div className="mt-6">
-          <Collapsible open={patronsOpen} onOpenChange={setPatronsOpen}>
-            <CollapsibleTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="w-full justify-between text-lg font-medium h-16 rounded-xl border-border bg-card hover:bg-accent/50"
-              >
-                <span className="flex items-center gap-3">
-                  <Users className="h-6 w-6 text-primary" />
-                  Our Patrons
-                </span>
-                <ChevronDown className={cn(
-                  "h-6 w-6 transition-transform duration-200",
-                  patronsOpen && "rotate-180"
-                )} />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-4">
+            {/* Patrons Tab */}
+            <TabsContent value="patrons" className="mt-0">
               <TemplePatrons templeId={temple.id} templeName={temple.name} />
-            </CollapsibleContent>
-          </Collapsible>
+            </TabsContent>
+          </Tabs>
         </div>
-      </main>
 
-      {footerContent}
+        {/* Footer */}
+        <footer className="border-t border-border bg-muted/30 py-10">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80">
+                  <Sparkles className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <div>
+                  <p className="font-bold text-foreground">Templo</p>
+                  <p className="text-xs text-muted-foreground">Divine Connections</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                © 2024 Templo. Connecting devotees with divine spaces.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </main>
     </div>
   );
 };

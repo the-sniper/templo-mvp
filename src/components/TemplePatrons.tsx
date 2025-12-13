@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -56,44 +55,45 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
   const allPatrons = filteredPatrons;
 
   return (
-    <Card className="border-border bg-card">
-      <CardHeader className="border-b border-border bg-accent/50 py-4 sm:py-6">
-        <CardTitle className="flex items-center gap-3 font-serif text-xl sm:text-2xl">
-          <Users className="h-6 w-6 text-primary" />
-          Our Patrons
-        </CardTitle>
-        <p className="text-base text-muted-foreground mt-2">
-          With blessings to our devoted supporters
-        </p>
-      </CardHeader>
-      <CardContent className="p-4 sm:p-6">
+    <div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+          <Users className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <h2 className="font-serif text-2xl font-semibold text-foreground">Our Patrons</h2>
+          <p className="text-sm text-muted-foreground">With blessings to our devoted supporters</p>
+        </div>
+      </div>
+      
+      <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
         <Tabs defaultValue="leaderboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="leaderboard">Top Supporters</TabsTrigger>
-            <TabsTrigger value="all">All Patrons</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-4 rounded-xl bg-muted/50">
+            <TabsTrigger value="leaderboard" className="rounded-lg">Top Supporters</TabsTrigger>
+            <TabsTrigger value="all" className="rounded-lg">All Patrons</TabsTrigger>
           </TabsList>
 
           {/* Filter Controls */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <div className="flex gap-1 p-1 rounded-lg bg-muted">
+            <div className="flex gap-1 p-1 rounded-xl bg-muted/50">
               {(['daily', 'weekly', 'monthly'] as const).map((filter) => (
                 <Button
                   key={filter}
                   variant={timeFilter === filter ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setTimeFilter(filter)}
-                  className="text-xs capitalize"
+                  className="text-xs capitalize rounded-lg"
                 >
                   {filter}
                 </Button>
               ))}
             </div>
-            <div className="flex gap-1 p-1 rounded-lg bg-muted">
+            <div className="flex gap-1 p-1 rounded-xl bg-muted/50">
               <Button
                 variant={regionFilter === 'all' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setRegionFilter('all')}
-                className="text-xs"
+                className="text-xs rounded-lg"
               >
                 All
               </Button>
@@ -101,7 +101,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 variant={regionFilter === 'nri' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setRegionFilter('nri')}
-                className="text-xs"
+                className="text-xs rounded-lg"
               >
                 <Globe className="h-3 w-3 mr-1" />
                 NRI
@@ -110,7 +110,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 variant={regionFilter === 'india' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setRegionFilter('india')}
-                className="text-xs"
+                className="text-xs rounded-lg"
               >
                 India
               </Button>
@@ -126,13 +126,13 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                   <div
                     key={patron.id}
                     className={cn(
-                      "flex items-start gap-3 p-4 rounded-lg border transition-colors",
-                      index === 0 && "bg-primary/5 border-primary/20",
-                      index !== 0 && "bg-card border-border hover:bg-accent/30"
+                      "flex items-start gap-3 p-4 rounded-xl transition-colors",
+                      index === 0 && "bg-primary/5",
+                      index !== 0 && "bg-background/50 hover:bg-background/80"
                     )}
                   >
                     <div className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-full font-bold text-sm",
+                      "flex h-8 w-8 items-center justify-center rounded-full font-bold text-sm shrink-0",
                       index === 0 && "bg-primary text-primary-foreground",
                       index === 1 && "bg-amber-500 text-white",
                       index === 2 && "bg-orange-500 text-white",
@@ -145,7 +145,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                         <span className="font-medium text-foreground">
                           {patron.isAnonymous ? 'Anonymous Devotee' : patron.name}
                         </span>
-                        <Badge variant="outline" className={cn("text-xs", badgeConfig[patron.badge].color)}>
+                        <Badge variant="outline" className={cn("text-xs rounded-full", badgeConfig[patron.badge].color)}>
                           <BadgeIcon className="h-3 w-3 mr-1" />
                           {badgeConfig[patron.badge].label}
                         </Badge>
@@ -187,9 +187,9 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 return (
                   <div
                     key={patron.id}
-                    className="flex items-start gap-3 p-3 rounded-lg border border-border bg-card hover:bg-accent/30 transition-colors"
+                    className="flex items-start gap-3 p-4 rounded-xl bg-background/50 hover:bg-background/80 transition-colors"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 shrink-0">
                       <BadgeIcon className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -202,7 +202,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                         <span className="text-xs text-muted-foreground">
                           {patron.region}
                         </span>
-                        <Badge variant="outline" className={cn("text-xs py-0", badgeConfig[patron.badge].color)}>
+                        <Badge variant="outline" className={cn("text-xs py-0 rounded-full", badgeConfig[patron.badge].color)}>
                           {badgeConfig[patron.badge].label.split(' ')[0]}
                         </Badge>
                       </div>
@@ -223,8 +223,8 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
             )}
           </TabsContent>
         </Tabs>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

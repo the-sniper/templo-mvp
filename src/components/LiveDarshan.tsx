@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Video, VideoOff, Bell, BellOff, Users, Share2 } from 'lucide-react';
+import { Video, VideoOff, Bell, BellOff, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/LanguageContext';
@@ -42,25 +41,24 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
   };
 
   return (
-    <Card className="mt-6">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Video className="h-5 w-5 text-primary" />
-            {t('liveDarshan')}
-          </CardTitle>
-          {isLive && (
-            <Badge variant="destructive" className="animate-pulse">
-              ● LIVE
-            </Badge>
-          )}
+    <section>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+          <Video className="h-5 w-5 text-primary" />
         </div>
-      </CardHeader>
-      <CardContent>
+        <h2 className="font-serif text-2xl font-semibold text-foreground">{t('liveDarshan')}</h2>
+        {isLive && (
+          <Badge variant="destructive" className="animate-pulse rounded-full">
+            ● LIVE
+          </Badge>
+        )}
+      </div>
+      
+      <div className="rounded-2xl bg-muted/30 overflow-hidden">
         {isLive ? (
           <>
             {/* Live Stream View */}
-            <div className="relative aspect-video bg-black rounded-lg overflow-hidden mb-4">
+            <div className="relative aspect-video bg-foreground/5">
               {isWatching ? (
                 <>
                   {/* Placeholder for actual video stream */}
@@ -72,15 +70,15 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
                     </div>
                   </div>
                   {/* Viewer count overlay */}
-                  <div className="absolute top-3 right-3 bg-black/60 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                  <div className="absolute top-3 right-3 bg-foreground/60 text-background px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5">
                     <Users className="h-3 w-3" />
                     {viewerCount.toLocaleString()} watching
                   </div>
                 </>
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Button size="lg" onClick={startWatching}>
-                    <Video className="h-5 w-5 mr-2" />
+                  <Button size="lg" onClick={startWatching} className="rounded-full gap-2">
+                    <Video className="h-5 w-5" />
                     Watch Live Darshan
                   </Button>
                 </div>
@@ -88,18 +86,18 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
             </div>
 
             {/* Live Actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 p-4">
               <ShareButton
                 title={`Live Darshan - ${templeName}`}
                 text={`Watch live darshan from ${templeName} now!`}
                 url={`${window.location.origin}/temple/${templeId}?live=true`}
                 variant="outline"
-                className="flex-1"
+                className="flex-1 rounded-full"
               />
               <Button
                 variant="outline"
                 onClick={toggleNotifications}
-                className="flex-1"
+                className="flex-1 rounded-full"
               >
                 {notificationsEnabled ? (
                   <BellOff className="h-4 w-4 mr-2" />
@@ -113,7 +111,7 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
         ) : (
           <>
             {/* Offline State */}
-            <div className="aspect-video bg-accent/50 rounded-lg flex items-center justify-center mb-4">
+            <div className="aspect-video flex items-center justify-center">
               <div className="text-center p-6">
                 <VideoOff className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
                 <p className="font-medium text-foreground">Live Darshan Offline</p>
@@ -130,31 +128,33 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
             </div>
 
             {/* Notification Toggle */}
-            <Button
-              variant={notificationsEnabled ? 'secondary' : 'default'}
-              className="w-full"
-              onClick={toggleNotifications}
-            >
-              {notificationsEnabled ? (
-                <>
-                  <BellOff className="h-4 w-4 mr-2" />
-                  Notifications Enabled
-                </>
-              ) : (
-                <>
-                  <Bell className="h-4 w-4 mr-2" />
-                  Notify When Live
-                </>
-              )}
-            </Button>
+            <div className="p-4 pt-0">
+              <Button
+                variant={notificationsEnabled ? 'secondary' : 'default'}
+                className="w-full rounded-full"
+                onClick={toggleNotifications}
+              >
+                {notificationsEnabled ? (
+                  <>
+                    <BellOff className="h-4 w-4 mr-2" />
+                    Notifications Enabled
+                  </>
+                ) : (
+                  <>
+                    <Bell className="h-4 w-4 mr-2" />
+                    Notify When Live
+                  </>
+                )}
+              </Button>
 
-            <p className="text-xs text-center text-muted-foreground mt-3">
-              Get notified when live darshan starts
-            </p>
+              <p className="text-xs text-center text-muted-foreground mt-3">
+                Get notified when live darshan starts
+              </p>
+            </div>
           </>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };
 

@@ -46,11 +46,11 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
           showLabel={false}
         />
       </div>
-      <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
+      <div className="rounded-2xl bg-accent/50 p-4 sm:p-6">
         <Accordion type="multiple" className="w-full">
           {history.originStory && (
             <AccordionItem value="origin" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Origin Story
@@ -64,7 +64,7 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
 
           {history.deitySignificance && (
             <AccordionItem value="deity" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Deity Significance
@@ -78,7 +78,7 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
 
           {history.famousMiracles && history.famousMiracles.length > 0 && (
             <AccordionItem value="miracles" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Famous Miracles
@@ -99,7 +99,7 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
 
           {history.famousPoojas && history.famousPoojas.length > 0 && (
             <AccordionItem value="poojas" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Famous Poojas & Rituals
@@ -117,7 +117,7 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
 
           {history.pastKumbabishekams && history.pastKumbabishekams.length > 0 && (
             <AccordionItem value="kumbabishekam" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Calendar className="h-4 w-4 text-primary" />
                   Past Kumbabishekams
@@ -138,7 +138,7 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
 
           {history.architecturalSignificance && (
             <AccordionItem value="architecture" className="border-b-0">
-              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-accent/70 px-3 -mx-3">
                 <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Architectural Significance

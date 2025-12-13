@@ -66,16 +66,16 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
         </div>
       </div>
       
-      <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
+      <div className="rounded-2xl bg-accent/50 p-4 sm:p-6">
         <Tabs defaultValue="leaderboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4 rounded-xl bg-muted/50">
+          <TabsList className="grid w-full grid-cols-2 mb-4 rounded-xl bg-accent/30">
             <TabsTrigger value="leaderboard" className="rounded-lg">Top Supporters</TabsTrigger>
             <TabsTrigger value="all" className="rounded-lg">All Patrons</TabsTrigger>
           </TabsList>
 
           {/* Filter Controls */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <div className="flex gap-1 p-1 rounded-xl bg-muted/50">
+            <div className="flex gap-1 p-1 rounded-xl bg-accent/30">
               {(['daily', 'weekly', 'monthly'] as const).map((filter) => (
                 <Button
                   key={filter}
@@ -88,7 +88,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 </Button>
               ))}
             </div>
-            <div className="flex gap-1 p-1 rounded-xl bg-muted/50">
+            <div className="flex gap-1 p-1 rounded-xl bg-accent/30">
               <Button
                 variant={regionFilter === 'all' ? 'default' : 'ghost'}
                 size="sm"
@@ -127,8 +127,8 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                     key={patron.id}
                     className={cn(
                       "flex items-start gap-3 p-4 rounded-xl transition-colors",
-                      index === 0 && "bg-primary/5",
-                      index !== 0 && "bg-background/50 hover:bg-background/80"
+                      index === 0 && "bg-primary/10",
+                      index !== 0 && "bg-card/80 hover:bg-card"
                     )}
                   >
                     <div className={cn(
@@ -187,7 +187,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 return (
                   <div
                     key={patron.id}
-                    className="flex items-start gap-3 p-4 rounded-xl bg-background/50 hover:bg-background/80 transition-colors"
+                    className="flex items-start gap-3 p-4 rounded-xl bg-card/80 hover:bg-card transition-colors"
                   >
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 shrink-0">
                       <BadgeIcon className="h-5 w-5 text-primary" />

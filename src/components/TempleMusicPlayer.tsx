@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Music } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface Track {
@@ -27,7 +26,7 @@ const sampleTracks: Track[] = [
     titleLocal: 'காலை சுப்ரபாதம்',
     artist: 'Temple Priests',
     duration: '5:30',
-    url: '', // Placeholder - would be actual audio URL
+    url: '',
   },
   {
     id: '2',
@@ -54,13 +53,11 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
   const [volume, setVolume] = useState(70);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const currentTrack = tracks[currentTrackIndex];
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
-    // In production, this would control actual audio playback
   };
 
   const nextTrack = () => {
@@ -99,18 +96,19 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
   }
 
   return (
-    <Card className="mt-6">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
+    <section>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
           <Music className="h-5 w-5 text-primary" />
-          {t('templeMusic')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </div>
+        <h2 className="font-serif text-2xl font-semibold text-foreground">{t('templeMusic')}</h2>
+      </div>
+      
+      <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
         {/* Now Playing */}
-        <div className="bg-accent/50 rounded-lg p-4 mb-4">
+        <div className="bg-primary/5 rounded-xl p-4 mb-4">
           <p className="text-xs text-muted-foreground mb-1">Now Playing</p>
-          <p className="font-medium">
+          <p className="font-medium text-foreground">
             {language !== 'en' && currentTrack.titleLocal ? currentTrack.titleLocal : currentTrack.title}
           </p>
           <p className="text-sm text-muted-foreground">{currentTrack.artist}</p>
@@ -125,32 +123,32 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
             className="cursor-pointer"
             onValueChange={(value) => setProgress(value[0])}
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <div className="flex justify-between text-xs text-muted-foreground mt-2">
             <span>{Math.floor(progress / 100 * 330 / 60)}:{String(Math.floor(progress / 100 * 330 % 60)).padStart(2, '0')}</span>
             <span>{currentTrack.duration}</span>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Button variant="ghost" size="icon" onClick={prevTrack}>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <Button variant="ghost" size="icon" onClick={prevTrack} className="h-12 w-12 rounded-full">
             <SkipBack className="h-5 w-5" />
           </Button>
           <Button
             size="icon"
-            className="h-12 w-12 rounded-full"
+            className="h-14 w-14 rounded-full"
             onClick={togglePlay}
           >
             {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6 ml-0.5" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={nextTrack}>
+          <Button variant="ghost" size="icon" onClick={nextTrack} className="h-12 w-12 rounded-full">
             <SkipForward className="h-5 w-5" />
           </Button>
         </div>
 
         {/* Volume */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggleMute}>
+        <div className="flex items-center gap-3 mb-6">
+          <Button variant="ghost" size="icon" onClick={toggleMute} className="shrink-0">
             {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </Button>
           <Slider
@@ -166,7 +164,7 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
         </div>
 
         {/* Track List */}
-        <div className="mt-4 space-y-2">
+        <div className="space-y-2">
           {tracks.map((track, index) => (
             <button
               key={track.id}
@@ -175,8 +173,8 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
                 setProgress(0);
                 setIsPlaying(true);
               }}
-              className={`w-full text-left p-2 rounded-lg transition-colors ${
-                index === currentTrackIndex ? 'bg-primary/10 text-primary' : 'hover:bg-accent'
+              className={`w-full text-left p-3 rounded-xl transition-colors ${
+                index === currentTrackIndex ? 'bg-primary/10 text-primary' : 'hover:bg-muted/50'
               }`}
             >
               <div className="flex justify-between items-center">
@@ -193,12 +191,12 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
         </div>
 
         {/* Morning Suprabhatam Banner */}
-        <div className="mt-4 p-3 bg-gradient-to-r from-primary/10 to-accent rounded-lg text-center">
-          <p className="text-sm font-medium">🌅 Start your day with morning Suprabhatam</p>
-          <p className="text-xs text-muted-foreground">Daily at 5:30 AM</p>
+        <div className="mt-4 p-4 bg-gradient-to-r from-primary/10 to-accent/30 rounded-xl text-center">
+          <p className="font-medium text-foreground">🌅 Start your day with morning Suprabhatam</p>
+          <p className="text-xs text-muted-foreground mt-1">Daily at 5:30 AM</p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };
 

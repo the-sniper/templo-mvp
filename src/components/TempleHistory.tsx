@@ -1,6 +1,5 @@
 import React from 'react';
 import { BookOpen, Sparkles, Calendar } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import ShareButton from '@/components/ShareButton';
@@ -30,62 +29,62 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
   if (!hasContent) return null;
 
   return (
-    <Card className="border-border bg-card">
-      <CardHeader className="border-b border-border bg-accent/50">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 font-serif text-xl">
+    <section>
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
             <BookOpen className="h-5 w-5 text-primary" />
-            Temple History & Significance
-          </CardTitle>
-          <ShareButton
-            title={`${templeName} - History`}
-            text={`Learn about the rich history and significance of ${templeName} 🙏`}
-            url={`${window.location.origin}/temple/${templeId}`}
-            variant="ghost"
-            size="sm"
-            showLabel={false}
-          />
+          </div>
+          <h2 className="font-serif text-2xl font-semibold text-foreground">History & Significance</h2>
         </div>
-      </CardHeader>
-      <CardContent className="p-4">
+        <ShareButton
+          title={`${templeName} - History`}
+          text={`Learn about the rich history and significance of ${templeName} 🙏`}
+          url={`${window.location.origin}/temple/${templeId}`}
+          variant="ghost"
+          size="sm"
+          showLabel={false}
+        />
+      </div>
+      <div className="rounded-2xl bg-muted/30 p-4 sm:p-6">
         <Accordion type="multiple" className="w-full">
           {history.originStory && (
-            <AccordionItem value="origin">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="origin" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Origin Story
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <p className="text-muted-foreground leading-relaxed">{history.originStory}</p>
               </AccordionContent>
             </AccordionItem>
           )}
 
           {history.deitySignificance && (
-            <AccordionItem value="deity">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="deity" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Deity Significance
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <p className="text-muted-foreground leading-relaxed">{history.deitySignificance}</p>
               </AccordionContent>
             </AccordionItem>
           )}
 
           {history.famousMiracles && history.famousMiracles.length > 0 && (
-            <AccordionItem value="miracles">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="miracles" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Famous Miracles
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <ul className="space-y-2">
                   {history.famousMiracles.map((miracle, index) => (
                     <li key={index} className="flex items-start gap-2 text-muted-foreground">
@@ -99,17 +98,17 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
           )}
 
           {history.famousPoojas && history.famousPoojas.length > 0 && (
-            <AccordionItem value="poojas">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="poojas" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Famous Poojas & Rituals
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <div className="flex flex-wrap gap-2">
                   {history.famousPoojas.map((pooja, index) => (
-                    <Badge key={index} variant="secondary">{pooja}</Badge>
+                    <Badge key={index} variant="secondary" className="rounded-full">{pooja}</Badge>
                   ))}
                 </div>
               </AccordionContent>
@@ -117,18 +116,18 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
           )}
 
           {history.pastKumbabishekams && history.pastKumbabishekams.length > 0 && (
-            <AccordionItem value="kumbabishekam">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="kumbabishekam" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Calendar className="h-4 w-4 text-primary" />
                   Past Kumbabishekams
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <div className="space-y-3">
                   {history.pastKumbabishekams.map((event, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <Badge variant="outline" className="shrink-0">{event.year}</Badge>
+                      <Badge variant="outline" className="shrink-0 rounded-full">{event.year}</Badge>
                       <p className="text-muted-foreground">{event.description}</p>
                     </div>
                   ))}
@@ -138,21 +137,21 @@ const TempleHistory: React.FC<TempleHistoryProps> = ({ history, templeName, temp
           )}
 
           {history.architecturalSignificance && (
-            <AccordionItem value="architecture">
-              <AccordionTrigger className="text-left">
-                <span className="flex items-center gap-2">
+            <AccordionItem value="architecture" className="border-b-0">
+              <AccordionTrigger className="text-left hover:no-underline py-4 rounded-xl hover:bg-muted/50 px-3 -mx-3">
+                <span className="flex items-center gap-2 font-medium">
                   <Sparkles className="h-4 w-4 text-primary" />
                   Architectural Significance
                 </span>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-3">
                 <p className="text-muted-foreground leading-relaxed">{history.architecturalSignificance}</p>
               </AccordionContent>
             </AccordionItem>
           )}
         </Accordion>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 };
 

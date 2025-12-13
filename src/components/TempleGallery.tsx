@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Images } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogClose } from '@/components/ui/dialog';
 import ShareButton from '@/components/ShareButton';
 
@@ -48,43 +47,42 @@ const TempleGallery: React.FC<TempleGalleryProps> = ({ images, templeName, templ
 
   return (
     <>
-      <Card className="border-border bg-card">
-        <CardHeader className="border-b border-border bg-accent/50">
-          <CardTitle className="flex items-center gap-2 font-serif text-xl">
+      <section>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
             <Images className="h-5 w-5 text-primary" />
-            Gallery
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="grid grid-cols-3 gap-2">
-            {images.slice(0, 6).map((image, index) => (
-              <div
-                key={image.id}
-                className="aspect-square rounded-lg overflow-hidden cursor-pointer relative group"
-                onClick={() => openLightbox(index)}
-              >
-                <img
-                  src={image.url}
-                  alt={image.caption || `${templeName} photo`}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                  onError={(e) => {
-                    e.currentTarget.src = '/placeholder.svg';
-                  }}
-                />
-                {index === 5 && images.length > 6 && (
-                  <div className="absolute inset-0 bg-foreground/60 flex items-center justify-center">
-                    <span className="text-background font-bold text-lg">+{images.length - 6}</span>
-                  </div>
-                )}
-              </div>
-            ))}
           </div>
-        </CardContent>
-      </Card>
+          <h2 className="font-serif text-2xl font-semibold text-foreground">Gallery</h2>
+        </div>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          {images.slice(0, 6).map((image, index) => (
+            <div
+              key={image.id}
+              className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer relative group"
+              onClick={() => openLightbox(index)}
+            >
+              <img
+                src={image.url}
+                alt={image.caption || `${templeName} photo`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                onError={(e) => {
+                  e.currentTarget.src = '/placeholder.svg';
+                }}
+              />
+              <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-all duration-300" />
+              {index === 5 && images.length > 6 && (
+                <div className="absolute inset-0 bg-foreground/60 flex items-center justify-center">
+                  <span className="text-background font-bold text-xl">+{images.length - 6}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Lightbox */}
       <Dialog open={selectedIndex !== null} onOpenChange={closeLightbox}>
-        <DialogContent className="max-w-4xl p-0 bg-background/95 backdrop-blur">
+        <DialogContent className="max-w-4xl p-0 bg-background/95 backdrop-blur border-0 rounded-2xl overflow-hidden">
           <DialogClose className="absolute right-4 top-4 z-10">
             <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full bg-background/80">
               <X className="h-5 w-5" />

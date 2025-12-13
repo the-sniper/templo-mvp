@@ -123,7 +123,7 @@ const TempleReviews = ({ templeId, templeName }: TempleReviewsProps) => {
       </div>
       
       {/* Rating Summary */}
-      <div className="flex items-center gap-6 mb-6 p-5 rounded-2xl bg-muted/30">
+      <div className="flex items-center gap-6 mb-6 p-5 rounded-2xl bg-accent/50">
         <div className="text-center">
           <div className="text-4xl font-bold text-foreground">{averageRating.toFixed(1)}</div>
           <div className="flex justify-center mt-1">
@@ -156,7 +156,7 @@ const TempleReviews = ({ templeId, templeName }: TempleReviewsProps) => {
 
       {/* Write Review Form */}
       {showReviewForm && (
-        <div className="mb-6 p-5 rounded-2xl border-2 border-dashed border-border bg-muted/20">
+        <div className="mb-6 p-5 rounded-2xl border-2 border-dashed border-primary/30 bg-accent/30">
           <h4 className="font-medium mb-3">{t('shareYourExperience')}</h4>
           <div className="mb-4">
             <label className="text-sm text-muted-foreground mb-2 block">{t('yourRating')}</label>
@@ -190,7 +190,7 @@ const TempleReviews = ({ templeId, templeName }: TempleReviewsProps) => {
       {/* Reviews List */}
       <div className="space-y-4">
         {reviews.map((review) => (
-          <div key={review.id} className="p-5 rounded-2xl bg-muted/30 transition-all hover:bg-muted/40">
+          <div key={review.id} className="p-5 rounded-2xl bg-accent/50 transition-all hover:bg-accent/70">
             <div className="flex items-start justify-between gap-3 mb-3">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">

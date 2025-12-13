@@ -214,7 +214,7 @@ const TempleDetails = () => {
                   {temple.poojaTimings.map((timing, index) => (
                     <div
                       key={index}
-                      className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-muted/30 transition-all hover:bg-muted/50"
+                      className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-accent/50 transition-all hover:bg-accent/70"
                     >
                       <div className="flex-1">
                         <h4 className="text-base sm:text-lg font-medium text-foreground">{timing.name}</h4>
@@ -238,14 +238,14 @@ const TempleDetails = () => {
                   </div>
                   <h2 className="font-serif text-2xl font-semibold text-foreground">{t('announcements')}</h2>
                 </div>
-                {temple.announcements.length === 0 ? (
-                  <div className="p-8 text-center text-lg text-muted-foreground rounded-2xl bg-muted/30">
+              {temple.announcements.length === 0 ? (
+                  <div className="p-8 text-center text-lg text-muted-foreground rounded-2xl bg-accent/50">
                     No announcements at this time
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {temple.announcements.map((announcement) => (
-                      <div key={announcement.id} className="p-4 sm:p-5 rounded-2xl bg-muted/30 transition-all hover:bg-muted/50">
+                      <div key={announcement.id} className="p-4 sm:p-5 rounded-2xl bg-accent/50 transition-all hover:bg-accent/70">
                         <div className="mb-2 flex items-start justify-between gap-3">
                           <h4 className="text-base sm:text-lg font-medium text-foreground">{announcement.title}</h4>
                           <Badge className={cn("shrink-0 capitalize text-sm rounded-full px-3", getAnnouncementBadgeColor(announcement.type))}>
@@ -282,7 +282,7 @@ const TempleDetails = () => {
                       {temple.contact.phone && (
                         <a 
                           href={`tel:${temple.contact.phone}`}
-                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                        className="flex items-center gap-4 p-4 rounded-2xl bg-accent/50 text-foreground hover:bg-accent/70 transition-all group"
                         >
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                             <Phone className="h-5 w-5 text-primary" />
@@ -296,7 +296,7 @@ const TempleDetails = () => {
                       {temple.contact.email && (
                         <a 
                           href={`mailto:${temple.contact.email}`}
-                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                        className="flex items-center gap-4 p-4 rounded-2xl bg-accent/50 text-foreground hover:bg-accent/70 transition-all group"
                         >
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                             <Mail className="h-5 w-5 text-primary" />
@@ -312,7 +312,7 @@ const TempleDetails = () => {
                           href={temple.contact.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-4 p-4 rounded-2xl bg-muted/30 text-foreground hover:bg-muted/50 transition-all group"
+                          className="flex items-center gap-4 p-4 rounded-2xl bg-accent/50 text-foreground hover:bg-accent/70 transition-all group"
                         >
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                             <Globe className="h-5 w-5 text-primary" />
@@ -339,7 +339,7 @@ const TempleDetails = () => {
                       </div>
                       <h2 className="font-serif text-2xl font-semibold text-foreground">Location</h2>
                     </div>
-                    <div className="rounded-2xl overflow-hidden bg-muted/30">
+                    <div className="rounded-2xl overflow-hidden bg-accent/50">
                       <div className="aspect-video">
                         <iframe
                           title={`${temple.name} location`}

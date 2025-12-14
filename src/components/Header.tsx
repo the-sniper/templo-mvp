@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, User, LogOut, Menu, Home, MapPin, Sparkles, Calendar } from 'lucide-react';
+import { Heart, User, LogOut, Menu, Home, MapPin, Sparkles, HelpCircle } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -68,6 +68,12 @@ const Header = () => {
               className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
             >
               {t('ancestralTemple')}
+            </Link>
+            <Link
+              to="/how-to"
+              className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
+            >
+              How To
             </Link>
             
             <div className="mx-2 h-6 w-px bg-border" />
@@ -159,6 +165,9 @@ const Header = () => {
                   </MobileNavLink>
                   <MobileNavLink to="/ancestral" icon={MapPin}>
                     {t('findAncestralTemple')}
+                  </MobileNavLink>
+                  <MobileNavLink to="/how-to" icon={HelpCircle}>
+                    How To
                   </MobileNavLink>
                   
                   <div className="my-3 border-t border-border" />

@@ -54,7 +54,7 @@ const LiveDarshan: React.FC<LiveDarshanProps> = ({
         )}
       </div>
       
-      <div className="rounded-2xl bg-accent/50 overflow-hidden">
+      <div className="rounded-2xl bg-card border border-border/50 overflow-hidden">
         {isLive ? (
           <>
             {/* Live Stream View */}

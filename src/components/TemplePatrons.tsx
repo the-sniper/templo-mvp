@@ -66,16 +66,16 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
         </div>
       </div>
       
-      <div className="rounded-2xl bg-accent/50 p-4 sm:p-6">
+      <div className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
         <Tabs defaultValue="leaderboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4 rounded-xl bg-accent/30">
+          <TabsList className="grid w-full grid-cols-2 mb-4 rounded-xl bg-muted/30">
             <TabsTrigger value="leaderboard" className="rounded-lg">Top Supporters</TabsTrigger>
             <TabsTrigger value="all" className="rounded-lg">All Patrons</TabsTrigger>
           </TabsList>
 
           {/* Filter Controls */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <div className="flex gap-1 p-1 rounded-xl bg-accent/30">
+            <div className="flex gap-1 p-1 rounded-xl bg-muted/30">
               {(['daily', 'weekly', 'monthly'] as const).map((filter) => (
                 <Button
                   key={filter}
@@ -88,7 +88,7 @@ const TemplePatrons = ({ templeId, templeName }: TemplePatronsProps) => {
                 </Button>
               ))}
             </div>
-            <div className="flex gap-1 p-1 rounded-xl bg-accent/30">
+            <div className="flex gap-1 p-1 rounded-xl bg-muted/30">
               <Button
                 variant={regionFilter === 'all' ? 'default' : 'ghost'}
                 size="sm"

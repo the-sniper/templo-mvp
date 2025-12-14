@@ -104,7 +104,7 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
         <h2 className="font-serif text-2xl font-semibold text-foreground">{t('templeMusic')}</h2>
       </div>
       
-      <div className="rounded-2xl bg-accent/50 p-4 sm:p-6">
+      <div className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6">
         {/* Now Playing */}
         <div className="bg-primary/5 rounded-xl p-4 mb-4">
           <p className="text-xs text-muted-foreground mb-1">Now Playing</p>
@@ -174,7 +174,7 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
                 setIsPlaying(true);
               }}
               className={`w-full text-left p-3 rounded-xl transition-colors ${
-                index === currentTrackIndex ? 'bg-primary/10 text-primary' : 'hover:bg-accent/70'
+                index === currentTrackIndex ? 'bg-primary/10 text-primary' : 'hover:bg-primary/5'
               }`}
             >
               <div className="flex justify-between items-center">

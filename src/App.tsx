@@ -45,6 +45,9 @@ import BookingConfirmation from "./pages/booking/BookingConfirmation";
 import RequestPoojaPage from "./pages/pooja/RequestPoojaPage";
 import PoojaConfirmation from "./pages/pooja/PoojaConfirmation";
 
+// Account
+import MyAccount from "./pages/account/MyAccount";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -80,6 +83,7 @@ const App = () => (
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/my-account" element={<MyAccount />} />
                         
                         {/* Donation Flow */}
                         <Route path="/donate/:id" element={<DonatePage />} />

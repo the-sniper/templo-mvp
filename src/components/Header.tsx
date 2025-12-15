@@ -100,6 +100,12 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-xl bg-card p-2 shadow-xl">
                   <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
+                    <Link to="/my-account" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      My Account
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
                     <Link to="/following" className="cursor-pointer">
                       <Heart className="mr-2 h-4 w-4" />
                       {t('myTemples')}
@@ -180,12 +186,19 @@ const Header = () => {
                   
                   {isAuthenticated ? (
                     <>
-                      <div className="flex items-center gap-3 rounded-xl bg-accent/50 px-4 py-3">
+                      <Link
+                        to="/my-account"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-xl bg-accent/50 px-4 py-3"
+                      >
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                           <User className="h-5 w-5 text-primary" />
                         </div>
-                        <span className="font-medium">{user?.name}</span>
-                      </div>
+                        <div>
+                          <span className="font-medium">{user?.name}</span>
+                          <p className="text-xs text-muted-foreground">View Account</p>
+                        </div>
+                      </Link>
                       <button
                         onClick={() => {
                           logout();

@@ -118,7 +118,18 @@ const Login = () => {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
+          {/* Demo credentials hint */}
+          <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-center text-sm">
+            <p className="font-medium text-foreground">Demo Account</p>
+            <p className="text-muted-foreground">
+              Email: <span className="font-mono text-primary">test@temple.com</span>
+            </p>
+            <p className="text-muted-foreground">
+              Password: <span className="font-mono text-primary">12345678</span>
+            </p>
+          </div>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
             Don't have an account?{' '}
             <Link to="/register" className="text-primary hover:underline">
               Create one

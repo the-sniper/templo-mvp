@@ -17,6 +17,14 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Mock test user
+const MOCK_USER = {
+  id: 'test-user-001',
+  email: 'test@temple.com',
+  password: '12345678',
+  name: 'Temple Devotee',
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('currentUser');
@@ -34,6 +42,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string): Promise<boolean> => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Check mock user first
+    if (email === MOCK_USER.email && password === MOCK_USER.password) {
+      setUser({ id: MOCK_USER.id, email: MOCK_USER.email, name: MOCK_USER.name });
+      return true;
+    }
     
     // Get registered users from localStorage
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');

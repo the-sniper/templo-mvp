@@ -13,7 +13,6 @@ import { RecurringDonationProvider } from "@/context/RecurringDonationContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
 import TempleDetails from "./pages/TempleDetails";
-import Following from "./pages/Following";
 import HowTo from "./pages/HowTo";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -45,8 +44,8 @@ import BookingConfirmation from "./pages/booking/BookingConfirmation";
 import RequestPoojaPage from "./pages/pooja/RequestPoojaPage";
 import PoojaConfirmation from "./pages/pooja/PoojaConfirmation";
 
-// Account
-import MyAccount from "./pages/account/MyAccount";
+// Dashboard
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -68,7 +67,9 @@ const App = () => (
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/temple/:id" element={<TempleDetails />} />
-                        <Route path="/following" element={<Following />} />
+                        <Route path="/following" element={<Dashboard />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/how-to" element={<HowTo />} />
                         <Route path="/how-to" element={<HowTo />} />
                         
                         {/* Ancestral Temple Flow */}
@@ -83,7 +84,7 @@ const App = () => (
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/my-account" element={<MyAccount />} />
+                        <Route path="/my-account" element={<Dashboard />} />
                         
                         {/* Donation Flow */}
                         <Route path="/donate/:id" element={<DonatePage />} />

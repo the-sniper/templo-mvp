@@ -79,7 +79,7 @@ const Header = () => {
             <div className="mx-2 h-6 w-px bg-border" />
             
             <Link
-              to="/following"
+              to="/dashboard"
               className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all hover:bg-primary/20"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -100,15 +100,9 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-xl bg-card p-2 shadow-xl">
                   <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
-                    <Link to="/my-account" className="cursor-pointer">
+                    <Link to="/dashboard" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
-                      My Account
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
-                    <Link to="/following" className="cursor-pointer">
-                      <Heart className="mr-2 h-4 w-4" />
-                      {t('myTemples')}
+                      My Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild className="rounded-lg px-3 py-2">
@@ -136,7 +130,7 @@ const Header = () => {
           {/* Mobile Navigation */}
           <div className="flex items-center gap-3 md:hidden">
             <Link
-              to="/following"
+              to="/dashboard"
               className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -166,7 +160,7 @@ const Header = () => {
                   <MobileNavLink to="/" icon={Home}>
                     {t('exploreTemples')}
                   </MobileNavLink>
-                  <MobileNavLink to="/following" icon={Heart}>
+                  <MobileNavLink to="/dashboard" icon={Heart}>
                     {t('myTemples')}
                   </MobileNavLink>
                   <MobileNavLink to="/ancestral" icon={MapPin}>
@@ -187,7 +181,7 @@ const Header = () => {
                   {isAuthenticated ? (
                     <>
                       <Link
-                        to="/my-account"
+                        to="/dashboard"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 rounded-xl bg-accent/50 px-4 py-3"
                       >
@@ -196,7 +190,7 @@ const Header = () => {
                         </div>
                         <div>
                           <span className="font-medium">{user?.name}</span>
-                          <p className="text-xs text-muted-foreground">View Account</p>
+                          <p className="text-xs text-muted-foreground">View Dashboard</p>
                         </div>
                       </Link>
                       <button

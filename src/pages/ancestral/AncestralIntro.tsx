@@ -1,21 +1,12 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, Heart, Sparkles } from 'lucide-react';
+import { Search, Heart, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Header from '@/components/Header';
 
 const AncestralIntro = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center">
-            <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back to Temples</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">

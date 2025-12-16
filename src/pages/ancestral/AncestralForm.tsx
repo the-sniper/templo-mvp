@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAncestral } from '@/context/AncestralContext';
+import Header from '@/components/Header';
 
 const indianStates = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -61,20 +62,18 @@ const AncestralForm = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center">
-            <Link to="/ancestral" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
+
+      {/* Breadcrumb */}
+      <div className="container mx-auto px-4 py-4">
+        <Link to="/ancestral" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Ancestral Temple
+        </Link>
+      </div>
 
       {/* Form */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 pb-8">
         <div className="mx-auto max-w-lg">
           <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
             Tell Us About Your Roots

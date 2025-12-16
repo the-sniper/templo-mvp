@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Search, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAncestral, SuggestedTemple } from '@/context/AncestralContext';
+import Header from '@/components/Header';
 
 const AncestralResults = () => {
   const navigate = useNavigate();
@@ -31,19 +32,17 @@ const AncestralResults = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center">
-            <Link to="/ancestral/form" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      {/* Breadcrumb */}
+      <div className="container mx-auto px-4 py-4">
+        <Link to="/ancestral/form" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Form
+        </Link>
+      </div>
+
+      <main className="container mx-auto px-4 pb-8">
         <div className="mx-auto max-w-2xl">
           {showNoResults ? (
             /* No Results State */

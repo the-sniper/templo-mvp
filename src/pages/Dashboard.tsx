@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { 
-  Heart, Calendar, MapPin, User, Receipt, Settings, LogOut, 
-  Sparkles, ChevronRight, Home, Menu, X, CreditCard
+  Heart, Calendar, MapPin, User, Receipt, LogOut, 
+  Sparkles, ChevronRight, Home, Menu, X, CreditCard, 
+  Filter, List, CalendarDays, Eye
 } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
@@ -10,6 +11,7 @@ import { useDonation } from '@/context/DonationContext';
 import { useBooking } from '@/context/BookingContext';
 import { useRecurringDonation } from '@/context/RecurringDonationContext';
 import { useLanguage } from '@/context/LanguageContext';
+import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,12 +23,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 
 type TabType = 'overview' | 'temples' | 'donations' | 'bookings' | 'festivals';
+type DonationFilter = 'all' | 'one-time' | 'recurring';
+type FestivalView = 'list' | 'calendar';
 
 const Dashboard = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
   const { temples, followedTemples, toggleFollowTemple } = useTemple();
   const { user, isAuthenticated, logout } = useAuth();
   const { donations } = useDonation();
@@ -35,11 +47,19 @@ const Dashboard = () => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [donationFilter, setDonationFilter] = useState<DonationFilter>('all');
+  const [festivalView, setFestivalView] = useState<FestivalView>('list');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const followedTemplesList = useMemo(() => {
     return temples.filter(temple => followedTemples.includes(temple.id));
@@ -74,6 +94,55 @@ const Dashboard = () => {
 
     return festivals.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [followedTemplesList]);
+
+  // Combined donations list
+  const allDonations = useMemo(() => {
+    const oneTime = donations.map(d => ({
+      ...d,
+      donationType: 'one-time' as const,
+      frequency: null,
+    }));
+    
+    const recurring = recurringDonations.map(d => ({
+      id: d.id,
+      templeId: d.templeId,
+      templeName: d.templeName,
+      amount: d.amount,
+      donorName: d.donorName,
+      donorPhone: d.donorPhone,
+      donorEmail: d.donorEmail,
+      createdAt: d.createdAt,
+      receiptNumber: d.id,
+      transactionId: d.id,
+      status: d.status,
+      donationType: 'recurring' as const,
+      frequency: d.frequency,
+    }));
+
+    let combined = [...oneTime, ...recurring];
+    
+    if (donationFilter === 'one-time') {
+      combined = oneTime;
+    } else if (donationFilter === 'recurring') {
+      combined = recurring;
+    }
+
+    return combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [donations, recurringDonations, donationFilter]);
+
+  // Get festivals for selected date in calendar
+  const festivalsOnSelectedDate = useMemo(() => {
+    if (!selectedDate) return [];
+    return upcomingFestivals.filter(f => {
+      const festivalDate = new Date(f.date);
+      return festivalDate.toDateString() === selectedDate.toDateString();
+    });
+  }, [upcomingFestivals, selectedDate]);
+
+  // Get all dates that have festivals
+  const festivalDates = useMemo(() => {
+    return upcomingFestivals.map(f => new Date(f.date));
+  }, [upcomingFestivals]);
 
   const formatDate = (dateValue: string | Date) => {
     const date = typeof dateValue === 'string' ? new Date(dateValue) : dateValue;
@@ -112,49 +181,8 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-sm">
-        <div className="flex h-16 items-center justify-between px-4 lg:px-6">
-          <div className="flex items-center gap-4">
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-            
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-lg font-bold text-foreground">Templo</span>
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Link to="/">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Home className="h-4 w-4" />
-                <span className="hidden sm:inline">Home</span>
-              </Button>
-            </Link>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={logout} 
-              className="gap-2 text-destructive hover:text-destructive"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </Button>
-          </div>
-        </div>
-      </header>
-
+      <Header />
+      
       <div className="flex">
         {/* Desktop Sidebar */}
         <aside className="hidden w-64 shrink-0 border-r border-border bg-card lg:block">
@@ -187,10 +215,22 @@ const Dashboard = () => {
                   <p className="text-xs text-muted-foreground">Temples</p>
                 </div>
                 <div className="rounded-lg bg-muted/50 p-2">
-                  <p className="text-lg font-bold text-primary">{donations.length}</p>
+                  <p className="text-lg font-bold text-primary">{allDonations.length}</p>
                   <p className="text-xs text-muted-foreground">Donations</p>
                 </div>
               </div>
+            </div>
+
+            {/* Logout Button */}
+            <div className="border-t border-border p-3">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
             </div>
           </div>
         </aside>
@@ -227,10 +267,41 @@ const Dashboard = () => {
               <NavItem key={item.id} item={item} mobile />
             ))}
           </nav>
+
+          {/* Logout */}
+          <div className="absolute bottom-0 left-0 right-0 border-t border-border p-3">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
         </aside>
 
+        {/* Mobile Header Bar */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card p-2 lg:hidden">
+          <div className="flex justify-around">
+            {navItems.map(item => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={cn(
+                  "flex flex-col items-center gap-1 rounded-lg p-2 transition-colors",
+                  activeTab === item.id ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                <span className="text-xs">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Main Content */}
-        <main className="flex-1 p-4 lg:p-6">
+        <main className="flex-1 p-4 pb-24 lg:p-6 lg:pb-6">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="space-y-6 animate-fade-in">
@@ -259,7 +330,18 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-foreground">{donations.length}</p>
-                      <p className="text-sm text-muted-foreground">Donations Made</p>
+                      <p className="text-sm text-muted-foreground">One-time Donations</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="border border-border/50">
+                  <CardContent className="flex items-center gap-4 p-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                      <CreditCard className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{recurringDonations.length}</p>
+                      <p className="text-sm text-muted-foreground">Recurring Donations</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -271,17 +353,6 @@ const Dashboard = () => {
                     <div>
                       <p className="text-2xl font-bold text-foreground">{bookings.length}</p>
                       <p className="text-sm text-muted-foreground">Bookings</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border border-border/50">
-                  <CardContent className="flex items-center gap-4 p-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                      <CreditCard className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{recurringDonations.length}</p>
-                      <p className="text-sm text-muted-foreground">Recurring</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -436,101 +507,105 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Donations Tab */}
+          {/* Donations Tab - Combined List */}
           {activeTab === 'donations' && (
             <div className="space-y-6 animate-fade-in">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Donations</h1>
-                <p className="text-muted-foreground">Your donation history and receipts</p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold text-foreground">Donations</h1>
+                  <p className="text-muted-foreground">Your donation history and receipts</p>
+                </div>
+                
+                {/* Filter */}
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <Select value={donationFilter} onValueChange={(v) => setDonationFilter(v as DonationFilter)}>
+                    <SelectTrigger className="w-[150px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Donations</SelectItem>
+                      <SelectItem value="one-time">One-time</SelectItem>
+                      <SelectItem value="recurring">Recurring</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-2">
-                {/* One-time Donations */}
-                <Card className="border border-border/50">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Receipt className="h-5 w-5 text-primary" />
-                      One-time Donations
-                    </CardTitle>
-                    <CardDescription>{donations.length} donations made</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {donations.length === 0 ? (
-                      <p className="text-center text-muted-foreground py-4">No donations yet</p>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Temple</TableHead>
-                              <TableHead>Amount</TableHead>
-                              <TableHead>Date</TableHead>
-                              <TableHead>Receipt</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {donations.slice(0, 5).map(donation => (
-                              <TableRow key={donation.id}>
-                                <TableCell className="font-medium">{donation.templeName}</TableCell>
-                                <TableCell>₹{donation.amount.toLocaleString()}</TableCell>
-                                <TableCell>{formatDate(donation.createdAt)}</TableCell>
-                                <TableCell>
-                                  <Link to={`/donate/receipt/${donation.id}`} className="text-primary hover:underline">
+              <Card className="border border-border/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Receipt className="h-5 w-5 text-primary" />
+                    Donation History
+                  </CardTitle>
+                  <CardDescription>
+                    {allDonations.length} donation{allDonations.length !== 1 ? 's' : ''} 
+                    {donationFilter !== 'all' && ` (${donationFilter})`}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {allDonations.length === 0 ? (
+                    <div className="py-8 text-center">
+                      <Receipt className="mx-auto mb-4 h-12 w-12 text-muted-foreground opacity-50" />
+                      <p className="text-muted-foreground">No donations yet</p>
+                      <Link to="/" className="mt-2 inline-block text-primary hover:underline">
+                        Explore temples to donate
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Temple</TableHead>
+                            <TableHead>Amount</TableHead>
+                            <TableHead>Type</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Receipt</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {allDonations.map(donation => (
+                            <TableRow key={`${donation.donationType}-${donation.id}`}>
+                              <TableCell className="font-medium">{donation.templeName}</TableCell>
+                              <TableCell>₹{donation.amount.toLocaleString()}</TableCell>
+                              <TableCell>
+                                <Badge variant={donation.donationType === 'recurring' ? 'default' : 'secondary'}>
+                                  {donation.donationType === 'recurring' ? (
+                                    <span className="capitalize">{donation.frequency}</span>
+                                  ) : (
+                                    'One-time'
+                                  )}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>{formatDate(donation.createdAt)}</TableCell>
+                              <TableCell>
+                                <Badge variant={donation.status === 'completed' || donation.status === 'active' ? 'default' : 'secondary'}>
+                                  {donation.status}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                {donation.donationType === 'one-time' ? (
+                                  <Link 
+                                    to={`/donation/receipt/${donation.id}`} 
+                                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                                  >
+                                    <Eye className="h-4 w-4" />
                                     View
                                   </Link>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Recurring Donations */}
-                <Card className="border border-border/50">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <CreditCard className="h-5 w-5 text-primary" />
-                      Recurring Donations
-                    </CardTitle>
-                    <CardDescription>{recurringDonations.length} active subscriptions</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {recurringDonations.length === 0 ? (
-                      <p className="text-center text-muted-foreground py-4">No recurring donations</p>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Temple</TableHead>
-                              <TableHead>Amount</TableHead>
-                              <TableHead>Frequency</TableHead>
-                              <TableHead>Status</TableHead>
+                                ) : (
+                                  <span className="text-muted-foreground">—</span>
+                                )}
+                              </TableCell>
                             </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {recurringDonations.slice(0, 5).map(donation => (
-                              <TableRow key={donation.id}>
-                                <TableCell className="font-medium">{donation.templeName}</TableCell>
-                                <TableCell>₹{donation.amount.toLocaleString()}</TableCell>
-                                <TableCell className="capitalize">{donation.frequency}</TableCell>
-                                <TableCell>
-                                  <Badge variant={donation.status === 'active' ? 'default' : 'secondary'}>
-                                    {donation.status}
-                                  </Badge>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           )}
 
@@ -601,12 +676,36 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Festivals Tab */}
+          {/* Festivals Tab - Calendar & List View */}
           {activeTab === 'festivals' && (
             <div className="space-y-6 animate-fade-in">
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">Upcoming Festivals</h1>
-                <p className="text-muted-foreground">Festivals at your followed temples</p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold text-foreground">Upcoming Festivals</h1>
+                  <p className="text-muted-foreground">Festivals at your followed temples</p>
+                </div>
+                
+                {/* View Toggle */}
+                <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+                  <Button
+                    variant={festivalView === 'list' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setFestivalView('list')}
+                    className="gap-2"
+                  >
+                    <List className="h-4 w-4" />
+                    List
+                  </Button>
+                  <Button
+                    variant={festivalView === 'calendar' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setFestivalView('calendar')}
+                    className="gap-2"
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    Calendar
+                  </Button>
+                </div>
               </div>
 
               {upcomingFestivals.length === 0 ? (
@@ -617,7 +716,7 @@ const Dashboard = () => {
                     <p className="text-muted-foreground">Follow more temples to see their festivals</p>
                   </CardContent>
                 </Card>
-              ) : (
+              ) : festivalView === 'list' ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {upcomingFestivals.map((festival, idx) => (
                     <Card key={`${festival.id}-${idx}`} className="overflow-hidden transition-all hover:shadow-md">
@@ -653,6 +752,71 @@ const Dashboard = () => {
                       </CardContent>
                     </Card>
                   ))}
+                </div>
+              ) : (
+                <div className="grid gap-6 lg:grid-cols-2">
+                  {/* Calendar */}
+                  <Card className="border border-border/50">
+                    <CardContent className="p-4">
+                      <CalendarComponent
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        className="rounded-md"
+                        modifiers={{
+                          festival: festivalDates,
+                        }}
+                        modifiersClassNames={{
+                          festival: "bg-primary/20 text-primary font-bold",
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Events on Selected Date */}
+                  <Card className="border border-border/50">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        {selectedDate ? formatDate(selectedDate) : 'Select a date'}
+                      </CardTitle>
+                      <CardDescription>
+                        {festivalsOnSelectedDate.length} event{festivalsOnSelectedDate.length !== 1 ? 's' : ''}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {festivalsOnSelectedDate.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-8">
+                          No festivals on this date
+                        </p>
+                      ) : (
+                        <div className="space-y-4">
+                          {festivalsOnSelectedDate.map((festival, idx) => (
+                            <div 
+                              key={`${festival.id}-${idx}`} 
+                              className="rounded-lg border border-border p-4"
+                            >
+                              <h4 className="font-semibold text-foreground">{festival.title}</h4>
+                              <Link 
+                                to={`/temple/${festival.templeId}`}
+                                className="text-sm text-primary hover:underline"
+                              >
+                                {festival.templeName}
+                              </Link>
+                              <p className="mt-2 text-sm text-muted-foreground">
+                                {festival.content}
+                              </p>
+                              <Badge 
+                                variant={festival.type === 'festival' ? 'default' : 'secondary'}
+                                className="mt-2 text-xs capitalize"
+                              >
+                                {festival.type}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               )}
             </div>

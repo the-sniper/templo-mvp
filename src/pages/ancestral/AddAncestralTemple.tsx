@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAncestral } from '@/context/AncestralContext';
+import Header from '@/components/Header';
 
 const AddAncestralTemple = () => {
   const navigate = useNavigate();
@@ -51,19 +52,17 @@ const AddAncestralTemple = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center">
-            <Link to="/ancestral/results" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      {/* Breadcrumb */}
+      <div className="container mx-auto px-4 py-4">
+        <Link to="/ancestral/results" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Results
+        </Link>
+      </div>
+
+      <main className="container mx-auto px-4 pb-8">
         <div className="mx-auto max-w-lg">
           <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
             Add Your Ancestral Temple

@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, Star } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, MessageCircle } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
@@ -15,7 +15,7 @@ import TempleHistory from '@/components/TempleHistory';
 import TempleMusicPlayer from '@/components/TempleMusicPlayer';
 import LiveDarshan from '@/components/LiveDarshan';
 import TemplePatrons from '@/components/TemplePatrons';
-import TempleReviews from '@/components/TempleReviews';
+import TempleChannel from '@/components/TempleChannel';
 import { useState } from 'react';
 
 const TempleDetails = () => {
@@ -190,9 +190,9 @@ const TempleDetails = () => {
                 <Play className="h-4 w-4 mr-2 hidden sm:inline" />
                 Explore
               </TabsTrigger>
-              <TabsTrigger value="reviews" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                <Star className="h-4 w-4 mr-2 hidden sm:inline" />
-                Reviews
+              <TabsTrigger value="updates" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                <MessageCircle className="h-4 w-4 mr-2 hidden sm:inline" />
+                Updates
               </TabsTrigger>
               <TabsTrigger value="patrons" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
                 <Users className="h-4 w-4 mr-2 hidden sm:inline" />
@@ -393,9 +393,9 @@ const TempleDetails = () => {
               <TempleMusicPlayer templeName={temple.name} tracks={[]} />
             </TabsContent>
 
-            {/* Reviews Tab */}
-            <TabsContent value="reviews" className="mt-0">
-              <TempleReviews templeId={temple.id} templeName={temple.name} />
+            {/* Updates Tab - Temple Channel */}
+            <TabsContent value="updates" className="mt-0">
+              <TempleChannel templeId={temple.id} templeName={temple.name} />
             </TabsContent>
 
             {/* Patrons Tab */}

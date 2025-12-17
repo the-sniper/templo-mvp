@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Heart, Calendar, MapPin, User, Receipt, LogOut, 
-  Sparkles, ChevronRight, Home, Menu, X, CreditCard, 
-  Filter, List, CalendarDays, Eye
+  Sparkles, ChevronRight, Menu, CreditCard, 
+  Filter, List, CalendarDays, Eye, Settings, Save
 } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useAuth } from '@/context/AuthContext';
@@ -15,6 +15,8 @@ import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -32,24 +34,45 @@ import {
 } from '@/components/ui/select';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
-type TabType = 'overview' | 'temples' | 'donations' | 'bookings' | 'festivals';
+type TabType = 'overview' | 'temples' | 'donations' | 'bookings' | 'festivals' | 'settings';
 type DonationFilter = 'all' | 'one-time' | 'recurring';
 type FestivalView = 'list' | 'calendar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { temples, followedTemples, toggleFollowTemple } = useTemple();
   const { user, isAuthenticated, logout } = useAuth();
   const { donations } = useDonation();
   const { bookings } = useBooking();
   const { recurringDonations } = useRecurringDonation();
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const { toast } = useToast();
+  
+  // Get initial tab from URL or default to overview
+  const tabFromUrl = searchParams.get('tab') as TabType | null;
+  const [activeTab, setActiveTab] = useState<TabType>(tabFromUrl || 'overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [donationFilter, setDonationFilter] = useState<DonationFilter>('all');
   const [festivalView, setFestivalView] = useState<FestivalView>('list');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  
+  // Profile form state
+  const [profileForm, setProfileForm] = useState({
+    firstName: user?.name?.split(' ')[0] || '',
+    lastName: user?.name?.split(' ').slice(1).join(' ') || '',
+    email: user?.email || '',
+    phone: '',
+  });
+
+  // Update tab when URL changes
+  useEffect(() => {
+    if (tabFromUrl && ['overview', 'temples', 'donations', 'bookings', 'festivals', 'settings'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [tabFromUrl]);
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
@@ -59,6 +82,19 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    navigate(`/dashboard?tab=${tab}`, { replace: true });
+    setSidebarOpen(false);
+  };
+
+  const handleSaveProfile = () => {
+    toast({
+      title: "Profile Updated",
+      description: "Your profile has been saved successfully.",
+    });
   };
 
   const followedTemplesList = useMemo(() => {
@@ -159,14 +195,12 @@ const Dashboard = () => {
     { id: 'donations' as TabType, label: 'Donations', icon: Receipt },
     { id: 'bookings' as TabType, label: 'Bookings', icon: Calendar },
     { id: 'festivals' as TabType, label: 'Festivals', icon: Sparkles },
+    { id: 'settings' as TabType, label: 'Settings', icon: Settings },
   ];
 
   const NavItem = ({ item, mobile = false }: { item: typeof navItems[0]; mobile?: boolean }) => (
     <button
-      onClick={() => {
-        setActiveTab(item.id);
-        if (mobile) setSidebarOpen(false);
-      }}
+      onClick={() => handleTabChange(item.id)}
       className={cn(
         "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
         activeTab === item.id
@@ -210,14 +244,20 @@ const Dashboard = () => {
             {/* Stats */}
             <div className="border-t border-border p-4">
               <div className="grid grid-cols-2 gap-2 text-center">
-                <div className="rounded-lg bg-muted/50 p-2">
+                <button 
+                  onClick={() => handleTabChange('temples')}
+                  className="rounded-lg bg-accent/50 p-2 hover:bg-accent transition-colors"
+                >
                   <p className="text-lg font-bold text-primary">{followedTemples.length}</p>
                   <p className="text-xs text-muted-foreground">Temples</p>
-                </div>
-                <div className="rounded-lg bg-muted/50 p-2">
+                </button>
+                <button 
+                  onClick={() => handleTabChange('donations')}
+                  className="rounded-lg bg-accent/50 p-2 hover:bg-accent transition-colors"
+                >
                   <p className="text-lg font-bold text-primary">{allDonations.length}</p>
                   <p className="text-xs text-muted-foreground">Donations</p>
-                </div>
+                </button>
               </div>
             </div>
 
@@ -284,10 +324,10 @@ const Dashboard = () => {
         {/* Mobile Header Bar */}
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card p-2 lg:hidden">
           <div className="flex justify-around">
-            {navItems.map(item => (
+            {navItems.slice(0, 5).map(item => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabChange(item.id)}
                 className={cn(
                   "flex flex-col items-center gap-1 rounded-lg p-2 transition-colors",
                   activeTab === item.id ? "text-primary" : "text-muted-foreground"
@@ -310,9 +350,12 @@ const Dashboard = () => {
                 <p className="text-muted-foreground">Manage your temples, donations, and bookings</p>
               </div>
 
-              {/* Quick Stats */}
+              {/* Quick Stats - Clickable */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Card className="border border-border/50">
+                <Card 
+                  className="border border-border/50 cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => handleTabChange('temples')}
+                >
                   <CardContent className="flex items-center gap-4 p-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                       <Heart className="h-6 w-6 text-primary" />
@@ -323,7 +366,10 @@ const Dashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
-                <Card className="border border-border/50">
+                <Card 
+                  className="border border-border/50 cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => handleTabChange('donations')}
+                >
                   <CardContent className="flex items-center gap-4 p-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                       <Receipt className="h-6 w-6 text-primary" />
@@ -334,7 +380,10 @@ const Dashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
-                <Card className="border border-border/50">
+                <Card 
+                  className="border border-border/50 cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => handleTabChange('donations')}
+                >
                   <CardContent className="flex items-center gap-4 p-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                       <CreditCard className="h-6 w-6 text-primary" />
@@ -345,7 +394,10 @@ const Dashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
-                <Card className="border border-border/50">
+                <Card 
+                  className="border border-border/50 cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => handleTabChange('bookings')}
+                >
                   <CardContent className="flex items-center gap-4 p-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                       <Calendar className="h-6 w-6 text-primary" />
@@ -368,7 +420,7 @@ const Dashboard = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        onClick={() => setActiveTab('temples')}
+                        onClick={() => handleTabChange('temples')}
                         className="text-primary"
                       >
                         View All
@@ -411,7 +463,7 @@ const Dashboard = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        onClick={() => setActiveTab('festivals')}
+                        onClick={() => handleTabChange('festivals')}
                         className="text-primary"
                       >
                         View All
@@ -457,7 +509,7 @@ const Dashboard = () => {
                     <Heart className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
                     <h3 className="mb-2 text-lg font-semibold">No temples followed</h3>
                     <p className="text-muted-foreground mb-4">Start following temples to see them here</p>
-                    <Link to="/">
+                    <Link to="/temples">
                       <Button>Explore Temples</Button>
                     </Link>
                   </CardContent>
@@ -548,7 +600,7 @@ const Dashboard = () => {
                     <div className="py-8 text-center">
                       <Receipt className="mx-auto mb-4 h-12 w-12 text-muted-foreground opacity-50" />
                       <p className="text-muted-foreground">No donations yet</p>
-                      <Link to="/" className="mt-2 inline-block text-primary hover:underline">
+                      <Link to="/temples" className="mt-2 inline-block text-primary hover:underline">
                         Explore temples to donate
                       </Link>
                     </div>
@@ -630,7 +682,7 @@ const Dashboard = () => {
                     <div className="py-8 text-center">
                       <Calendar className="mx-auto mb-4 h-12 w-12 text-muted-foreground opacity-50" />
                       <p className="text-muted-foreground">No bookings yet</p>
-                      <Link to="/" className="mt-2 inline-block text-primary hover:underline">
+                      <Link to="/temples" className="mt-2 inline-block text-primary hover:underline">
                         Book a darshan slot
                       </Link>
                     </div>
@@ -686,7 +738,7 @@ const Dashboard = () => {
                 </div>
                 
                 {/* View Toggle */}
-                <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+                <div className="flex items-center gap-1 rounded-lg bg-accent p-1">
                   <Button
                     variant={festivalView === 'list' ? 'default' : 'ghost'}
                     size="sm"
@@ -802,9 +854,7 @@ const Dashboard = () => {
                               >
                                 {festival.templeName}
                               </Link>
-                              <p className="mt-2 text-sm text-muted-foreground">
-                                {festival.content}
-                              </p>
+                              <p className="mt-2 text-sm text-muted-foreground">{festival.content}</p>
                               <Badge 
                                 variant={festival.type === 'festival' ? 'default' : 'secondary'}
                                 className="mt-2 text-xs capitalize"
@@ -819,6 +869,97 @@ const Dashboard = () => {
                   </Card>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Settings Tab - Profile */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6 animate-fade-in">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">Account Settings</h1>
+                <p className="text-muted-foreground">Manage your profile and preferences</p>
+              </div>
+
+              <Card className="border border-border/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <User className="h-5 w-5 text-primary" />
+                    Profile Information
+                  </CardTitle>
+                  <CardDescription>
+                    Update your personal details
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        value={profileForm.firstName}
+                        onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
+                        placeholder="Enter first name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        value={profileForm.lastName}
+                        onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
+                        placeholder="Enter last name"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={profileForm.email}
+                      onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+                      placeholder="Enter email"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={profileForm.phone}
+                      onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+
+                  <Button onClick={handleSaveProfile} className="gap-2">
+                    <Save className="h-4 w-4" />
+                    Save Changes
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Account Actions */}
+              <Card className="border border-border/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-destructive">
+                    <LogOut className="h-5 w-5" />
+                    Account Actions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Button 
+                    variant="destructive" 
+                    onClick={handleLogout}
+                    className="gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           )}
         </main>

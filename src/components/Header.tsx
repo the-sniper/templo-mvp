@@ -55,10 +55,9 @@ const Header = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden items-center gap-2 md:flex">
             <Link
-              to="/"
+              to="/temples"
               className="rounded-lg px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-primary"
             >
               {t('temples')}
@@ -79,7 +78,7 @@ const Header = () => {
             <div className="mx-2 h-6 w-px bg-border" />
             
             <Link
-              to="/dashboard"
+              to="/dashboard?tab=temples"
               className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-all hover:bg-primary/20"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -130,7 +129,7 @@ const Header = () => {
           {/* Mobile Navigation */}
           <div className="flex items-center gap-3 md:hidden">
             <Link
-              to="/dashboard"
+              to="/dashboard?tab=temples"
               className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
             >
               <Heart className="h-4 w-4 fill-primary" />
@@ -158,9 +157,12 @@ const Header = () => {
                 
                 <nav className="flex flex-col gap-1 p-3">
                   <MobileNavLink to="/" icon={Home}>
+                    Home
+                  </MobileNavLink>
+                  <MobileNavLink to="/temples" icon={Sparkles}>
                     {t('exploreTemples')}
                   </MobileNavLink>
-                  <MobileNavLink to="/dashboard" icon={Heart}>
+                  <MobileNavLink to="/dashboard?tab=temples" icon={Heart}>
                     {t('myTemples')}
                   </MobileNavLink>
                   <MobileNavLink to="/ancestral" icon={MapPin}>

@@ -12,6 +12,7 @@ import { PoojaProvider } from "@/context/PoojaContext";
 import { RecurringDonationProvider } from "@/context/RecurringDonationContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Index from "./pages/Index";
+import Temples from "./pages/Temples";
 import TempleDetails from "./pages/TempleDetails";
 import HowTo from "./pages/HowTo";
 import NotFound from "./pages/NotFound";
@@ -66,10 +67,10 @@ const App = () => (
                       <ScrollToTop />
                       <Routes>
                         <Route path="/" element={<Index />} />
+                        <Route path="/temples" element={<Temples />} />
                         <Route path="/temple/:id" element={<TempleDetails />} />
                         <Route path="/following" element={<Dashboard />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/how-to" element={<HowTo />} />
                         <Route path="/how-to" element={<HowTo />} />
                         
                         {/* Ancestral Temple Flow */}

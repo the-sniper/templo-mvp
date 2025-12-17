@@ -54,15 +54,6 @@ const DonationReceipt = () => {
       </div>
       
       <main className="container mx-auto px-4 py-8 max-w-2xl">
-        {/* Success Header */}
-        <div className="text-center mb-8 print:mb-4">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 print:w-16 print:h-16">
-            <CheckCircle className="h-12 w-12 text-green-600 print:h-10 print:w-10" />
-          </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2 print:text-xl">Donation Successful!</h1>
-          <p className="text-muted-foreground">Thank you for your generous contribution</p>
-        </div>
-
         {/* Receipt Card */}
         <Card className="mb-6 overflow-hidden border-2 print:border print:shadow-none">
           {/* Receipt Header */}

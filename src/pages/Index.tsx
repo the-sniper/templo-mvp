@@ -1,5 +1,5 @@
 import Header from '@/components/Header';
-import TempleList from '@/components/TempleList';
+import FeaturedTemples from '@/components/FeaturedTemples';
 import { Sparkles, MapPin, Heart, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -78,9 +78,9 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      {/* Temple List Section */}
+      {/* Featured Temples Section */}
       <main className="container mx-auto px-4 py-8 sm:py-12 md:py-16">
-        <TempleList />
+        <FeaturedTemples />
       </main>
 
       {/* Footer */}

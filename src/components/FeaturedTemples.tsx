@@ -71,28 +71,30 @@ const FeaturedTemples = () => {
           ))}
         </div>
       ) : (
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {featuredTemples.map((temple, index) => (
-              <CarouselItem key={temple.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                <div 
-                  className="animate-fade-in h-full"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <TempleCard temple={temple} />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex -left-4 lg:-left-6" />
-          <CarouselNext className="hidden sm:flex -right-4 lg:-right-6" />
-        </Carousel>
+        <div className="relative px-0 sm:px-10">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
+              {featuredTemples.map((temple, index) => (
+                <CarouselItem key={temple.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                  <div 
+                    className="animate-fade-in h-full"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <TempleCard temple={temple} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden sm:flex left-0" />
+            <CarouselNext className="hidden sm:flex right-0" />
+          </Carousel>
+        </div>
       )}
     </div>
   );

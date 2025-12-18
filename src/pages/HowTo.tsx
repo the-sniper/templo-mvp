@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, Heart, CreditCard, CalendarCheck, Palmtree, RefreshCw, Play, Music, Image, Users, Star, MapPin, HelpCircle, User, Globe, Share2, BookOpen, Calendar, History } from 'lucide-react';
+import { ArrowLeft, Search, Heart, CreditCard, CalendarCheck, Palmtree, RefreshCw, Play, Music, Image, Users, Star, MapPin, HelpCircle, User, Globe, Share2, BookOpen, Calendar, History, MessageCircle } from 'lucide-react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -12,21 +13,21 @@ const HowTo = () => {
       icon: Search,
       title: 'Discover Temples',
       description: 'Browse and search temples across India. Use filters to find temples by deity, city, or state. Enable location to see nearby temples sorted by distance.',
-      steps: ['Visit the home page', 'Use the search bar to find temples by name', 'Click filters to narrow by deity, city, or state', 'Tap "Nearby" to find temples near you'],
+      steps: ['Visit the Temples page', 'Use the search bar to find temples by name', 'Click filters to narrow by deity, city, or state', 'Tap "Nearby" to find temples near you'],
       category: 'discovery'
     },
     {
       icon: Heart,
       title: 'Follow Temples',
       description: 'Follow your favorite temples to stay updated with their announcements, festivals, and events.',
-      steps: ['Open any temple page', 'Click the "Follow" button in the action bar', 'View all followed temples in the Following page', 'Unfollow anytime by clicking the button again'],
+      steps: ['Open any temple page', 'Click the "Follow" button in the action bar', 'View all followed temples in your Dashboard', 'Unfollow anytime by clicking the button again'],
       category: 'discovery'
     },
     {
       icon: Calendar,
       title: 'Festivals Calendar',
-      description: 'View upcoming festivals across all temples you follow. Never miss important celebrations and events.',
-      steps: ['Go to the Following page from header', 'Click on the "Festivals" tab', 'See all upcoming festivals from your followed temples', 'Plan your visits accordingly'],
+      description: 'View upcoming festivals across all temples you follow in calendar or list view. Never miss important celebrations.',
+      steps: ['Go to your Dashboard', 'Click on the "Festivals" tab', 'Toggle between Calendar and List view', 'See all upcoming festivals from your followed temples'],
       category: 'discovery'
     },
     {
@@ -47,7 +48,7 @@ const HowTo = () => {
       icon: RefreshCw,
       title: 'Recurring Donations',
       description: 'Set up automatic daily, weekly, or monthly donations to temples you support regularly.',
-      steps: ['Open a temple page', 'Click the recurring donation button', 'Choose frequency: daily, weekly, or monthly', 'Select or enter amount', 'Pause or cancel anytime from your account'],
+      steps: ['Open a temple page', 'Click the recurring donation button', 'Choose frequency: daily, weekly, or monthly', 'Select or enter amount', 'Pause or cancel anytime from your Dashboard'],
       category: 'transactions'
     },
     {
@@ -93,10 +94,10 @@ const HowTo = () => {
       category: 'explore'
     },
     {
-      icon: Star,
-      title: 'Reviews & Ratings',
-      description: 'Read and share temple visit experiences with the community.',
-      steps: ['Open a temple page', 'Go to "Reviews" tab', 'Read reviews from other devotees', 'Click "Write a Review" to share yours', 'Rate your experience with stars'],
+      icon: MessageCircle,
+      title: 'Temple Updates',
+      description: 'Get official announcements and updates directly from temple priests through the temple channel.',
+      steps: ['Open a temple page', 'Go to "Updates" tab', 'View latest announcements from temple', 'Stay informed about timings, events, and more', 'Get notified when new updates are posted'],
       category: 'community'
     },
     {
@@ -122,9 +123,9 @@ const HowTo = () => {
     },
     {
       icon: User,
-      title: 'Your Account',
-      description: 'Create an account to save your preferences, track donations, and manage bookings.',
-      steps: ['Click "Sign In" in the header', 'Register with your phone or email', 'Verify your account with OTP', 'Access your donation history and bookings', 'Manage your followed temples'],
+      title: 'Your Dashboard',
+      description: 'Access all your temple activities in one place - followed temples, donations, bookings, and settings.',
+      steps: ['Click your profile icon or "Dashboard" in header', 'View overview of all activities', 'Access My Temples, Donations, Bookings tabs', 'Manage your profile in Settings', 'Track all your donation receipts'],
       category: 'account'
     },
     {
@@ -140,9 +141,9 @@ const HowTo = () => {
     { id: 'discovery', title: 'Discover & Follow', description: 'Find and follow temples' },
     { id: 'transactions', title: 'Donations & Bookings', description: 'Support temples and book services' },
     { id: 'explore', title: 'Explore Temple', description: 'Live darshan, music, gallery & history' },
-    { id: 'community', title: 'Community', description: 'Reviews, patrons & sharing' },
+    { id: 'community', title: 'Community & Updates', description: 'Temple updates, patrons & sharing' },
     { id: 'info', title: 'Information', description: 'Location & contact details' },
-    { id: 'account', title: 'Your Account', description: 'Sign in & language settings' }
+    { id: 'account', title: 'Your Account', description: 'Dashboard & language settings' }
   ];
 
   return (
@@ -176,24 +177,24 @@ const HowTo = () => {
               <h2 className="font-serif text-2xl font-semibold text-foreground">{category.title}</h2>
               <p className="text-muted-foreground">{category.description}</p>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {features
                 .filter((f) => f.category === category.id)
                 .map((feature, index) => (
                   <div
                     key={index}
-                    className="p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all"
+                    className="p-5 sm:p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all"
                   >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 shrink-0">
-                        <feature.icon className="h-6 w-6 text-primary" />
+                    <div className="flex items-center gap-3 sm:gap-4 mb-4">
+                      <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                        <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                       </div>
-                      <h3 className="font-serif text-xl font-semibold text-foreground">
+                      <h3 className="font-serif text-lg sm:text-xl font-semibold text-foreground">
                         {feature.title}
                       </h3>
                     </div>
                     
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
+                    <p className="text-sm sm:text-base text-muted-foreground mb-4 leading-relaxed">
                       {feature.description}
                     </p>
                     
@@ -217,14 +218,14 @@ const HowTo = () => {
         ))}
 
         {/* Quick Start Section */}
-        <div className="mt-12 p-8 rounded-2xl bg-card border border-border/50 text-center">
+        <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-card border border-border/50 text-center">
           <h2 className="font-serif text-2xl font-semibold text-foreground mb-4">
             Ready to Start?
           </h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
             Begin your spiritual journey by exploring temples near you or searching for your favorite temple.
           </p>
-          <Link to="/">
+          <Link to="/temples">
             <Button size="lg" className="gap-2 rounded-full text-lg px-8">
               <Search className="h-5 w-5" />
               Explore Temples
@@ -234,11 +235,7 @@ const HowTo = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 mt-12">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>© {new Date().getFullYear()} Templo. Connecting Devotees with Temples.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

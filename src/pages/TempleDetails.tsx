@@ -1,8 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Sparkles, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, MessageCircle } from 'lucide-react';
+import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, MessageCircle, Sparkles } from 'lucide-react';
 import { useTemple } from '@/context/TempleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -406,24 +407,7 @@ const TempleDetails = () => {
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-border bg-muted/30 py-10">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80">
-                  <Sparkles className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <div>
-                  <p className="font-bold text-foreground">Templo</p>
-                  <p className="text-xs text-muted-foreground">Divine Connections</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                © 2024 Templo. Connecting devotees with divine spaces.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </div>
   );

@@ -6,6 +6,13 @@ import TempleCard from './TempleCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 const FeaturedTemples = () => {
   const { temples, loading, error } = useTemple();
@@ -53,7 +60,6 @@ const FeaturedTemples = () => {
             <div 
               key={i} 
               className="overflow-hidden rounded-2xl border border-border bg-card"
-              style={{ animationDelay: `${i * 0.1}s` }}
             >
               <Skeleton className="aspect-[4/3] w-full" />
               <div className="p-5 space-y-3">
@@ -65,17 +71,28 @@ const FeaturedTemples = () => {
           ))}
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredTemples.map((temple, index) => (
-            <div 
-              key={temple.id} 
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 0.05}s` }}
-            >
-              <TempleCard temple={temple} />
-            </div>
-          ))}
-        </div>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {featuredTemples.map((temple, index) => (
+              <CarouselItem key={temple.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                <div 
+                  className="animate-fade-in h-full"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <TempleCard temple={temple} />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden sm:flex -left-4 lg:-left-6" />
+          <CarouselNext className="hidden sm:flex -right-4 lg:-right-6" />
+        </Carousel>
       )}
     </div>
   );

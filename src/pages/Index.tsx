@@ -1,12 +1,22 @@
 import Header from '@/components/Header';
 import FeaturedTemples from '@/components/FeaturedTemples';
-import { Sparkles, MapPin, Heart, Bell } from 'lucide-react';
+import ServiceHighlights from '@/components/ServiceHighlights';
+import StatsSection from '@/components/StatsSection';
+import Footer from '@/components/Footer';
+import { Sparkles, MapPin, Heart, Bell, Play, CreditCard, CalendarCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
 
 const Index = () => {
   const { t } = useLanguage();
+
+  const quickActions = [
+    { icon: CreditCard, label: 'Donate', path: '/temples' },
+    { icon: CalendarCheck, label: 'Book Darshan', path: '/temples' },
+    { icon: Play, label: 'Live Darshan', path: '/temples' },
+    { icon: Heart, label: 'Follow', path: '/temples' },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,7 +31,7 @@ const Index = () => {
           }} />
         </div>
         
-        <div className="container relative mx-auto px-4 py-16 sm:py-24 md:py-32">
+        <div className="container relative mx-auto px-4 py-12 sm:py-20 md:py-28">
           <div className="mx-auto max-w-3xl text-center">
             {/* Badge */}
             <div className="mb-6 inline-flex animate-fade-in items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
@@ -30,7 +40,7 @@ const Index = () => {
             </div>
             
             {/* Main Heading */}
-            <h1 className="mb-6 animate-fade-in font-serif text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl" style={{ animationDelay: '0.1s' }}>
+            <h1 className="mb-6 animate-fade-in font-serif text-3xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl" style={{ animationDelay: '0.1s' }}>
               {t('discoverIndias')}
               <span className="block bg-gradient-to-r from-primary via-primary to-accent-foreground bg-clip-text text-transparent">
                 {t('sacredTemples')}
@@ -38,16 +48,18 @@ const Index = () => {
             </h1>
             
             {/* Subtitle */}
-            <p className="mx-auto mb-8 max-w-xl animate-fade-in text-lg text-muted-foreground sm:text-xl" style={{ animationDelay: '0.2s' }}>
+            <p className="mx-auto mb-8 max-w-xl animate-fade-in text-base text-muted-foreground sm:text-lg" style={{ animationDelay: '0.2s' }}>
               {t('heroSubtitle')}
             </p>
             
             {/* CTA Buttons */}
             <div className="flex animate-fade-in flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4" style={{ animationDelay: '0.3s' }}>
-              <Button size="lg" className="w-full rounded-full px-8 py-6 text-base shadow-xl shadow-primary/30 sm:w-auto">
-                <MapPin className="mr-2 h-5 w-5" />
-                {t('exploreTemples')}
-              </Button>
+              <Link to="/temples">
+                <Button size="lg" className="w-full rounded-full px-8 py-6 text-base shadow-xl shadow-primary/30 sm:w-auto">
+                  <MapPin className="mr-2 h-5 w-5" />
+                  {t('exploreTemples')}
+                </Button>
+              </Link>
               <Link to="/ancestral">
                 <Button variant="outline" size="lg" className="w-full rounded-full border-2 px-8 py-6 text-base sm:w-auto">
                   {t('findAncestralTemple')}
@@ -56,20 +68,17 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Feature Pills */}
-          <div className="mt-16 flex animate-fade-in flex-wrap items-center justify-center gap-3 sm:gap-4" style={{ animationDelay: '0.4s' }}>
-            {[
-              { icon: Heart, labelKey: 'followTemples' },
-              { icon: Bell, labelKey: 'getUpdates' },
-              { icon: MapPin, labelKey: 'findNearby' },
-            ].map((item) => (
-              <div
-                key={item.labelKey}
-                className="flex items-center gap-2 rounded-full border border-border bg-card/50 px-4 py-2 text-sm backdrop-blur-sm"
+          {/* Quick Action Pills - Mobile Friendly */}
+          <div className="mt-12 flex animate-fade-in flex-wrap items-center justify-center gap-2 sm:gap-3" style={{ animationDelay: '0.4s' }}>
+            {quickActions.map((action) => (
+              <Link
+                key={action.label}
+                to={action.path}
+                className="flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2.5 text-sm backdrop-blur-sm hover:border-primary/30 hover:bg-primary/5 transition-all"
               >
-                <item.icon className="h-4 w-4 text-primary" />
-                <span className="text-foreground">{t(item.labelKey)}</span>
-              </div>
+                <action.icon className="h-4 w-4 text-primary" />
+                <span className="text-foreground font-medium">{action.label}</span>
+              </Link>
             ))}
           </div>
         </div>
@@ -78,30 +87,39 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      {/* Featured Temples Section */}
-      <main className="container mx-auto px-4 py-8 sm:py-12 md:py-16">
-        <FeaturedTemples />
+      {/* Main Content */}
+      <main className="container mx-auto px-4">
+        {/* Services Section */}
+        <ServiceHighlights />
+
+        {/* Featured Temples Section */}
+        <section className="py-8 sm:py-12">
+          <FeaturedTemples />
+        </section>
+
+        {/* Stats Section */}
+        <StatsSection />
+
+        {/* How It Works CTA */}
+        <section className="py-12 md:py-16">
+          <div className="rounded-3xl border border-border bg-card p-8 md:p-12 text-center">
+            <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl mb-4">
+              New to Templo?
+            </h2>
+            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
+              Learn how to discover temples, make donations, book darshan slots, and connect with your spiritual journey.
+            </p>
+            <Link to="/how-to">
+              <Button variant="outline" size="lg" className="rounded-full px-8">
+                See How It Works
+              </Button>
+            </Link>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card/50 py-10">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80">
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <div>
-                <p className="font-bold text-foreground">Templo</p>
-                <p className="text-xs text-muted-foreground">{t('sacredConnections')}</p>
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t('copyright')}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

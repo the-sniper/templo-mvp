@@ -25,7 +25,7 @@ const FeaturedTemples = () => {
 
   if (error) {
     return (
-      <div className="py-20 text-center">
+      <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
       </div>
     );
@@ -36,42 +36,42 @@ const FeaturedTemples = () => {
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="text-center sm:text-left">
-          <div className="mb-3 flex items-center justify-center sm:justify-start gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium uppercase tracking-wider text-primary">
+          <div className="mb-2 flex items-center justify-center sm:justify-start gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-xs font-medium uppercase tracking-wider text-primary">
               Featured
             </span>
           </div>
-          <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
+          <h2 className="font-serif text-2xl font-bold text-foreground">
             Popular Temples
           </h2>
         </div>
         <Link to="/temples">
-          <Button variant="outline" className="gap-2 rounded-full">
-            View All Temples
-            <ArrowRight className="h-4 w-4" />
+          <Button variant="outline" size="sm" className="gap-2 rounded-full">
+            View All
+            <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>
       </div>
 
       {loading ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(3)].map((_, i) => (
             <div 
               key={i} 
-              className="overflow-hidden rounded-2xl border border-border bg-card"
+              className="overflow-hidden rounded-xl border border-border bg-card"
             >
-              <Skeleton className="aspect-[4/3] w-full" />
-              <div className="p-5 space-y-3">
-                <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-40 w-full" />
+              <div className="p-4 space-y-2">
+                <Skeleton className="h-5 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-10 w-full" />
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="relative px-0 sm:px-10">
+        <div className="relative">
           <Carousel
             opts={{
               align: "start",
@@ -79,11 +79,11 @@ const FeaturedTemples = () => {
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-3 sm:-ml-4">
               {featuredTemples.map((temple, index) => (
-                <CarouselItem key={temple.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={temple.id} className="pl-3 sm:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
                   <div 
-                    className="animate-fade-in h-[360px]"
+                    className="animate-fade-in h-[320px]"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <TempleCard temple={temple} />
@@ -91,8 +91,8 @@ const FeaturedTemples = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex left-0" />
-            <CarouselNext className="hidden sm:flex right-0" />
+            <CarouselPrevious className="hidden sm:flex -left-4 lg:-left-5 h-8 w-8" />
+            <CarouselNext className="hidden sm:flex -right-4 lg:-right-5 h-8 w-8" />
           </Carousel>
         </div>
       )}

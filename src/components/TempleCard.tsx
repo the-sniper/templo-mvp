@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Heart, Clock, Bell, ArrowRight } from 'lucide-react';
+import { MapPin, Heart, ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,10 +16,10 @@ const TempleCard = ({ temple }: TempleCardProps) => {
   const following = isFollowing(temple.id);
 
   return (
-    <Card className="group relative overflow-hidden rounded-2xl border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/5">
-      {/* Image Section */}
+    <Card className="group relative overflow-hidden rounded-2xl border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 h-full flex flex-col">
+      {/* Image Section - Fixed Height */}
       <Link to={`/temple/${temple.id}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="relative h-48 overflow-hidden">
           <img
             src={temple.image}
             alt={temple.name}
@@ -57,37 +57,25 @@ const TempleCard = ({ temple }: TempleCardProps) => {
         </div>
       </Link>
       
-      {/* Content Section */}
-      <div className="p-5">
+      {/* Content Section - Flex grow to fill remaining space */}
+      <div className="p-5 flex flex-col flex-grow">
         <Link to={`/temple/${temple.id}`} className="block group/link">
-          <h3 className="mb-2 font-serif text-xl font-bold text-foreground transition-colors group-hover/link:text-primary">
+          <h3 className="mb-2 font-serif text-xl font-bold text-foreground transition-colors group-hover/link:text-primary line-clamp-1">
             {temple.name}
           </h3>
         </Link>
         
         <div className="mb-3 flex items-center gap-2 text-muted-foreground">
-          <MapPin className="h-4 w-4 text-primary" />
-          <span className="text-sm">{temple.location}</span>
+          <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+          <span className="text-sm line-clamp-1">{temple.location}</span>
         </div>
 
-        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed">
+        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed flex-grow">
           {temple.description}
         </p>
-
-        {/* Stats Row */}
-        <div className="mb-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <Clock className="h-4 w-4 text-primary" />
-            {temple.poojaTimings.length} timings
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Bell className="h-4 w-4 text-primary" />
-            {temple.announcements.length} updates
-          </span>
-        </div>
         
-        {/* CTA Button */}
-        <Link to={`/temple/${temple.id}`}>
+        {/* CTA Button - Always at bottom */}
+        <Link to={`/temple/${temple.id}`} className="mt-auto">
           <Button 
             variant="outline" 
             className="w-full rounded-xl border-2 py-5 text-sm font-medium transition-all group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"

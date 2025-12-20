@@ -83,7 +83,7 @@ const FeaturedTemples = () => {
               {featuredTemples.map((temple, index) => (
                 <CarouselItem key={temple.id} className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
                   <div 
-                    className="animate-fade-in h-[420px]"
+                    className="animate-fade-in h-[360px]"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     <TempleCard temple={temple} />

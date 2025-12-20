@@ -18,8 +18,8 @@ const TempleCard = ({ temple }: TempleCardProps) => {
   return (
     <Card className="group relative overflow-hidden rounded-2xl border-border bg-card transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 h-full flex flex-col">
       {/* Image Section - Fixed Height */}
-      <Link to={`/temple/${temple.id}`} className="block">
-        <div className="relative h-48 overflow-hidden">
+      <Link to={`/temple/${temple.id}`} className="block flex-shrink-0">
+        <div className="relative h-44 overflow-hidden">
           <img
             src={temple.image}
             alt={temple.name}
@@ -32,8 +32,8 @@ const TempleCard = ({ temple }: TempleCardProps) => {
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
           
           {/* Deity Badge */}
-          <div className="absolute bottom-4 left-4">
-            <Badge className="bg-card/90 text-foreground backdrop-blur-sm border-0 px-3 py-1.5 text-sm font-medium shadow-lg">
+          <div className="absolute bottom-3 left-3">
+            <Badge className="bg-card/90 text-foreground backdrop-blur-sm border-0 px-2.5 py-1 text-xs font-medium shadow-lg">
               {temple.deity}
             </Badge>
           </div>
@@ -43,7 +43,7 @@ const TempleCard = ({ temple }: TempleCardProps) => {
             variant="ghost"
             size="icon"
             className={cn(
-              "absolute right-4 top-4 h-10 w-10 rounded-full bg-card/90 shadow-lg backdrop-blur-sm transition-all hover:bg-card hover:scale-110",
+              "absolute right-3 top-3 h-9 w-9 rounded-full bg-card/90 shadow-lg backdrop-blur-sm transition-all hover:bg-card hover:scale-110",
               following && "text-primary bg-primary/10"
             )}
             onClick={(e) => {
@@ -52,25 +52,25 @@ const TempleCard = ({ temple }: TempleCardProps) => {
               toggleFollowTemple(temple.id);
             }}
           >
-            <Heart className={cn("h-5 w-5 transition-all", following && "fill-primary text-primary scale-110")} />
+            <Heart className={cn("h-4 w-4 transition-all", following && "fill-primary text-primary scale-110")} />
           </Button>
         </div>
       </Link>
       
-      {/* Content Section - Flex grow to fill remaining space */}
-      <div className="p-5 flex flex-col flex-grow">
-        <Link to={`/temple/${temple.id}`} className="block group/link">
-          <h3 className="mb-2 font-serif text-xl font-bold text-foreground transition-colors group-hover/link:text-primary line-clamp-1">
+      {/* Content Section - Fixed structure */}
+      <div className="p-4 flex flex-col flex-grow">
+        <Link to={`/temple/${temple.id}`} className="block">
+          <h3 className="mb-1.5 font-serif text-lg font-bold text-foreground transition-colors hover:text-primary line-clamp-1">
             {temple.name}
           </h3>
         </Link>
         
-        <div className="mb-3 flex items-center gap-2 text-muted-foreground">
-          <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
+        <div className="mb-2 flex items-center gap-1.5 text-muted-foreground">
+          <MapPin className="h-3.5 w-3.5 text-primary flex-shrink-0" />
           <span className="text-sm line-clamp-1">{temple.location}</span>
         </div>
 
-        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed flex-grow">
+        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed h-10">
           {temple.description}
         </p>
         
@@ -78,7 +78,7 @@ const TempleCard = ({ temple }: TempleCardProps) => {
         <Link to={`/temple/${temple.id}`} className="mt-auto">
           <Button 
             variant="outline" 
-            className="w-full rounded-xl border-2 py-5 text-sm font-medium transition-all group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
+            className="w-full rounded-xl border py-4 text-sm font-medium transition-all group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
           >
             View Temple
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

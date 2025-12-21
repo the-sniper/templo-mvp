@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import FeaturedTemples from '@/components/FeaturedTemples';
 import Footer from '@/components/Footer';
+import QuickFilters from '@/components/QuickFilters';
+import TemplesNearYou from '@/components/TemplesNearYou';
+import TodaysHighlights from '@/components/TodaysHighlights';
+import TempleAdminCTA from '@/components/TempleAdminCTA';
+import LiveActivityCounter from '@/components/LiveActivityCounter';
+import SpiritualTip from '@/components/SpiritualTip';
+import FloatingDiya from '@/components/FloatingDiya';
 import { Sparkles, MapPin, Heart, Search, Play, Pause, Volume2, VolumeX, Music, TreePine, Quote, Users, Camera } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,6 +22,7 @@ const Index = () => {
   const [quoteVisible, setQuoteVisible] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicMuted, setMusicMuted] = useState(true);
+  const [locationGranted, setLocationGranted] = useState(false);
 
   // Fade in animation for quote
   useEffect(() => {
@@ -28,6 +36,15 @@ const Index = () => {
       navigate(`/temples?search=${encodeURIComponent(searchQuery)}`);
     } else {
       navigate('/temples');
+    }
+  };
+
+  const handleLocationRequest = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => setLocationGranted(true),
+        () => console.log('Location access denied')
+      );
     }
   };
 
@@ -64,6 +81,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
+      <FloatingDiya />
       
       {/* Hero Section - Emotional & Sacred */}
       <section className="relative overflow-hidden">
@@ -82,6 +100,16 @@ const Index = () => {
           </svg>
         </div>
         
+        {/* Rangoli Pattern (left) */}
+        <div className="absolute left-0 top-1/4 w-48 h-48 opacity-[0.02]">
+          <svg viewBox="0 0 100 100" className="w-full h-full">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
+            <circle cx="50" cy="50" r="25" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
+            <path d="M50 5 L50 95 M5 50 L95 50 M15 15 L85 85 M85 15 L15 85" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-primary"/>
+          </svg>
+        </div>
+        
         {/* Gopuram Outline (subtle) */}
         <div className="absolute left-0 bottom-0 w-64 h-80 opacity-[0.02]">
           <svg viewBox="0 0 100 150" className="w-full h-full">
@@ -90,7 +118,7 @@ const Index = () => {
         </div>
         
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="py-16 sm:py-24 lg:py-32 max-w-4xl mx-auto text-center">
+          <div className="py-16 sm:py-24 lg:py-28 max-w-4xl mx-auto text-center">
             {/* Sacred Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
               <Sparkles className="h-4 w-4" />
@@ -106,19 +134,19 @@ const Index = () => {
             </h1>
             
             {/* Poetic Subtitle */}
-            <p className="mb-10 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-serif italic">
+            <p className="mb-8 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-serif italic">
               "Even from miles away, the divine hears you. Feel the sacred bells echo in your heart, wherever you are."
             </p>
             
             {/* Find My Temple Search */}
-            <form onSubmit={handleSearch} className="mb-8 max-w-xl mx-auto">
+            <form onSubmit={handleSearch} className="mb-4 max-w-xl mx-auto">
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                   <Search className="h-5 w-5" />
                 </div>
                 <Input
                   type="text"
-                  placeholder="Find your temple by name, location, or deity..."
+                  placeholder="Search by temple name, city, deity, or region…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full h-14 pl-12 pr-36 text-base rounded-full border-border bg-card shadow-sm focus:ring-2 focus:ring-primary/20"
@@ -133,6 +161,11 @@ const Index = () => {
                 </Button>
               </div>
             </form>
+
+            {/* Quick Filters */}
+            <div className="mb-8">
+              <QuickFilters onLocationRequest={handleLocationRequest} />
+            </div>
             
             {/* Secondary CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -154,8 +187,20 @@ const Index = () => {
         <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
       </section>
 
+      {/* Spiritual Tip of the Day */}
+      <SpiritualTip />
+
+      {/* Today's Highlights - Live Events */}
+      <TodaysHighlights />
+
+      {/* Temples Near You */}
+      <TemplesNearYou 
+        locationGranted={locationGranted} 
+        onRequestLocation={handleLocationRequest} 
+      />
+
       {/* Your Sacred Journey Section */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-card/50 to-background relative overflow-hidden">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-card/50 to-background relative overflow-hidden">
         {/* Subtle Pattern */}
         <div className="absolute inset-0 opacity-[0.02]">
           <div className="absolute inset-0" style={{
@@ -225,16 +270,16 @@ const Index = () => {
       </section>
 
       {/* Emotional Quote Block */}
-      <section className="py-16 sm:py-20 relative overflow-hidden">
+      <section className="py-12 sm:py-16 relative overflow-hidden">
         {/* Warm Background */}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/10 to-primary/5" />
         
         {/* Decorative Elements */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 opacity-10">
-          <Quote className="h-32 w-32 text-primary rotate-180" />
+        <div className="absolute left-8 top-1/2 -translate-y-1/2 opacity-10 hidden sm:block">
+          <Quote className="h-24 w-24 text-primary rotate-180" />
         </div>
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-10">
-          <Quote className="h-32 w-32 text-primary" />
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-10 hidden sm:block">
+          <Quote className="h-24 w-24 text-primary" />
         </div>
         
         <div className="container mx-auto px-4 sm:px-6">
@@ -243,7 +288,7 @@ const Index = () => {
               quoteVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-relaxed italic">
+            <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl text-foreground leading-relaxed italic">
               "A thousand miles away, I still hear the temple bells of my childhood."
             </blockquote>
             <footer className="mt-6">
@@ -255,7 +300,7 @@ const Index = () => {
       </section>
 
       {/* Featured Temples */}
-      <section className="py-16 sm:py-20 lg:py-24">
+      <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <FeaturedTemples />
@@ -264,7 +309,7 @@ const Index = () => {
       </section>
 
       {/* Voices of Devotion - Testimonials */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-card/30 via-card/50 to-card/30">
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-card/30 via-card/50 to-card/30">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
@@ -335,14 +380,19 @@ const Index = () => {
       </section>
 
       {/* Temple Music Preview - Floating Block */}
-      <section className="py-16 sm:py-20 relative">
+      <section className="py-12 sm:py-16 relative">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
-            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-lg">
+            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-lg relative overflow-hidden">
+              {/* Now Playing Glow Effect */}
+              {musicPlaying && !musicMuted && (
+                <div className="absolute inset-0 bg-primary/5 animate-pulse" />
+              )}
+              
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="relative flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center">
+                  <div className={`h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center ${musicPlaying ? 'animate-pulse' : ''}`}>
                     <Music className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <div>
@@ -363,14 +413,14 @@ const Index = () => {
               </div>
               
               {/* Track List */}
-              <div className="space-y-3">
+              <div className="relative space-y-3">
                 {musicTracks.map((track, index) => (
                   <button
                     key={index}
                     onClick={() => setMusicPlaying(!musicPlaying)}
                     className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all ${
                       index === 0 
-                        ? 'bg-primary/10 border border-primary/20' 
+                        ? `bg-primary/10 border border-primary/20 ${musicPlaying ? 'ring-2 ring-primary/30' : ''}` 
                         : 'bg-muted/30 hover:bg-muted/50'
                     }`}
                   >
@@ -388,14 +438,16 @@ const Index = () => {
                       <p className="text-xs text-muted-foreground">{track.artist}</p>
                     </div>
                     {index === 0 && (
-                      <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">Now Playing</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${musicPlaying ? 'text-primary-foreground bg-primary animate-pulse' : 'text-primary bg-primary/10'}`}>
+                        {musicPlaying ? '🎵 Playing' : 'Now Playing'}
+                      </span>
                     )}
                   </button>
                 ))}
               </div>
               
               {/* Morning Reminder */}
-              <div className="mt-6 p-4 bg-gradient-to-r from-accent/30 to-primary/10 rounded-xl text-center">
+              <div className="relative mt-6 p-4 bg-gradient-to-r from-accent/30 to-primary/10 rounded-xl text-center">
                 <p className="text-sm text-foreground">🌅 Start your day with Suprabhatam at 5:30 AM</p>
               </div>
             </div>
@@ -403,8 +455,11 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Temple Admin CTA */}
+      <TempleAdminCTA />
+
       {/* Final CTA Section */}
-      <section className="py-16 sm:py-20 lg:py-24">
+      <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 p-8 sm:p-12 lg:p-16 text-center">
@@ -443,6 +498,13 @@ const Index = () => {
                       Discover Your Roots
                     </Button>
                   </Link>
+                </div>
+
+                {/* Live Activity Counter */}
+                <div className="mt-8 pt-6 border-t border-primary-foreground/20">
+                  <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm text-primary-foreground/70 flex-wrap">
+                    <LiveActivityCounter />
+                  </div>
                 </div>
               </div>
             </div>

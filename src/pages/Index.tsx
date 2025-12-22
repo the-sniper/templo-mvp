@@ -48,29 +48,50 @@ const Index = () => {
     }
   };
 
-  const testimonials = [
-    { 
-      quote: "Being thousands of miles away in California, Templo helps me stay connected to my family temple in Madurai. Every ritual, every blessing—I feel like I'm there.", 
-      name: "Priya Srinivasan", 
-      location: "California, USA",
-      image: null,
-      type: "text"
-    },
-    { 
-      quote: "I watched my grandmother's ceremony live from London. The temple bells, the chants, the fragrance of camphor—tears of gratitude flowed. Thank you, Templo.", 
-      name: "Rajesh Iyer", 
-      location: "London, UK",
-      image: null,
-      type: "video"
-    },
-    { 
-      quote: "After 3 generations, we finally found our ancestral temple in a small village near Thanjavur. It felt like coming home after a century-long journey.", 
-      name: "Meera Krishnamurthy", 
-      location: "Sydney, Australia",
-      image: null,
-      type: "text"
-    },
-  ];
+  const [testimonialTab, setTestimonialTab] = useState<'india' | 'nri'>('nri');
+
+  const testimonials = {
+    nri: [
+      { 
+        quote: "Being thousands of miles away in California, Templo helps me stay connected to my family temple in Madurai. Every ritual, every blessing—I feel like I'm there.", 
+        name: "Priya Srinivasan", 
+        location: "California, USA",
+        type: "text"
+      },
+      { 
+        quote: "I watched my grandmother's ceremony live from London. The temple bells, the chants, the fragrance of camphor—tears of gratitude flowed. Thank you, Templo.", 
+        name: "Rajesh Iyer", 
+        location: "London, UK",
+        type: "video"
+      },
+      { 
+        quote: "After 3 generations, we finally found our ancestral temple in a small village near Thanjavur. It felt like coming home after a century-long journey.", 
+        name: "Meera Krishnamurthy", 
+        location: "Sydney, Australia",
+        type: "text"
+      },
+    ],
+    india: [
+      { 
+        quote: "Living in Bangalore, I could never visit my grandmother's temple in rural Tamil Nadu. Through Templo, I now perform monthly poojas there without missing a single one.", 
+        name: "Venkat Raman", 
+        location: "Bangalore, India",
+        type: "text"
+      },
+      { 
+        quote: "When my father passed away, I could not travel to our village temple. Through Templo, the priests performed all rituals while I watched and prayed from Mumbai.", 
+        name: "Lakshmi Narayanan", 
+        location: "Mumbai, India",
+        type: "video"
+      },
+      { 
+        quote: "Our family temple in Kerala was almost forgotten. Through Templo, we connected with the priests, resumed our traditions, and now sponsor weekly poojas.", 
+        name: "Suresh Menon", 
+        location: "Delhi, India",
+        type: "text"
+      },
+    ]
+  };
 
   const musicTracks = [
     { title: 'Suprabhatam', artist: 'Morning Awakening' },
@@ -126,8 +147,8 @@ const Index = () => {
             </div>
             
             {/* Emotional Headline */}
-            <h1 className="mb-6 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-              The Temple of Your Childhood.
+            <h1 className="mb-6 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground whitespace-normal">
+              <span className="block">The Temple of Your Childhood.</span>
               <span className="block mt-2 bg-gradient-to-r from-primary via-primary to-accent-foreground bg-clip-text text-transparent">
                 The Blessings of Your Lineage.
               </span>
@@ -216,7 +237,7 @@ const Index = () => {
               <div className="order-2 lg:order-1">
                 <div className="relative rounded-2xl overflow-hidden shadow-xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1609766857041-ed402ea8069a?w=800&auto=format&fit=crop&q=80" 
+                    src="https://images.unsplash.com/photo-1621427642649-dd7d6c0ef3b8?w=800&auto=format&fit=crop&q=80" 
                     alt="Traditional village temple with devotees"
                     className="w-full h-[300px] sm:h-[400px] object-cover"
                     onError={(e) => {
@@ -313,7 +334,7 @@ const Index = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 mb-4">
                 <Heart className="h-5 w-5 text-primary" />
                 <span className="text-sm font-medium uppercase tracking-wider text-primary">Stories of Faith</span>
@@ -326,9 +347,35 @@ const Index = () => {
               </p>
             </div>
 
+            {/* Tab Selector */}
+            <div className="flex justify-center mb-10">
+              <div className="inline-flex rounded-full bg-muted p-1.5 gap-1">
+                <button
+                  onClick={() => setTestimonialTab('nri')}
+                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    testimonialTab === 'nri' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  🌍 NRI Devotees
+                </button>
+                <button
+                  onClick={() => setTestimonialTab('india')}
+                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    testimonialTab === 'india' 
+                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  🇮🇳 Devotees in India
+                </button>
+              </div>
+            </div>
+
             {/* Testimonial Cards */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {testimonials.map((item, index) => (
+              {testimonials[testimonialTab].map((item, index) => (
                 <div
                   key={index}
                   className="group relative p-6 sm:p-8 rounded-2xl border border-border bg-card shadow-sm hover:shadow-md transition-all"

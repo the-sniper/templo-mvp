@@ -7,9 +7,8 @@ import TemplesNearYou from '@/components/TemplesNearYou';
 import TodaysHighlights from '@/components/TodaysHighlights';
 import TempleAdminCTA from '@/components/TempleAdminCTA';
 import LiveActivityCounter from '@/components/LiveActivityCounter';
-import SpiritualTip from '@/components/SpiritualTip';
 import FloatingDiya from '@/components/FloatingDiya';
-import { Sparkles, MapPin, Heart, Search, Play, Pause, Volume2, VolumeX, Music, TreePine, Quote, Users, Camera } from 'lucide-react';
+import { Sparkles, MapPin, Heart, Search, Play, Pause, Volume2, VolumeX, Music, TreePine, Quote, Users, Camera, Home, Star, Clock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,8 +22,8 @@ const Index = () => {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicMuted, setMusicMuted] = useState(true);
   const [locationGranted, setLocationGranted] = useState(false);
+  const [testimonialTab, setTestimonialTab] = useState<'india' | 'nri'>('nri');
 
-  // Fade in animation for quote
   useEffect(() => {
     const timer = setTimeout(() => setQuoteVisible(true), 500);
     return () => clearTimeout(timer);
@@ -48,46 +47,44 @@ const Index = () => {
     }
   };
 
-  const [testimonialTab, setTestimonialTab] = useState<'india' | 'nri'>('nri');
-
   const testimonials = {
     nri: [
       { 
-        quote: "Being thousands of miles away in California, Templo helps me stay connected to my family temple in Madurai. Every ritual, every blessing—I feel like I'm there.", 
-        name: "Priya Srinivasan", 
-        location: "California, USA",
-        type: "text"
-      },
-      { 
-        quote: "I watched my grandmother's ceremony live from London. The temple bells, the chants, the fragrance of camphor—tears of gratitude flowed. Thank you, Templo.", 
-        name: "Rajesh Iyer", 
-        location: "London, UK",
+        quote: "My amma passed away last year in Chennai. I was in New Jersey, helpless. Through Templo, I watched the priests perform her final rites at our family temple. I wept, I prayed, I felt her presence. This platform gave me closure I never thought possible.", 
+        name: "Lakshmi Venkatesh", 
+        location: "New Jersey, USA",
         type: "video"
       },
       { 
-        quote: "After 3 generations, we finally found our ancestral temple in a small village near Thanjavur. It felt like coming home after a century-long journey.", 
-        name: "Meera Krishnamurthy", 
-        location: "Sydney, Australia",
+        quote: "My children were born in London. They had never seen a temple until Templo. Now, every morning, we watch the live aarti together. My 6-year-old now asks me to teach her the slokas. My heart overflows.", 
+        name: "Anitha Ramachandran", 
+        location: "London, UK",
+        type: "text"
+      },
+      { 
+        quote: "I left India 30 years ago. I forgot the name of our village temple. With Templo, I found it—a small shrine near Thanjavur where my grandmother used to take me. When I saw it on screen, I broke down. I am home again.", 
+        name: "Suresh Natarajan", 
+        location: "Toronto, Canada",
         type: "text"
       },
     ],
     india: [
       { 
-        quote: "Living in Bangalore, I could never visit my grandmother's temple in rural Tamil Nadu. Through Templo, I now perform monthly poojas there without missing a single one.", 
-        name: "Venkat Raman", 
+        quote: "I work 12-hour shifts in Bangalore. I cannot visit my mother in our village, let alone our ancestral temple. Now, every month, I book a pooja through Templo. The priest calls me after—it feels like my mother is blessing me through the phone.", 
+        name: "Karthik Sundaram", 
         location: "Bangalore, India",
         type: "text"
       },
       { 
-        quote: "When my father passed away, I could not travel to our village temple. Through Templo, the priests performed all rituals while I watched and prayed from Mumbai.", 
-        name: "Lakshmi Narayanan", 
+        quote: "When my father took his last breath, I was on a train to Mumbai. I could not reach our temple in time. The priests at our family shrine performed the rituals while I watched on my phone, tears streaming. Templo was my bridge to the divine that day.", 
+        name: "Revathi Krishnan", 
         location: "Mumbai, India",
         type: "video"
       },
       { 
-        quote: "Our family temple in Kerala was almost forgotten. Through Templo, we connected with the priests, resumed our traditions, and now sponsor weekly poojas.", 
-        name: "Suresh Menon", 
-        location: "Delhi, India",
+        quote: "Our temple in rural Kerala had no visitors for years. We listed it on Templo. Now, families from across India sponsor poojas every week. The temple is alive again. The bells ring again. The gods are smiling again.", 
+        name: "Padmini Nair", 
+        location: "Kochi, India",
         type: "text"
       },
     ]
@@ -99,119 +96,181 @@ const Index = () => {
     { title: 'Bhajans from Thanjavur', artist: 'Temple Priests' },
   ];
 
+  const emotionalQuotes = [
+    {
+      text: "I close my eyes in California, and I am seven years old again, holding my thatha's hand at the temple entrance.",
+      author: "Priya, San Francisco",
+      context: "Found her ancestral temple after 25 years"
+    },
+    {
+      text: "The distance is just geography. The connection is eternal.",
+      author: "Rajesh, Dubai",
+      context: "Watches live darshan every morning"
+    },
+    {
+      text: "When the temple bells rang through my laptop speaker, my soul remembered what my mind had forgotten.",
+      author: "Meera, Sydney",
+      context: "Reconnected with family traditions"
+    }
+  ];
+
+  const [currentQuote] = useState(() => 
+    emotionalQuotes[Math.floor(Math.random() * emotionalQuotes.length)]
+  );
+
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <FloatingDiya />
       
-      {/* Hero Section - Emotional & Sacred */}
-      <section className="relative overflow-hidden">
-        {/* Background with Traditional Textures */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-accent/5 to-transparent" />
+      {/* Hero Section - Deep Emotional Connection */}
+      <section className="relative overflow-hidden min-h-[85vh] flex items-center">
+        {/* Warm Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-background" />
         
-        {/* Decorative Temple Bell Pattern */}
-        <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03]">
-          <svg viewBox="0 0 200 200" className="w-full h-full">
-            <defs>
-              <pattern id="bells" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M20 5 L20 10 M15 15 Q20 20 25 15 Q30 25 20 35 Q10 25 15 15" fill="none" stroke="currentColor" strokeWidth="1"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#bells)" className="text-primary"/>
-          </svg>
-        </div>
+        {/* Subtle Sacred Pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L30 55 M5 30 L55 30 M15 15 L45 45 M45 15 L15 45' stroke='%23B8860B' stroke-width='0.5' fill='none' opacity='0.5'/%3E%3Ccircle cx='30' cy='30' r='20' stroke='%23B8860B' stroke-width='0.5' fill='none' opacity='0.3'/%3E%3C/svg%3E")`,
+          backgroundSize: '60px 60px',
+        }} />
         
-        {/* Rangoli Pattern (left) */}
-        <div className="absolute left-0 top-1/4 w-48 h-48 opacity-[0.02]">
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
-            <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
-            <circle cx="50" cy="50" r="25" fill="none" stroke="currentColor" strokeWidth="1" className="text-primary"/>
-            <path d="M50 5 L50 95 M5 50 L95 50 M15 15 L85 85 M85 15 L15 85" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-primary"/>
-          </svg>
-        </div>
-        
-        {/* Gopuram Outline (subtle) */}
-        <div className="absolute left-0 bottom-0 w-64 h-80 opacity-[0.02]">
-          <svg viewBox="0 0 100 150" className="w-full h-full">
-            <path d="M50 0 L60 20 L70 45 L80 75 L85 110 L90 150 L10 150 L15 110 L20 75 L30 45 L40 20 Z" fill="currentColor" className="text-primary"/>
-          </svg>
-        </div>
-        
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="py-16 sm:py-24 lg:py-28 max-w-4xl mx-auto text-center">
-            {/* Sacred Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
-              <Sparkles className="h-4 w-4" />
-              <span>Your Divine Connection Awaits</span>
-            </div>
-            
-            {/* Emotional Headline */}
-            <h1 className="mb-6 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground whitespace-normal">
-              <span className="block">The Temple of Your Childhood.</span>
-              <span className="block mt-2 bg-gradient-to-r from-primary via-primary to-accent-foreground bg-clip-text text-transparent">
-                The Blessings of Your Lineage.
-              </span>
-            </h1>
-            
-            {/* Poetic Subtitle */}
-            <p className="mb-8 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed font-serif italic">
-              "Even from miles away, the divine hears you. Feel the sacred bells echo in your heart, wherever you are."
-            </p>
-            
-            {/* Find My Temple Search */}
-            <form onSubmit={handleSearch} className="mb-4 max-w-xl mx-auto">
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  <Search className="h-5 w-5" />
-                </div>
-                <Input
-                  type="text"
-                  placeholder="Search by temple name, city, deity, or region…"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-14 pl-12 pr-36 text-base rounded-full border-border bg-card shadow-sm focus:ring-2 focus:ring-primary/20"
-                />
-                <Button 
-                  type="submit"
-                  size="lg" 
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-6"
-                >
-                  <MapPin className="mr-2 h-4 w-4" />
-                  Find Temple
-                </Button>
+        <div className="container mx-auto px-4 sm:px-6 relative">
+          <div className="py-12 sm:py-16 lg:py-20 max-w-5xl mx-auto">
+            <div className="text-center">
+              {/* Emotional Opening */}
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-5 py-2.5 text-sm font-medium text-primary">
+                <Home className="h-4 w-4" />
+                <span>Come home. Your temple is waiting.</span>
               </div>
-            </form>
+              
+              {/* Main Headline - Deeply Personal */}
+              <h1 className="mb-8 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] text-foreground">
+                <span className="block">Remember the temple</span>
+                <span className="block mt-1">where your grandmother prayed?</span>
+                <span className="block mt-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl bg-gradient-to-r from-primary via-primary to-accent-foreground bg-clip-text text-transparent">
+                  It still prays for you.
+                </span>
+              </h1>
+              
+              {/* Emotional Subtext */}
+              <p className="mb-10 max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
+                Thousands of miles away, your ancestral temple stands unchanged. 
+                The same stones. The same bells. The same prayers your family has offered for generations.
+                <span className="block mt-2 font-serif italic text-foreground/80">
+                  Now, you can be there again.
+                </span>
+              </p>
+              
+              {/* Search - The First Step Home */}
+              <form onSubmit={handleSearch} className="mb-6 max-w-2xl mx-auto">
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <Search className="h-5 w-5" />
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder="Search your temple by name, village, deity, or memory..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-16 pl-14 pr-40 text-base sm:text-lg rounded-full border-2 border-border bg-card shadow-lg focus:ring-2 focus:ring-primary/30 focus:border-primary/50"
+                  />
+                  <Button 
+                    type="submit"
+                    size="lg" 
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-6 sm:px-8 h-12"
+                  >
+                    <MapPin className="mr-2 h-4 w-4" />
+                    <span className="hidden sm:inline">Find Temple</span>
+                    <span className="sm:hidden">Find</span>
+                  </Button>
+                </div>
+              </form>
 
-            {/* Quick Filters */}
-            <div className="mb-8">
-              <QuickFilters onLocationRequest={handleLocationRequest} />
-            </div>
-            
-            {/* Secondary CTA */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/ancestral">
-                <Button variant="outline" size="lg" className="rounded-full px-8 border-primary/30 hover:bg-primary/5">
-                  <TreePine className="mr-2 h-4 w-4" />
-                  Find My Ancestral Temple
-                </Button>
-              </Link>
-              <span className="text-muted-foreground text-sm">or</span>
-              <Link to="/temples" className="text-primary hover:underline font-medium">
-                Browse All Temples →
-              </Link>
+              {/* Quick Filters */}
+              <div className="mb-10">
+                <QuickFilters onLocationRequest={handleLocationRequest} />
+              </div>
+              
+              {/* Primary Actions */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <Link to="/ancestral">
+                  <Button size="lg" className="rounded-full px-8 h-14 text-base">
+                    <Heart className="mr-2 h-5 w-5" />
+                    Find My Ancestral Temple
+                  </Button>
+                </Link>
+                <Link to="/temples">
+                  <Button variant="outline" size="lg" className="rounded-full px-8 h-14 text-base border-primary/30">
+                    <Sparkles className="mr-2 h-5 w-5" />
+                    Explore All Temples
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span>1,200+ temples connected</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4 text-primary" />
+                  <span>50,000+ families reunited</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  <span>Live darshan 24/7</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        
-        {/* Decorative Garland Border */}
-        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
       </section>
 
-      {/* Spiritual Tip of the Day */}
-      <SpiritualTip />
+      {/* The Promise Section - Why This Matters */}
+      <section className="py-16 sm:py-20 bg-gradient-to-b from-card/80 to-background relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-8 leading-tight">
+              You left home.<br />
+              <span className="text-primary">But home never left you.</span>
+            </h2>
+            
+            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mb-10 max-w-3xl mx-auto">
+              Perhaps you moved for work. Perhaps your parents moved you. Perhaps life just happened. 
+              But somewhere deep inside, you still remember—the smell of camphor, the sound of bells, 
+              the feeling of standing before something greater than yourself.
+            </p>
 
-      {/* Today's Highlights - Live Events */}
+            {/* Three Pillars */}
+            <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 mb-10">
+              <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10">
+                <div className="text-4xl mb-4">🪔</div>
+                <h3 className="font-serif font-bold text-foreground mb-2">Watch Live</h3>
+                <p className="text-sm text-muted-foreground">
+                  See the aarti. Hear the mantras. Be present at your temple, from anywhere in the world.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10">
+                <div className="text-4xl mb-4">📿</div>
+                <h3 className="font-serif font-bold text-foreground mb-2">Request Pooja</h3>
+                <p className="text-sm text-muted-foreground">
+                  Book rituals for birthdays, anniversaries, or just because your heart calls you.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10">
+                <div className="text-4xl mb-4">🌳</div>
+                <h3 className="font-serif font-bold text-foreground mb-2">Find Your Roots</h3>
+                <p className="text-sm text-muted-foreground">
+                  Discover the temple your ancestors built. The one that carries your family name.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Today's Highlights */}
       <TodaysHighlights />
 
       {/* Temples Near You */}
@@ -220,70 +279,79 @@ const Index = () => {
         onRequestLocation={handleLocationRequest} 
       />
 
-      {/* Your Sacred Journey Section */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-card/50 to-background relative overflow-hidden">
-        {/* Subtle Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--primary)) 1px, transparent 0)`,
-            backgroundSize: '32px 32px',
-          }} />
-        </div>
+      {/* Your Ancestral Temple Section - Deep Emotional Design */}
+      <section className="py-16 sm:py-24 relative overflow-hidden">
+        {/* Warm Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-primary/5 to-transparent" />
         
-        <div className="container mx-auto px-4 sm:px-6">
+        <div className="container mx-auto px-4 sm:px-6 relative">
           <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Image */}
-              <div className="order-2 lg:order-1">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              {/* Image Side */}
+              <div className="relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                   <img 
                     src="https://images.unsplash.com/photo-1621427642649-dd7d6c0ef3b8?w=800&auto=format&fit=crop&q=80" 
-                    alt="Traditional village temple with devotees"
-                    className="w-full h-[300px] sm:h-[400px] object-cover"
+                    alt="Ancient village temple where generations have prayed"
+                    className="w-full h-[350px] sm:h-[450px] object-cover"
                     onError={(e) => {
                       e.currentTarget.src = '/placeholder.svg';
                     }}
                   />
-                  {/* Warm Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-foreground/10 to-transparent" />
                   
-                  {/* Caption */}
-                  <div className="absolute bottom-4 left-4 right-4 text-center">
-                    <p className="text-sm text-primary-foreground font-medium bg-foreground/40 backdrop-blur-sm rounded-full px-4 py-2 inline-block">
-                      A village temple, where generations have prayed
+                  {/* Emotional Caption */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-center">
+                    <p className="text-primary-foreground font-serif text-lg sm:text-xl italic">
+                      "This is where my grandmother brought me when I was five."
+                    </p>
+                    <p className="text-primary-foreground/70 text-sm mt-2">
+                      — Every devotee who finds their temple
                     </p>
                   </div>
                 </div>
+                
+                {/* Floating Stats */}
+                <div className="absolute -right-4 top-8 bg-card rounded-xl shadow-lg p-4 border border-border hidden lg:block">
+                  <p className="text-2xl font-bold text-primary">2,847</p>
+                  <p className="text-xs text-muted-foreground">families found their<br />ancestral temples</p>
+                </div>
               </div>
               
-              {/* Content */}
-              <div className="order-1 lg:order-2 text-center lg:text-left">
-                <div className="mb-4 inline-flex items-center gap-2">
-                  <TreePine className="h-5 w-5 text-primary" />
-                  <span className="text-sm font-medium uppercase tracking-wider text-primary">Reconnect With Your Roots</span>
+              {/* Content Side */}
+              <div className="text-center lg:text-left">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2">
+                  <TreePine className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Reconnect with your roots</span>
                 </div>
                 
                 <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-6 leading-tight">
-                  Your Sacred Journey
-                  <span className="block text-primary">Begins Here</span>
+                  Somewhere in India,<br />
+                  <span className="text-primary">your family temple is waiting.</span>
                 </h2>
                 
                 <p className="text-muted-foreground leading-relaxed mb-6 text-base sm:text-lg">
-                  For generations, your ancestors walked the sacred grounds of their village temple. 
-                  The same bells that rang for them still ring today, waiting to welcome you home.
+                  Maybe your grandparents mentioned it in stories. Maybe you visited as a child 
+                  and forgot the name. Maybe you have only heard whispers of a village, a deity, a tradition.
                 </p>
                 
-                <p className="text-muted-foreground leading-relaxed mb-8 text-base sm:text-lg font-serif italic">
-                  Whether you're an NRI longing for home, a child of Indian heritage discovering your roots, 
-                  or a seeker of divine connection—your temple awaits.
+                <p className="text-foreground leading-relaxed mb-8 text-base sm:text-lg font-serif">
+                  <span className="text-primary font-bold">We will help you find it.</span> Tell us what you remember—
+                  a village name, a deity, your family surname, your community. Our network of 
+                  1,200+ temples will search for your ancestral connection.
                 </p>
-                
-                <Link to="/ancestral">
-                  <Button size="lg" className="rounded-full px-8">
-                    <Heart className="mr-2 h-4 w-4" />
-                    Find My Ancestral Temple
-                  </Button>
-                </Link>
+
+                <div className="space-y-4">
+                  <Link to="/ancestral">
+                    <Button size="lg" className="rounded-full px-10 h-14 text-base w-full sm:w-auto">
+                      <Heart className="mr-2 h-5 w-5" />
+                      Begin Your Search
+                    </Button>
+                  </Link>
+                  <p className="text-sm text-muted-foreground">
+                    Free. No commitment. Just a journey home.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -291,30 +359,26 @@ const Index = () => {
       </section>
 
       {/* Emotional Quote Block */}
-      <section className="py-12 sm:py-16 relative overflow-hidden">
-        {/* Warm Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/10 to-primary/5" />
-        
-        {/* Decorative Elements */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 opacity-10 hidden sm:block">
-          <Quote className="h-24 w-24 text-primary rotate-180" />
+      <section className="py-16 sm:py-20 relative overflow-hidden bg-primary/5">
+        <div className="absolute left-4 sm:left-12 top-1/2 -translate-y-1/2 opacity-10">
+          <Quote className="h-16 sm:h-32 w-16 sm:w-32 text-primary rotate-180" />
         </div>
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-10 hidden sm:block">
-          <Quote className="h-24 w-24 text-primary" />
+        <div className="absolute right-4 sm:right-12 top-1/2 -translate-y-1/2 opacity-10">
+          <Quote className="h-16 sm:h-32 w-16 sm:w-32 text-primary" />
         </div>
         
         <div className="container mx-auto px-4 sm:px-6">
           <div 
-            className={`max-w-3xl mx-auto text-center transition-all duration-1000 ${
+            className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${
               quoteVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl text-foreground leading-relaxed italic">
-              "A thousand miles away, I still hear the temple bells of my childhood."
+            <blockquote className="font-serif text-xl sm:text-2xl md:text-4xl text-foreground leading-relaxed">
+              "{currentQuote.text}"
             </blockquote>
-            <footer className="mt-6">
-              <p className="text-primary font-medium">— A devotee from Toronto</p>
-              <p className="text-muted-foreground text-sm mt-1">Reconnected with their family temple after 25 years</p>
+            <footer className="mt-8">
+              <p className="text-primary font-semibold text-lg">— {currentQuote.author}</p>
+              <p className="text-muted-foreground text-sm mt-1">{currentQuote.context}</p>
             </footer>
           </div>
         </div>
@@ -329,21 +393,21 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Voices of Devotion - Testimonials */}
-      <section className="py-16 sm:py-20 bg-gradient-to-b from-card/30 via-card/50 to-card/30">
+      {/* Voices of Devotion - Emotional Testimonials */}
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-card/50 via-card/80 to-card/50">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-10">
               <div className="inline-flex items-center gap-2 mb-4">
-                <Heart className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium uppercase tracking-wider text-primary">Stories of Faith</span>
+                <Heart className="h-5 w-5 text-primary animate-pulse" />
+                <span className="text-sm font-medium uppercase tracking-wider text-primary">Real Stories. Real Tears. Real Faith.</span>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">
                 Voices of Devotion
               </h2>
-              <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-                Heartfelt stories from devotees who reconnected with their spiritual roots
+              <p className="text-muted-foreground mt-3 max-w-2xl mx-auto text-base sm:text-lg">
+                These are not testimonials. These are moments of grace, shared by families like yours.
               </p>
             </div>
 
@@ -352,23 +416,23 @@ const Index = () => {
               <div className="inline-flex rounded-full bg-muted p-1.5 gap-1">
                 <button
                   onClick={() => setTestimonialTab('nri')}
-                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                  className={`px-5 sm:px-8 py-3 rounded-full text-sm font-medium transition-all ${
                     testimonialTab === 'nri' 
-                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      ? 'bg-primary text-primary-foreground shadow-md' 
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  🌍 NRI Devotees
+                  🌍 Living Abroad
                 </button>
                 <button
                   onClick={() => setTestimonialTab('india')}
-                  className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                  className={`px-5 sm:px-8 py-3 rounded-full text-sm font-medium transition-all ${
                     testimonialTab === 'india' 
-                      ? 'bg-primary text-primary-foreground shadow-sm' 
+                      ? 'bg-primary text-primary-foreground shadow-md' 
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  🇮🇳 Devotees in India
+                  🇮🇳 Living in India
                 </button>
               </div>
             </div>
@@ -378,35 +442,33 @@ const Index = () => {
               {testimonials[testimonialTab].map((item, index) => (
                 <div
                   key={index}
-                  className="group relative p-6 sm:p-8 rounded-2xl border border-border bg-card shadow-sm hover:shadow-md transition-all"
+                  className="group relative p-6 sm:p-8 rounded-2xl border border-border bg-card shadow-sm hover:shadow-xl transition-all duration-300"
                 >
-                  {/* Decorative Corner */}
-                  <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/20 rounded-tl-2xl" />
-                  <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/20 rounded-br-2xl" />
+                  {/* Decorative Corners */}
+                  <div className="absolute top-0 left-0 w-12 h-12 border-l-2 border-t-2 border-primary/30 rounded-tl-2xl" />
+                  <div className="absolute bottom-0 right-0 w-12 h-12 border-r-2 border-b-2 border-primary/30 rounded-br-2xl" />
                   
                   {/* Video Badge */}
                   {item.type === 'video' && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full">
+                    <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-primary text-primary-foreground text-xs font-medium px-3 py-1.5 rounded-full">
                       <Camera className="h-3 w-3" />
                       Video Story
                     </div>
                   )}
                   
-                  {/* Quote Icon */}
-                  <Quote className="h-8 w-8 text-primary/20 mb-4 rotate-180" />
-                  
                   {/* Quote */}
-                  <p className="text-foreground leading-relaxed mb-6 text-sm sm:text-base">
+                  <Quote className="h-6 w-6 text-primary/30 mb-4 rotate-180" />
+                  <p className="text-foreground leading-relaxed mb-6 text-sm sm:text-base min-h-[120px]">
                     "{item.quote}"
                   </p>
                   
                   {/* Author */}
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/30 flex items-center justify-center ring-2 ring-primary/10">
+                  <div className="flex items-center gap-4 pt-4 border-t border-border/50">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/30 to-accent/40 flex items-center justify-center ring-2 ring-primary/20">
                       <span className="text-primary font-serif font-bold text-lg">{item.name[0]}</span>
                     </div>
                     <div>
-                      <p className="font-medium text-foreground">{item.name}</p>
+                      <p className="font-semibold text-foreground">{item.name}</p>
                       <p className="text-sm text-muted-foreground">{item.location}</p>
                     </div>
                   </div>
@@ -414,11 +476,16 @@ const Index = () => {
               ))}
             </div>
             
-            {/* Share Your Story CTA */}
-            <div className="text-center mt-10">
-              <p className="text-muted-foreground mb-4">Have a story to share?</p>
-              <Button variant="outline" className="rounded-full px-6">
-                <Users className="mr-2 h-4 w-4" />
+            {/* Share Your Story */}
+            <div className="text-center mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/10">
+              <h3 className="font-serif text-xl font-bold text-foreground mb-2">
+                Your story matters too.
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                If Templo has touched your life, we would be honored to hear from you.
+              </p>
+              <Button variant="outline" className="rounded-full px-8">
+                <Heart className="mr-2 h-4 w-4" />
                 Share Your Journey
               </Button>
             </div>
@@ -426,17 +493,24 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Temple Music Preview - Floating Block */}
+      {/* Sacred Sounds - Temple Music */}
       <section className="py-12 sm:py-16 relative">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-8">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+                Close your eyes. Listen. Remember.
+              </h3>
+              <p className="text-muted-foreground mt-2">
+                The same sounds that echoed in your childhood temple.
+              </p>
+            </div>
+            
             <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-lg relative overflow-hidden">
-              {/* Now Playing Glow Effect */}
               {musicPlaying && !musicMuted && (
                 <div className="absolute inset-0 bg-primary/5 animate-pulse" />
               )}
               
-              {/* Header */}
               <div className="relative flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className={`h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center ${musicPlaying ? 'animate-pulse' : ''}`}>
@@ -444,11 +518,10 @@ const Index = () => {
                   </div>
                   <div>
                     <h3 className="font-serif text-lg font-bold text-foreground">Sacred Sounds</h3>
-                    <p className="text-sm text-muted-foreground">Temple music to soothe your soul</p>
+                    <p className="text-sm text-muted-foreground">Temple music for your soul</p>
                   </div>
                 </div>
                 
-                {/* Mute Toggle */}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -459,7 +532,6 @@ const Index = () => {
                 </Button>
               </div>
               
-              {/* Track List */}
               <div className="relative space-y-3">
                 {musicTracks.map((track, index) => (
                   <button
@@ -492,11 +564,6 @@ const Index = () => {
                   </button>
                 ))}
               </div>
-              
-              {/* Morning Reminder */}
-              <div className="relative mt-6 p-4 bg-gradient-to-r from-accent/30 to-primary/10 rounded-xl text-center">
-                <p className="text-sm text-foreground">🌅 Start your day with Suprabhatam at 5:30 AM</p>
-              </div>
             </div>
           </div>
         </div>
@@ -505,13 +572,12 @@ const Index = () => {
       {/* Temple Admin CTA */}
       <TempleAdminCTA />
 
-      {/* Final CTA Section */}
-      <section className="py-16 sm:py-20">
+      {/* Final CTA - The Invitation */}
+      <section className="py-16 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 p-8 sm:p-12 lg:p-16 text-center">
-              {/* Pattern Overlay */}
-              <div className="absolute inset-0 opacity-5">
+              <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0" style={{
                   backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
                   backgroundSize: '24px 24px',
@@ -519,19 +585,22 @@ const Index = () => {
               </div>
               
               <div className="relative">
-                <Sparkles className="h-10 w-10 text-primary-foreground/50 mx-auto mb-6" />
+                <div className="text-5xl mb-6">🙏</div>
                 
-                <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-4">
-                  The Temple Door is Always Open
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-6 leading-tight">
+                  The temple door has always been open.<br />
+                  <span className="text-primary-foreground/90">You just needed a way to reach it.</span>
                 </h2>
-                <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto text-base sm:text-lg">
-                  No matter the distance, no matter the time—your spiritual home awaits. 
-                  Begin your journey of faith, connection, and inner peace.
+                
+                <p className="text-primary-foreground/80 mb-10 max-w-2xl mx-auto text-base sm:text-lg">
+                  No matter where life has taken you—across oceans, across time zones, across the years—
+                  the divine connection remains unbroken. Your ancestors are with you. Your temple awaits.
                 </p>
+                
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/temples">
-                    <Button size="lg" className="w-full sm:w-auto rounded-full px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90">
-                      <MapPin className="mr-2 h-4 w-4" />
+                    <Button size="lg" className="w-full sm:w-auto rounded-full px-10 h-14 bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-base font-semibold">
+                      <MapPin className="mr-2 h-5 w-5" />
                       Find Your Temple
                     </Button>
                   </Link>
@@ -539,19 +608,16 @@ const Index = () => {
                     <Button 
                       size="lg" 
                       variant="ghost" 
-                      className="w-full sm:w-auto rounded-full px-8 text-primary-foreground border border-primary-foreground/30 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                      className="w-full sm:w-auto rounded-full px-10 h-14 text-primary-foreground border-2 border-primary-foreground/30 hover:bg-primary-foreground/10 text-base font-semibold"
                     >
-                      <TreePine className="mr-2 h-4 w-4" />
+                      <TreePine className="mr-2 h-5 w-5" />
                       Discover Your Roots
                     </Button>
                   </Link>
                 </div>
 
-                {/* Live Activity Counter */}
-                <div className="mt-8 pt-6 border-t border-primary-foreground/20">
-                  <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm text-primary-foreground/70 flex-wrap">
-                    <LiveActivityCounter />
-                  </div>
+                <div className="mt-10 pt-8 border-t border-primary-foreground/20">
+                  <LiveActivityCounter />
                 </div>
               </div>
             </div>

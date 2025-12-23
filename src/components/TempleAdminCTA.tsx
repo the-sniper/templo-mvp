@@ -6,7 +6,7 @@ const TempleAdminCTA = () => {
   return (
     <section className="py-8 sm:py-10 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 via-accent/15 to-primary/10 border border-primary/20 p-6 sm:p-8 overflow-hidden">
             {/* Decorative pattern */}
             <div className="absolute inset-0 opacity-5">

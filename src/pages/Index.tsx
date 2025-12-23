@@ -415,13 +415,13 @@ const Index = () => {
 
             {/* Tab Selector */}
             <div className="flex justify-center mb-8 sm:mb-10 px-2">
-              <div className="inline-flex rounded-full bg-muted p-1 sm:p-1.5 gap-1">
+              <div className="inline-flex rounded-full bg-primary/10 border border-primary/20 p-1 sm:p-1.5 gap-1">
                 <button
                   onClick={() => setTestimonialTab('nri')}
                   className={`px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all ${
                     testimonialTab === 'nri' 
                       ? 'bg-primary text-primary-foreground shadow-md' 
-                      : 'text-muted-foreground hover:text-foreground'
+                      : 'text-foreground/70 hover:text-foreground hover:bg-primary/5'
                   }`}
                 >
                   🌍 Living Abroad
@@ -431,7 +431,7 @@ const Index = () => {
                   className={`px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-medium transition-all ${
                     testimonialTab === 'india' 
                       ? 'bg-primary text-primary-foreground shadow-md' 
-                      : 'text-muted-foreground hover:text-foreground'
+                      : 'text-foreground/70 hover:text-foreground hover:bg-primary/5'
                   }`}
                 >
                   🇮🇳 Living in India

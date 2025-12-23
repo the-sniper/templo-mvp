@@ -24,7 +24,7 @@ const TemplesNearYou = ({ locationGranted, onRequestLocation }: TemplesNearYouPr
     return (
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="relative rounded-2xl border border-border bg-gradient-to-br from-card via-card to-primary/5 p-8 sm:p-12 text-center overflow-hidden">
               {/* Decorative circles */}
               <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-primary/5" />

@@ -9,19 +9,19 @@ import TempleAdminCTA from '@/components/TempleAdminCTA';
 import LiveActivityCounter from '@/components/LiveActivityCounter';
 import FloatingDiya from '@/components/FloatingDiya';
 import villageTempleImg from '@/assets/village-temple.jpg';
-import { Sparkles, MapPin, Heart, Search, Play, Pause, Volume2, VolumeX, Music, TreePine, Quote, Camera, Home, Star, Clock } from 'lucide-react';
+import { Sparkles, MapPin, Heart, Search, TreePine, Quote, Camera, Home, Star, Clock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/context/LanguageContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [quoteVisible, setQuoteVisible] = useState(false);
-  const [musicPlaying, setMusicPlaying] = useState(false);
-  const [musicMuted, setMusicMuted] = useState(true);
   const [locationGranted, setLocationGranted] = useState(false);
   const [testimonialTab, setTestimonialTab] = useState<'india' | 'nri'>('nri');
 
@@ -46,6 +46,13 @@ const Index = () => {
         () => console.log('Location access denied')
       );
     }
+  };
+
+  const handleShareStory = () => {
+    toast({
+      title: "Share Your Story",
+      description: "Thank you for wanting to share! This feature will be available soon. We'd love to hear your journey.",
+    });
   };
 
   const testimonials = {
@@ -91,12 +98,6 @@ const Index = () => {
     ]
   };
 
-  const musicTracks = [
-    { title: 'Suprabhatam', artist: 'Morning Awakening' },
-    { title: 'Om Namah Shivaya', artist: 'Sacred Chants' },
-    { title: 'Bhajans from Thanjavur', artist: 'Temple Priests' },
-  ];
-
   const emotionalQuotes = [
     {
       text: "I close my eyes in California, and I am seven years old again, holding my thatha's hand at the temple entrance.",
@@ -134,7 +135,7 @@ const Index = () => {
         }} />
         
         <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="py-8 sm:py-16 lg:py-20 max-w-5xl mx-auto">
+          <div className="py-8 sm:py-16 lg:py-20 max-w-6xl mx-auto">
             <div className="text-center">
               {/* Badge */}
               <div className="mb-6 sm:mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 sm:px-5 py-2 text-xs sm:text-sm font-medium text-primary">
@@ -152,7 +153,7 @@ const Index = () => {
               </h1>
               
               {/* Subtext */}
-              <p className="mb-8 sm:mb-10 max-w-xl sm:max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed px-2">
+              <p className="mb-8 sm:mb-10 max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed px-2">
                 Thousands of miles away, your ancestral temple stands unchanged. 
                 The same stones. The same bells. The same prayers your family has offered for generations.
                 <span className="block mt-2 font-serif italic text-foreground/80">
@@ -161,7 +162,7 @@ const Index = () => {
               </p>
               
               {/* Search */}
-              <form onSubmit={handleSearch} className="mb-4 sm:mb-6 max-w-xl sm:max-w-2xl mx-auto px-2">
+              <form onSubmit={handleSearch} className="mb-4 sm:mb-6 max-w-2xl mx-auto px-2">
                 <div className="relative">
                   <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-muted-foreground">
                     <Search className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -236,7 +237,7 @@ const Index = () => {
       {/* The Promise Section */}
       <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-card/80 to-background relative overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center">
             <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-6 sm:mb-8 leading-tight px-2">
               You left home.<br />
               <span className="text-primary">But home never left you.</span>
@@ -249,7 +250,7 @@ const Index = () => {
             </p>
 
             {/* Three Pillars */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10">
               <div className="p-5 sm:p-6 rounded-2xl bg-primary/5 border border-primary/10">
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🪔</div>
                 <h3 className="font-serif font-bold text-foreground mb-2 text-sm sm:text-base">Watch Live Darshan</h3>
@@ -371,7 +372,7 @@ const Index = () => {
         
         <div className="container mx-auto px-4 sm:px-6">
           <div 
-            className={`max-w-3xl lg:max-w-4xl mx-auto text-center transition-all duration-1000 ${
+            className={`max-w-6xl mx-auto text-center transition-all duration-1000 ${
               quoteVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -480,93 +481,21 @@ const Index = () => {
             </div>
             
             {/* Share Your Story */}
-            <div className="text-center mt-10 sm:mt-12 p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-primary/5 border border-primary/10 mx-2 sm:mx-0">
+            <div className="text-center mt-10 sm:mt-12 p-6 sm:p-8 rounded-xl sm:rounded-2xl bg-primary/5 border border-primary/10">
               <h3 className="font-serif text-lg sm:text-xl font-bold text-foreground mb-2">
                 Your story matters too.
               </h3>
               <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
                 If Templo has touched your life, we would be honored to hear from you.
               </p>
-              <Button variant="outline" className="rounded-full px-6 sm:px-8 h-10 sm:h-11 text-sm">
+              <Button 
+                variant="outline" 
+                className="rounded-full px-6 sm:px-8 h-10 sm:h-11 text-sm"
+                onClick={handleShareStory}
+              >
                 <Heart className="mr-2 h-4 w-4" />
                 Share Your Journey
               </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sacred Sounds */}
-      <section className="py-10 sm:py-12 lg:py-16 relative">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-xl sm:max-w-2xl mx-auto">
-            <div className="text-center mb-6 sm:mb-8">
-              <h3 className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-foreground">
-                Close your eyes. Listen. Remember.
-              </h3>
-              <p className="text-muted-foreground mt-1 sm:mt-2 text-sm sm:text-base">
-                The same sounds that echoed in your childhood temple.
-              </p>
-            </div>
-            
-            <div className="rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 lg:p-8 shadow-lg relative overflow-hidden">
-              {musicPlaying && !musicMuted && (
-                <div className="absolute inset-0 bg-primary/5 animate-pulse" />
-              )}
-              
-              <div className="relative flex items-center justify-between mb-4 sm:mb-6">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center ${musicPlaying ? 'animate-pulse' : ''}`}>
-                    <Music className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-base sm:text-lg font-bold text-foreground">Sacred Sounds</h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">Temple music for your soul</p>
-                  </div>
-                </div>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setMusicMuted(!musicMuted)}
-                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
-                >
-                  {musicMuted ? <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" /> : <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" />}
-                </Button>
-              </div>
-              
-              <div className="relative space-y-2 sm:space-y-3">
-                {musicTracks.map((track, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setMusicPlaying(!musicPlaying)}
-                    className={`w-full flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg sm:rounded-xl transition-all ${
-                      index === 0 
-                        ? `bg-primary/10 border border-primary/20 ${musicPlaying ? 'ring-2 ring-primary/30' : ''}` 
-                        : 'bg-muted/30 hover:bg-muted/50'
-                    }`}
-                  >
-                    <div className={`h-8 w-8 sm:h-10 sm:w-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      index === 0 ? 'bg-primary' : 'bg-muted'
-                    }`}>
-                      {index === 0 && musicPlaying ? (
-                        <Pause className={`h-3 w-3 sm:h-4 sm:w-4 ${index === 0 ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
-                      ) : (
-                        <Play className={`h-3 w-3 sm:h-4 sm:w-4 ml-0.5 ${index === 0 ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
-                      )}
-                    </div>
-                    <div className="text-left flex-1 min-w-0">
-                      <p className={`font-medium text-sm sm:text-base truncate ${index === 0 ? 'text-primary' : 'text-foreground'}`}>{track.title}</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{track.artist}</p>
-                    </div>
-                    {index === 0 && (
-                      <span className={`text-[10px] sm:text-xs px-2 py-1 rounded-full flex-shrink-0 ${musicPlaying ? 'text-primary-foreground bg-primary animate-pulse' : 'text-primary bg-primary/10'}`}>
-                        {musicPlaying ? '🎵 Playing' : 'Now Playing'}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -578,7 +507,7 @@ const Index = () => {
       {/* Final CTA */}
       <section className="py-12 sm:py-16 lg:py-24">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 p-6 sm:p-10 lg:p-16 text-center">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0" style={{

@@ -68,7 +68,7 @@ const Index = () => {
             {/* Subheadline - Quiet, Reflective */}
             <p className="mb-10 sm:mb-14 max-w-2xl mx-auto text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed font-serif italic">
               Some prayers don't fade with time.<br />
-              They wait quietly for you to return.
+              They wait quietly—just as they always have.
             </p>
             
             {/* Primary CTAs */}
@@ -104,11 +104,8 @@ const Index = () => {
             
             <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed">
               Work took you away. Cities changed you.<br />
-              But somewhere, temple bells still ring the same way they did when you were young.
-            </p>
-            
-            <p className="mt-6 sm:mt-8 text-foreground text-base sm:text-lg md:text-xl font-serif">
-              Templo helps you find that place again.
+              But somewhere, the same bells still ring—<br />
+              just as they did when you were young.
             </p>
           </div>
         </div>
@@ -153,8 +150,11 @@ const Index = () => {
               <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
                 Temples People Still Return To
               </h2>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-base sm:text-lg mb-2">
                 Some places never stop calling their people back.
+              </p>
+              <p className="text-foreground/70 text-sm sm:text-base font-serif italic">
+                These are not just places. They are chapters of people's lives.
               </p>
             </div>
             <FeaturedTemples />
@@ -167,6 +167,9 @@ const Index = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
+              <p className="text-muted-foreground text-sm sm:text-base mb-3 font-serif italic">
+                Not reviews. Memories.
+              </p>
               <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
                 Voices of Devotion
               </h2>
@@ -215,7 +218,7 @@ const Index = () => {
               <Link to="/ancestral">
                 <Button size="lg" className="w-full sm:w-auto rounded-full px-10 h-14 text-base sm:text-lg bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg">
                   <Heart className="mr-2 h-5 w-5" />
-                  Find My Temple
+                  Find My Family Temple
                 </Button>
               </Link>
               <Link to="/temples">

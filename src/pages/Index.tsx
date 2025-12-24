@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from '@/components/Header';
 import FeaturedTemples from '@/components/FeaturedTemples';
 import Footer from '@/components/Footer';
 import TempleAdminCTA from '@/components/TempleAdminCTA';
 import FloatingDiya from '@/components/FloatingDiya';
 import LivingFaith from '@/components/LivingFaith';
+import AmbientElements from '@/components/AmbientElements';
+import EmotionalTicker from '@/components/EmotionalTicker';
 import { Heart, MapPin, Search } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -48,7 +50,8 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden relative">
+      <AmbientElements />
       <Header />
       <FloatingDiya />
       
@@ -126,6 +129,9 @@ const Index = () => {
 
       {/* Living Faith Section */}
       <LivingFaith />
+
+      {/* Emotional Ticker - Slow, dignified horizontal scroll */}
+      <EmotionalTicker />
 
       {/* Return & Belonging Section - Quiet emotional lift */}
       <section className="py-10 sm:py-14 lg:py-18">

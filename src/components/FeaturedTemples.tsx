@@ -5,14 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import TempleCard from './TempleCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ArrowRight } from 'lucide-react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+import { ArrowRight } from 'lucide-react';
 
 const FeaturedTemples = () => {
   const { temples, loading, error } = useTemple();
@@ -60,29 +53,27 @@ const FeaturedTemples = () => {
           ))}
         </div>
       ) : (
-        <div className="relative">
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
+        <div className="relative -mx-4 sm:-mx-6 lg:mx-0">
+          {/* Horizontal scrollable container with visible partial cards */}
+          <div 
+            className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-0 pb-4 snap-x snap-mandatory scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            <CarouselContent className="-ml-3 sm:-ml-4">
-              {featuredTemples.map((temple, index) => (
-                <CarouselItem key={temple.id} className="pl-3 sm:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
-                  <div 
-                    className="animate-fade-in h-[340px]"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <TempleCard temple={temple} />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex -left-4 lg:-left-5 h-8 w-8" />
-            <CarouselNext className="hidden sm:flex -right-4 lg:-right-5 h-8 w-8" />
-          </Carousel>
+            {featuredTemples.map((temple, index) => (
+              <div 
+                key={temple.id}
+                className="flex-shrink-0 w-[280px] sm:w-[320px] lg:w-[340px] snap-start animate-fade-in h-[340px]"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <TempleCard temple={temple} />
+              </div>
+            ))}
+            {/* Spacer for last card visibility */}
+            <div className="flex-shrink-0 w-4 sm:w-6 lg:hidden" />
+          </div>
+          
+          {/* Scroll hint gradient on right */}
+          <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-popover/80 to-transparent pointer-events-none lg:hidden" />
         </div>
       )}
     </div>

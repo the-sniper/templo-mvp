@@ -41,17 +41,18 @@ const LivingFaith = () => {
             </p>
           </div>
 
-          {/* Prayer Moments - Warm, presence-focused */}
+          {/* Prayer Moments - Warm, presence-focused with subtle micro-motion */}
           <div className="grid md:grid-cols-3 gap-4 sm:gap-6 mb-8">
-            {moments.map((moment) => (
+            {moments.map((moment, index) => (
               <div
                 key={moment.id}
-                className="text-center p-5 sm:p-6 rounded-2xl bg-card border border-primary/15 shadow-sm hover:shadow-md transition-shadow"
+                className="text-center p-5 sm:p-6 rounded-2xl bg-card border border-primary/15 shadow-sm group cursor-default animate-prayer-glow"
+                style={{ animationDelay: `${index * 0.5}s` }}
               >
-                <p className="font-serif text-foreground text-lg sm:text-xl mb-2 leading-snug">
+                <p className="font-serif text-foreground text-lg sm:text-xl mb-2 leading-snug transition-all duration-500 group-hover:text-primary">
                   {moment.message}
                 </p>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm transition-all duration-500 group-hover:opacity-100 opacity-80">
                   {moment.subtext}
                 </p>
               </div>

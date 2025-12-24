@@ -22,33 +22,36 @@ const LivingFaith = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-24 lg:py-32 bg-accent/30">
+    <section className="py-10 sm:py-14 lg:py-18 bg-accent/40">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6">
+          <div className="text-center mb-8 sm:mb-10">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
               Prayers Are Still Happening
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-3">
+            <p className="text-muted-foreground text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-2">
               Even if you're far away, the rituals continue.
             </p>
-            <p className="text-foreground/80 text-sm sm:text-base font-serif italic">
+            <p className="text-foreground/80 text-sm sm:text-base">
+              Across villages and cities, rituals continue every day—whether someone is watching or not.
+            </p>
+            <p className="text-primary/80 text-sm sm:text-base font-serif italic mt-2">
               Even now—oil lamps glow, incense rises, and bells echo.
             </p>
           </div>
 
           {/* Prayer Moments - Warm, presence-focused */}
-          <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-14">
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {moments.map((moment) => (
               <div
                 key={moment.id}
-                className="text-center p-6 sm:p-8 rounded-2xl bg-card border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
+                className="text-center p-5 sm:p-6 rounded-2xl bg-card border border-primary/15 shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-serif text-foreground text-lg sm:text-xl mb-2 leading-snug">
                   {moment.message}
                 </p>
-                <p className="text-muted-foreground text-sm italic">
+                <p className="text-muted-foreground text-sm">
                   {moment.subtext}
                 </p>
               </div>

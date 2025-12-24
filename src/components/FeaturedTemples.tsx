@@ -32,23 +32,12 @@ const FeaturedTemples = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="text-center sm:text-left">
-          <div className="mb-2 flex items-center justify-center sm:justify-start gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-medium uppercase tracking-wider text-primary">
-              Featured
-            </span>
-          </div>
-          <h2 className="font-serif text-2xl font-bold text-foreground">
-            Popular Temples
-          </h2>
-        </div>
+    <div className="space-y-8">
+      {/* View All Link */}
+      <div className="flex justify-center">
         <Link to="/temples">
           <Button variant="outline" size="sm" className="gap-2 rounded-full">
-            View All
+            View All Temples
             <ArrowRight className="h-3 w-3" />
           </Button>
         </Link>

@@ -22,7 +22,7 @@ const LivingFaith = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-24 lg:py-32 bg-primary/5">
+    <section className="py-16 sm:py-24 lg:py-32 bg-accent/30">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -36,12 +36,12 @@ const LivingFaith = () => {
             </p>
           </div>
 
-          {/* Prayer Moments - Simple, Presence-Focused */}
+          {/* Prayer Moments - Warm, presence-focused */}
           <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-14">
             {moments.map((moment) => (
               <div
                 key={moment.id}
-                className="text-center p-6 sm:p-8 rounded-2xl bg-background border border-border/50"
+                className="text-center p-6 sm:p-8 rounded-2xl bg-card border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
               >
                 <p className="font-serif text-foreground text-lg sm:text-xl mb-3 leading-snug">
                   {moment.message}
@@ -56,7 +56,7 @@ const LivingFaith = () => {
           {/* CTA */}
           <div className="text-center">
             <Link to="/temples">
-              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base border-border">
+              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base border-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50">
                 <Eye className="h-4 w-4 mr-2" />
                 Witness the Prayers
               </Button>

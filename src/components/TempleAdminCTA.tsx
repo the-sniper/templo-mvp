@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const TempleAdminCTA = () => {
   return (
-    <section className="py-12 sm:py-16 bg-card/30">
+    <section className="py-12 sm:py-16 bg-popover/40">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
@@ -14,7 +14,7 @@ const TempleAdminCTA = () => {
             Templo exists to help temples stay connected with the people who love them—no matter where life takes them.
           </p>
           <Link to="/register">
-            <Button variant="outline" className="rounded-full px-8 h-12 text-base border-border">
+            <Button variant="outline" className="rounded-full px-8 h-12 text-base border-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50">
               <Heart className="h-4 w-4 mr-2" />
               I Manage a Temple
             </Button>

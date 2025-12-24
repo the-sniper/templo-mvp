@@ -53,26 +53,32 @@ const Index = () => {
       <FloatingDiya />
       
       {/* Hero Section - Morning light entering a temple */}
-      <section className="relative min-h-[85vh] sm:min-h-[80vh] flex items-center">
-        {/* Warm ivory gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/40 via-background to-background" />
+      <section className="relative min-h-[70vh] sm:min-h-[65vh] flex items-center">
+        {/* Warm ivory gradient background - slightly darker for visual mass */}
+        <div className="absolute inset-0 bg-gradient-to-b from-accent/60 via-accent/30 to-background" />
         
         <div className="container mx-auto px-4 sm:px-6 relative">
-          <div className="py-16 sm:py-20 lg:py-28 max-w-4xl mx-auto text-center">
+          <div className="py-12 sm:py-16 lg:py-20 max-w-4xl mx-auto text-center">
             
             {/* Main Headline - Deep charcoal with warmth */}
-            <h1 className="mb-6 sm:mb-8 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
+            <h1 className="mb-4 sm:mb-6 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
               Remember the temple where your grandmother prayed?
             </h1>
             
             {/* Subheadline - Quiet, Reflective */}
-            <p className="mb-10 sm:mb-14 max-w-2xl mx-auto text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed font-serif italic">
+            <p className="mb-4 sm:mb-6 max-w-2xl mx-auto text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed font-serif italic">
               Some prayers don't fade with time.<br />
               They wait quietly—just as they always have.
             </p>
             
+            {/* Grounding line */}
+            <p className="mb-8 sm:mb-10 max-w-2xl mx-auto text-sm sm:text-base text-foreground/70">
+              Millions grew up with a temple like this.<br />
+              Most don't remember its name. Some do.
+            </p>
+            
             {/* Primary CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
               <Link to="/ancestral">
                 <Button size="lg" className="w-full sm:w-auto rounded-full px-8 sm:px-10 h-14 text-base sm:text-lg shadow-lg">
                   <Heart className="mr-2 h-5 w-5" />
@@ -91,21 +97,25 @@ const Index = () => {
       </section>
 
       {/* Emotional Bridge Section - Intimate and reflective */}
-      <section className="py-16 sm:py-24 lg:py-32 bg-gradient-to-b from-background via-popover/50 to-background relative">
+      <section className="py-10 sm:py-14 lg:py-18 bg-gradient-to-b from-background via-popover/60 to-background relative">
         {/* Subtle kumkum divider at top */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-0.5 bg-secondary/40" />
         
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8 leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6 leading-tight">
               You didn't leave faith behind.<br />
               <span className="text-primary">Life just got louder.</span>
             </h2>
             
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed">
+            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-4">
               Work took you away. Cities changed you.<br />
               But somewhere, the same bells still ring—<br />
               just as they did when you were young.
+            </p>
+            
+            <p className="text-primary/90 text-sm sm:text-base font-serif italic">
+              Faith doesn't disappear. It waits.
             </p>
           </div>
         </div>
@@ -118,18 +128,23 @@ const Index = () => {
       <LivingFaith />
 
       {/* Return & Belonging Section - Quiet emotional lift */}
-      <section className="py-16 sm:py-24 lg:py-32">
+      <section className="py-10 sm:py-14 lg:py-18">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-6 sm:mb-8 leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6 leading-tight">
               Somewhere in India,<br />
               <span className="text-primary">your family temple is waiting.</span>
             </h2>
             
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10">
+            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-4">
               Between school mornings and adult responsibilities,<br />
               we stopped going.<br />
               But the temple never forgot us.
+            </p>
+            
+            <p className="text-foreground/70 text-sm sm:text-base mb-6 font-serif italic">
+              You may not remember the path.<br />
+              But the place remembers you.
             </p>
             
             <Link to="/ancestral">
@@ -143,18 +158,18 @@ const Index = () => {
       </section>
 
       {/* Temples Section - Visual reverence */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-popover/30">
+      <section className="py-10 sm:py-12 lg:py-16 bg-popover/40">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-10 sm:mb-12">
-              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
+            <div className="text-center mb-6 sm:mb-8">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 Temples People Still Return To
               </h2>
               <p className="text-muted-foreground text-base sm:text-lg mb-2">
                 Some places never stop calling their people back.
               </p>
-              <p className="text-foreground/70 text-sm sm:text-base font-serif italic">
-                These are not just places. They are chapters of people's lives.
+              <p className="text-foreground/80 text-sm sm:text-base">
+                These temples hold stories—of families, festivals, and first prayers.
               </p>
             </div>
             <FeaturedTemples />
@@ -163,20 +178,20 @@ const Index = () => {
       </section>
 
       {/* Voices of Devotion - Handwritten, personal, human */}
-      <section className="py-16 sm:py-24 lg:py-32 bg-accent/20">
+      <section className="py-10 sm:py-14 lg:py-18 bg-accent/30">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16">
-              <p className="text-muted-foreground text-sm sm:text-base mb-3 font-serif italic">
-                Not reviews. Memories.
-              </p>
-              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
+            <div className="text-center mb-8 sm:mb-10">
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                 Voices of Devotion
               </h2>
+              <p className="text-muted-foreground text-sm sm:text-base">
+                These aren't reviews. They're moments people carried with them.
+              </p>
             </div>
 
             {/* Testimonials - Simple, Personal */}
-            <div className="grid md:grid-cols-3 gap-8 sm:gap-10">
+            <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
               {testimonials.map((item, index) => (
                 <div
                   key={index}
@@ -185,12 +200,12 @@ const Index = () => {
                   {/* Kumkum quotation mark */}
                   <span className="text-secondary/50 font-serif text-5xl leading-none absolute -top-4 left-1/2 -translate-x-1/2">"</span>
                   
-                  <p className="text-foreground text-base sm:text-lg leading-relaxed mb-6 pt-6 font-serif italic">
+                  <p className="text-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-4 pt-6 font-serif italic">
                     {item.quote}
                   </p>
                   
                   {/* Kumkum separator */}
-                  <div className="w-8 h-0.5 bg-secondary/40 mx-auto mb-4" />
+                  <div className="w-8 h-0.5 bg-secondary/40 mx-auto mb-3" />
                   
                   <p className="text-muted-foreground text-sm">
                     — {item.name}, {item.location}
@@ -206,10 +221,13 @@ const Index = () => {
       <TempleAdminCTA />
 
       {/* Final CTA Section - Standing at the temple entrance */}
-      <section className="py-20 sm:py-28 lg:py-36 bg-primary">
+      <section className="py-14 sm:py-20 lg:py-24 bg-primary">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 sm:mb-8 leading-tight">
+            <p className="text-primary-foreground/80 text-sm sm:text-base mb-4 font-serif italic">
+              No matter how far you went—
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
               The temple door never closed.<br />
               <span className="text-primary-foreground/90">You just needed a way back.</span>
             </h2>

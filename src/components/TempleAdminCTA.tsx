@@ -11,7 +11,8 @@ const TempleAdminCTA = () => {
             For Temples, By Devotees
           </h3>
           <p className="text-muted-foreground text-base sm:text-lg mb-6 sm:mb-8 max-w-xl mx-auto">
-            Templo exists to help temples stay connected with the people who love them—no matter where life takes them.
+            Templo exists to help temples stay connected<br />
+            to the people who still carry them in their hearts.
           </p>
           <Link to="/register">
             <Button variant="outline" className="rounded-full px-8 h-12 text-base border-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50">

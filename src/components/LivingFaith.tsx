@@ -7,17 +7,17 @@ const LivingFaith = () => {
     {
       id: 1,
       message: 'The morning aarti has begun.',
-      subtext: 'The lamps are lit. The chants have started.',
+      subtext: 'Lamps lit. Chants rising.',
     },
     {
       id: 2,
-      message: 'An abhishekam is being offered today.',
-      subtext: 'Sacred waters flow over the deity.',
+      message: 'An abhishekam is being offered.',
+      subtext: 'Sacred waters. Silent prayers.',
     },
     {
       id: 3,
-      message: 'A festival is being prepared with devotion.',
-      subtext: 'Flowers are gathered. Offerings are made.',
+      message: 'A festival is being prepared.',
+      subtext: 'Flowers gathered. Offerings made.',
     },
   ];
 
@@ -30,9 +30,11 @@ const LivingFaith = () => {
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6">
               Prayers Are Still Happening
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
-              Even if you're far away, the rituals continue.<br />
-              The lamps are lit. The bells ring. The prayers go on.
+            <p className="text-muted-foreground text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-3">
+              Even if you're far away, the rituals continue.
+            </p>
+            <p className="text-foreground/80 text-sm sm:text-base font-serif italic">
+              Even now—oil lamps glow, incense rises, and bells echo.
             </p>
           </div>
 
@@ -43,10 +45,10 @@ const LivingFaith = () => {
                 key={moment.id}
                 className="text-center p-6 sm:p-8 rounded-2xl bg-card border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
               >
-                <p className="font-serif text-foreground text-lg sm:text-xl mb-3 leading-snug">
+                <p className="font-serif text-foreground text-lg sm:text-xl mb-2 leading-snug">
                   {moment.message}
                 </p>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm italic">
                   {moment.subtext}
                 </p>
               </div>

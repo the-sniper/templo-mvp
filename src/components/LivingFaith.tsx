@@ -42,17 +42,17 @@ const LivingFaith = () => {
           </div>
 
           {/* Prayer Moments - Warm, presence-focused with subtle micro-motion */}
-          <div className="grid md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
             {moments.map((moment, index) => (
               <div
                 key={moment.id}
-                className="text-center p-5 sm:p-6 rounded-2xl bg-card border border-primary/15 shadow-sm group cursor-default animate-prayer-glow"
+                className="text-center p-4 sm:p-6 rounded-2xl bg-card border border-primary/15 shadow-sm group cursor-default animate-prayer-glow"
                 style={{ animationDelay: `${index * 0.5}s` }}
               >
-                <p className="font-serif text-foreground text-lg sm:text-xl mb-2 leading-snug transition-all duration-500 group-hover:text-primary">
+                <p className="font-serif text-foreground text-base sm:text-lg md:text-xl mb-2 leading-snug transition-all duration-500 group-hover:text-primary">
                   {moment.message}
                 </p>
-                <p className="text-muted-foreground text-sm transition-all duration-500 group-hover:opacity-100 opacity-80">
+                <p className="text-muted-foreground text-xs sm:text-sm transition-all duration-500 group-hover:opacity-100 opacity-80">
                   {moment.subtext}
                 </p>
               </div>
@@ -62,7 +62,7 @@ const LivingFaith = () => {
           {/* CTA */}
           <div className="text-center">
             <Link to="/temples">
-              <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-base border-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50">
+              <Button size="lg" variant="outline" className="rounded-full px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base border-2 border-primary/40 text-foreground bg-card/80 hover:bg-primary/10 hover:border-primary/60">
                 <Eye className="h-4 w-4 mr-2" />
                 Witness the Prayers
               </Button>

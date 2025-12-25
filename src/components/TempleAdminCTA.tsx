@@ -15,7 +15,7 @@ const TempleAdminCTA = () => {
             not as visitors, but as family.
           </p>
           <Link to="/register">
-            <Button variant="outline" className="rounded-full px-8 h-12 text-base border-2 border-primary/30 hover:bg-primary/5 hover:border-primary/50">
+            <Button variant="outline" className="rounded-full px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base border-2 border-primary/40 text-foreground bg-card/80 hover:bg-primary/10 hover:border-primary/60">
               <Heart className="h-4 w-4 mr-2" />
               I Manage a Temple
             </Button>

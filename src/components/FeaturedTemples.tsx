@@ -26,10 +26,9 @@ const FeaturedTemples = () => {
 
   return (
     <div className="space-y-8">
-      {/* View All Link */}
       <div className="flex justify-center">
         <Link to="/temples">
-          <Button variant="outline" size="sm" className="gap-2 rounded-full">
+          <Button variant="outline" size="sm" className="gap-2 rounded-full border-primary/40 text-foreground bg-card/80 hover:bg-primary/10 hover:border-primary/60">
             View All Temples
             <ArrowRight className="h-3 w-3" />
           </Button>

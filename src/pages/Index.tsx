@@ -81,16 +81,16 @@ const Index = () => {
             </p>
             
             {/* Primary CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
-              <Link to="/ancestral">
-                <Button size="lg" className="w-full sm:w-auto rounded-full px-8 sm:px-10 h-14 text-base sm:text-lg shadow-lg">
-                  <Heart className="mr-2 h-5 w-5" />
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-4">
+              <Link to="/ancestral" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-10 h-12 sm:h-14 text-sm sm:text-lg shadow-lg">
+                  <Heart className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                   Find My Family Temple
                 </Button>
               </Link>
-              <Link to="/temples">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full px-8 sm:px-10 h-14 text-base sm:text-lg border-2 border-primary/30 text-foreground hover:bg-primary/5 hover:border-primary/50">
-                  <MapPin className="mr-2 h-5 w-5" />
+              <Link to="/temples" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-10 h-12 sm:h-14 text-sm sm:text-lg border-2 border-primary/40 text-foreground bg-card/80 hover:bg-primary/10 hover:border-primary/60">
+                  <MapPin className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                   Discover Temples Near Me
                 </Button>
               </Link>
@@ -153,9 +153,9 @@ const Index = () => {
               But the place remembers you.
             </p>
             
-            <Link to="/ancestral">
-              <Button size="lg" className="rounded-full px-10 h-14 text-base sm:text-lg shadow-lg">
-                <Search className="mr-2 h-5 w-5" />
+            <Link to="/ancestral" className="w-full sm:w-auto inline-block">
+              <Button size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-10 h-12 sm:h-14 text-sm sm:text-lg shadow-lg">
+                <Search className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                 Begin My Search
               </Button>
             </Link>
@@ -197,23 +197,23 @@ const Index = () => {
             </div>
 
             {/* Testimonials - Simple, Personal */}
-            <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
               {testimonials.map((item, index) => (
                 <div
                   key={index}
-                  className="text-center relative"
+                  className="text-center relative bg-card/50 rounded-xl p-5 sm:p-6"
                 >
                   {/* Kumkum quotation mark */}
-                  <span className="text-secondary/50 font-serif text-5xl leading-none absolute -top-4 left-1/2 -translate-x-1/2">"</span>
+                  <span className="text-secondary/50 font-serif text-4xl sm:text-5xl leading-none absolute top-2 left-1/2 -translate-x-1/2">"</span>
                   
-                  <p className="text-foreground text-base sm:text-lg md:text-xl leading-relaxed mb-4 pt-6 font-serif italic">
+                  <p className="text-foreground text-sm sm:text-base md:text-lg leading-relaxed mb-4 pt-8 font-serif italic">
                     {item.quote}
                   </p>
                   
                   {/* Kumkum separator */}
                   <div className="w-8 h-0.5 bg-secondary/40 mx-auto mb-3" />
                   
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-xs sm:text-sm">
                     — {item.name}, {item.location}
                   </p>
                 </div>
@@ -238,16 +238,16 @@ const Index = () => {
               <span className="text-primary-foreground/90">You just needed a way back.</span>
             </h2>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10 sm:mt-12">
-              <Link to="/ancestral">
-                <Button size="lg" className="w-full sm:w-auto rounded-full px-10 h-14 text-base sm:text-lg bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg">
-                  <Heart className="mr-2 h-5 w-5" />
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mt-8 sm:mt-12">
+              <Link to="/ancestral" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-10 h-12 sm:h-14 text-sm sm:text-lg bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg">
+                  <Heart className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                   Find My Family Temple
                 </Button>
               </Link>
-              <Link to="/temples">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full px-10 h-14 text-base sm:text-lg border-2 border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/60">
-                  <MapPin className="mr-2 h-5 w-5" />
+              <Link to="/temples" className="w-full sm:w-auto">
+                <Button variant="ghost" size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-10 h-12 sm:h-14 text-sm sm:text-lg border-2 border-primary-foreground/50 text-primary-foreground bg-primary-foreground/10 hover:bg-primary-foreground/20 hover:border-primary-foreground">
+                  <MapPin className="mr-2 h-4 sm:h-5 w-4 sm:w-5" />
                   Explore Nearby Temples
                 </Button>
               </Link>

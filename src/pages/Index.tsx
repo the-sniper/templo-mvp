@@ -25,14 +25,29 @@ const Index = () => {
       location: "San Francisco"
     },
     { 
+      quote: "My father's health kept us from travelling. Now he watches the morning aarti from his bed in Chennai.", 
+      name: "Karthik",
+      location: "Chennai"
+    },
+    { 
       quote: "When the bells rang through my screen, I wept. It was exactly as I remembered from childhood.", 
       name: "Rajesh",
       location: "London"
     },
     { 
+      quote: "Living in Bangalore, I miss our family temple in the village. Templo brings it closer every day.", 
+      name: "Meera",
+      location: "Bangalore"
+    },
+    { 
       quote: "My children had never seen a temple. Now they ask to watch the morning aarti together.", 
       name: "Anitha",
       location: "Toronto"
+    },
+    { 
+      quote: "After my mother passed, I wanted to offer prayers at her favourite temple. Templo made it possible.", 
+      name: "Suresh",
+      location: "Mumbai"
     },
   ];
 
@@ -94,13 +109,6 @@ const Index = () => {
                 </Button>
               </Link>
             </div>
-          </div>
-        </div>
-        
-        {/* Subtle scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
-            <div className="w-1.5 h-2.5 rounded-full bg-muted-foreground/50" />
           </div>
         </div>
       </section>
@@ -189,7 +197,7 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {testimonials.map((item, index) => (
                 <div
                   key={index}

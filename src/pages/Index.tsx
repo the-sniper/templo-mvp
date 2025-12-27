@@ -66,21 +66,11 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const testimonials = [
+  const indianTestimonials = [
     { 
-      quote: "I hadn't visited my village temple in years. Seeing it again felt like meeting an old part of myself.", 
-      name: "Priya",
-      location: "San Francisco"
-    },
-    { 
-      quote: "My father's health kept us from travelling. Now he watches the morning aarti from his bed in Chennai.", 
+      quote: "My father's health kept us from travelling. Now he watches the morning aarti from his bed.", 
       name: "Karthik",
       location: "Chennai"
-    },
-    { 
-      quote: "When the bells rang through my screen, I wept. It was exactly as I remembered from childhood.", 
-      name: "Rajesh",
-      location: "London"
     },
     { 
       quote: "Living in Bangalore, I miss our family temple in the village. Templo brings it closer every day.", 
@@ -88,14 +78,27 @@ const Index = () => {
       location: "Bangalore"
     },
     { 
-      quote: "My children had never seen a temple. Now they ask to watch the morning aarti together.", 
-      name: "Anitha",
-      location: "Toronto"
-    },
-    { 
       quote: "After my mother passed, I wanted to offer prayers at her favourite temple. Templo made it possible.", 
       name: "Suresh",
       location: "Mumbai"
+    },
+  ];
+
+  const nriTestimonials = [
+    { 
+      quote: "I hadn't visited my village temple in years. Seeing it again felt like meeting an old part of myself.", 
+      name: "Priya",
+      location: "San Francisco"
+    },
+    { 
+      quote: "When the bells rang through my screen, I wept. It was exactly as I remembered from childhood.", 
+      name: "Rajesh",
+      location: "London"
+    },
+    { 
+      quote: "My children had never seen a temple. Now they ask to watch the morning aarti together.", 
+      name: "Anitha",
+      location: "Toronto"
     },
   ];
 
@@ -232,11 +235,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials - Clean Cards */}
+      {/* Testimonials - Two Sections */}
       <section className="py-20 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-14">
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Voices of Devotion
               </h2>
@@ -245,29 +248,66 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {testimonials.map((item, index) => (
-                <div
-                  key={index}
-                  className="relative bg-card rounded-2xl p-6 sm:p-8 border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="text-5xl text-primary/20 font-serif leading-none mb-4">"</div>
-                  
-                  <p className="text-foreground leading-relaxed mb-6 font-serif italic">
-                    {item.quote}
-                  </p>
-                  
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary font-medium text-sm">{item.name[0]}</span>
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground text-sm">{item.name}</p>
-                      <p className="text-muted-foreground text-xs">{item.location}</p>
+            {/* From India */}
+            <div className="mb-14">
+              <h3 className="text-center font-medium text-primary mb-8 flex items-center justify-center gap-2">
+                <span className="h-px w-8 bg-primary/30" />
+                From India
+                <span className="h-px w-8 bg-primary/30" />
+              </h3>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {indianTestimonials.map((item, index) => (
+                  <div
+                    key={index}
+                    className="relative bg-card rounded-2xl p-6 sm:p-8 border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="text-5xl text-primary/20 font-serif leading-none mb-4">"</div>
+                    <p className="text-foreground leading-relaxed mb-6 font-serif italic">
+                      {item.quote}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary font-medium text-sm">{item.name[0]}</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-foreground text-sm">{item.name}</p>
+                        <p className="text-muted-foreground text-xs">{item.location}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* From Abroad (NRI) */}
+            <div>
+              <h3 className="text-center font-medium text-primary mb-8 flex items-center justify-center gap-2">
+                <span className="h-px w-8 bg-primary/30" />
+                From Abroad
+                <span className="h-px w-8 bg-primary/30" />
+              </h3>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {nriTestimonials.map((item, index) => (
+                  <div
+                    key={index}
+                    className="relative bg-card rounded-2xl p-6 sm:p-8 border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="text-5xl text-primary/20 font-serif leading-none mb-4">"</div>
+                    <p className="text-foreground leading-relaxed mb-6 font-serif italic">
+                      {item.quote}
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-primary font-medium text-sm">{item.name[0]}</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-foreground text-sm">{item.name}</p>
+                        <p className="text-muted-foreground text-xs">{item.location}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

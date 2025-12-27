@@ -13,6 +13,54 @@ const Index = () => {
   const navigate = useNavigate();
   const [quoteVisible, setQuoteVisible] = useState(false);
 
+  // Dynamic hero phrases
+  const heroPhrases = [
+    {
+      headline: "Remember the temple where your grandmother prayed?",
+      subline: "Some prayers don't fade with time. They wait quietly—just as they always have."
+    },
+    {
+      headline: "The bells still ring in your village temple.",
+      subline: "Distance changes everything. Except faith."
+    },
+    {
+      headline: "Your family temple never forgot you.",
+      subline: "Through generations, the lamps have stayed lit. Waiting."
+    },
+    {
+      headline: "Some places hold more than memories.",
+      subline: "They hold the prayers of everyone who came before you."
+    },
+    {
+      headline: "The incense still rises at dawn.",
+      subline: "In temples across India, rituals continue—whether you're there or not."
+    },
+    {
+      headline: "Where did your ancestors offer their first prayers?",
+      subline: "Every family has a temple. Most have just forgotten the way."
+    },
+    {
+      headline: "Faith travelled with you. Now travel back.",
+      subline: "The temple doors are open. They always have been."
+    },
+    {
+      headline: "The same stone steps. The same sacred air.",
+      subline: "Your grandmother walked here. Your children can too."
+    },
+    {
+      headline: "Home is where your prayers began.",
+      subline: "Before cities, before jobs—there was a temple."
+    },
+    {
+      headline: "The temple waited. Now it's your turn.",
+      subline: "Reconnect with the sacred spaces that shaped your family."
+    }
+  ];
+
+  const [currentPhrase] = useState(() => 
+    heroPhrases[Math.floor(Math.random() * heroPhrases.length)]
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => setQuoteVisible(true), 300);
     return () => clearTimeout(timer);
@@ -86,12 +134,12 @@ const Index = () => {
             
             {/* Main Headline */}
             <h1 className="mb-6 font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-foreground tracking-tight">
-              Remember the temple where your grandmother prayed?
+              {currentPhrase.headline}
             </h1>
             
             {/* Subheadline */}
             <p className="mb-8 max-w-xl mx-auto text-lg sm:text-xl text-muted-foreground leading-relaxed">
-              Some prayers don't fade with time. They wait quietly—just as they always have.
+              {currentPhrase.subline}
             </p>
             
             {/* Primary CTAs */}

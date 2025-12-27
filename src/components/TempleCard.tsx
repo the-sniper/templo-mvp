@@ -16,10 +16,10 @@ const TempleCard = ({ temple }: TempleCardProps) => {
   const following = isFollowing(temple.id);
 
   return (
-    <Card className="group relative overflow-hidden rounded-xl border-border bg-card transition-all duration-300 hover:shadow-lg h-full flex flex-col">
+    <Card className="group relative overflow-hidden rounded-2xl border-border/50 bg-card transition-all duration-300 hover:shadow-xl hover:border-primary/20 h-full flex flex-col">
       {/* Image Section */}
       <Link to={`/temple/${temple.id}`} className="block flex-shrink-0">
-        <div className="relative h-36 sm:h-40 overflow-hidden">
+        <div className="relative h-44 sm:h-48 overflow-hidden">
           <img
             src={temple.image}
             alt={temple.name}

@@ -14,10 +14,16 @@ const BookingConfirmation = () => {
 
   if (!booking) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-muted-foreground mb-4">Booking not found</p>
-          <Link to="/" className="text-primary hover:underline">Go back home</Link>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <Calendar className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h2 className="mb-2 font-serif text-xl font-semibold text-foreground">Booking not found</h2>
+          <p className="text-muted-foreground text-sm mb-4">The booking you're looking for doesn't exist.</p>
+          <Link to="/">
+            <Button className="rounded-full px-6">Go back home</Button>
+          </Link>
         </div>
       </div>
     );
@@ -40,14 +46,14 @@ const BookingConfirmation = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8 max-w-lg">
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-lg">
         {/* Success Header */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="h-12 w-12 text-green-600" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Booking Confirmed!</h1>
-          <p className="text-muted-foreground">Your slot has been successfully reserved</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-2">Booking Confirmed!</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Your slot has been successfully reserved</p>
         </div>
 
         {/* Booking Details Card */}
@@ -128,12 +134,12 @@ const BookingConfirmation = () => {
 
         {/* Actions */}
         <div className="space-y-3">
-          <Button variant="outline" className="w-full h-12">
+          <Button variant="outline" className="w-full h-12 rounded-full">
             <Download className="h-4 w-4 mr-2" />
             Download Booking Pass
           </Button>
           <Link to="/" className="block">
-            <Button variant="default" className="w-full h-12">
+            <Button variant="default" className="w-full h-12 rounded-full">
               <Home className="h-4 w-4 mr-2" />
               Back to Home
             </Button>

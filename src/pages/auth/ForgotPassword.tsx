@@ -41,47 +41,47 @@ const ForgotPassword = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/95">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center">
-            <Link to="/login" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
+            <Link to="/login" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
               <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back to Login</span>
+              <span className="text-sm font-medium">Back to Login</span>
             </Link>
           </div>
         </div>
       </header>
 
       {/* Forgot Password Form */}
-      <main className="flex flex-1 items-center justify-center p-4">
+      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">
         <div className="w-full max-w-md">
           {sent ? (
             /* Success State */
             <div className="text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <CheckCircle className="h-8 w-8 text-primary" />
+              <div className="mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary/10">
+                <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
               </div>
-              <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
+              <h1 className="mb-2 font-serif text-2xl sm:text-3xl font-bold text-foreground">
                 Check Your Email
               </h1>
-              <p className="mb-6 text-muted-foreground">
-                We've sent password reset instructions to <strong>{email}</strong>
+              <p className="mb-6 text-muted-foreground text-sm sm:text-base">
+                We've sent password reset instructions to <strong className="text-foreground">{email}</strong>
               </p>
               <Link to="/login">
-                <Button>Return to Login</Button>
+                <Button size="lg" className="rounded-full px-8">Return to Login</Button>
               </Link>
             </div>
           ) : (
             /* Form State */
             <>
               <div className="mb-8 text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <span className="text-3xl">🔑</span>
+                <div className="mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary/10">
+                  <span className="text-3xl sm:text-4xl">🔑</span>
                 </div>
-                <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
+                <h1 className="mb-2 font-serif text-2xl sm:text-3xl font-bold text-foreground">
                   Forgot Password?
                 </h1>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm sm:text-base">
                   Enter your email and we'll send you reset instructions
                 </p>
               </div>

@@ -65,20 +65,20 @@ const AncestralForm = () => {
       <Header />
 
       {/* Breadcrumb */}
-      <div className="container mx-auto px-4 py-4">
-        <Link to="/ancestral" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+      <div className="container mx-auto px-4 py-3 sm:py-4">
+        <Link to="/ancestral" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
           <ArrowLeft className="h-4 w-4" />
           Back to Ancestral Temple
         </Link>
       </div>
 
       {/* Form */}
-      <main className="container mx-auto px-4 pb-8">
+      <main className="container mx-auto px-4 pb-8 sm:pb-12">
         <div className="mx-auto max-w-lg">
-          <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
+          <h1 className="mb-2 font-serif text-xl sm:text-2xl font-bold text-foreground">
             Tell Us About Your Roots
           </h1>
-          <p className="mb-8 text-muted-foreground">
+          <p className="mb-6 sm:mb-8 text-sm sm:text-base text-muted-foreground">
             Share details about your native place to help us find your ancestral temple.
           </p>
 
@@ -199,7 +199,7 @@ const AncestralForm = () => {
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" size="lg">
+            <Button type="submit" className="w-full h-12 sm:h-14 text-base rounded-full" size="lg">
               Find My Ancestral Temple
             </Button>
           </form>

@@ -18,10 +18,16 @@ const RecurringDonationConfirmation = () => {
 
   if (!donation) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-muted-foreground mb-4">Donation not found</p>
-          <Link to="/" className="text-primary hover:underline">Go back home</Link>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <RefreshCw className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h2 className="mb-2 font-serif text-xl font-semibold text-foreground">Donation not found</h2>
+          <p className="text-muted-foreground text-sm mb-4">The donation you're looking for doesn't exist.</p>
+          <Link to="/">
+            <Button className="rounded-full px-6">Go back home</Button>
+          </Link>
         </div>
       </div>
     );
@@ -52,15 +58,15 @@ const RecurringDonationConfirmation = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8 max-w-lg">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-4">
-            <CheckCircle className="h-10 w-10 text-primary" />
+      <main className="container mx-auto px-4 py-6 sm:py-8 max-w-lg">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 mb-4">
+            <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
           </div>
-          <h1 className="text-2xl font-serif font-bold text-foreground mb-2">
+          <h1 className="text-xl sm:text-2xl font-serif font-bold text-foreground mb-2">
             Recurring Donation Set Up!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Your seva to {donation.templeName} will begin soon 🙏
           </p>
         </div>
@@ -108,20 +114,20 @@ const RecurringDonationConfirmation = () => {
           </CardContent>
         </Card>
 
-        <div className="bg-accent/50 rounded-lg p-4 mb-6">
-          <h3 className="font-medium text-foreground mb-2">What happens next?</h3>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">1.</span>
-              We'll send you a reminder before each donation
+        <div className="bg-accent/50 rounded-2xl p-4 sm:p-5 mb-6">
+          <h3 className="font-medium text-foreground mb-3">What happens next?</h3>
+          <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0">1</span>
+              <span>We'll send you a reminder before each donation</span>
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">2.</span>
-              Your payment will be auto-processed
+            <li className="flex items-start gap-3">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0">2</span>
+              <span>Your payment will be auto-processed</span>
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold">3.</span>
-              You can pause or cancel anytime from your profile
+            <li className="flex items-start gap-3">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0">3</span>
+              <span>You can pause or cancel anytime from your profile</span>
             </li>
           </ul>
         </div>
@@ -132,10 +138,10 @@ const RecurringDonationConfirmation = () => {
             text={`🙏 I'm donating ₹${donation.amount} ${donation.frequency} to ${donation.templeName}. Join me in supporting our temples!`}
             url={window.location.href}
             variant="outline"
-            className="w-full h-12"
+            className="w-full h-12 rounded-full"
           />
           <Link to="/" className="block">
-            <Button variant="default" className="w-full h-12">
+            <Button variant="default" className="w-full h-12 rounded-full">
               <Home className="h-4 w-4 mr-2" />
               Back to Home
             </Button>

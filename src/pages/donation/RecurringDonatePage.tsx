@@ -36,10 +36,16 @@ const RecurringDonatePage = () => {
 
   if (!temple) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-muted-foreground mb-4">Temple not found</p>
-          <Link to="/" className="text-primary hover:underline">Go back home</Link>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <RefreshCw className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h2 className="mb-2 font-serif text-xl font-semibold text-foreground">Temple not found</h2>
+          <p className="text-muted-foreground text-sm mb-4">The temple you're looking for doesn't exist.</p>
+          <Link to="/">
+            <Button className="rounded-full px-6">Go back home</Button>
+          </Link>
         </div>
       </div>
     );
@@ -109,14 +115,14 @@ const RecurringDonatePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+      <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
-            <h1 className="text-lg font-semibold text-foreground">Recurring Donation</h1>
-            <p className="text-sm text-muted-foreground">{temple.name}</p>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">Recurring Donation</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">{temple.name}</p>
           </div>
         </div>
       </header>

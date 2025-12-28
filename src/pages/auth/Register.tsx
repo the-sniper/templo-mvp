@@ -63,29 +63,29 @@ const Register = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/95">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center">
-            <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
+            <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
               <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm">Back to Home</span>
+              <span className="text-sm font-medium">Back to Home</span>
             </Link>
           </div>
         </div>
       </header>
 
       {/* Register Form */}
-      <main className="flex flex-1 items-center justify-center p-4">
+      <main className="flex flex-1 items-center justify-center px-4 py-8 sm:py-12">
         <div className="w-full max-w-md">
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <span className="text-3xl">🙏</span>
+            <div className="mx-auto mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary/10">
+              <span className="text-3xl sm:text-4xl">🙏</span>
             </div>
-            <h1 className="mb-2 font-serif text-2xl font-bold text-foreground">
+            <h1 className="mb-2 font-serif text-2xl sm:text-3xl font-bold text-foreground">
               Create Account
             </h1>
-            <p className="text-muted-foreground">
-              Join the Divine Temple community
+            <p className="text-muted-foreground text-sm sm:text-base">
+              Join the Templo community
             </p>
           </div>
 

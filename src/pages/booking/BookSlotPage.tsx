@@ -150,14 +150,14 @@ const BookSlotPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+      <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
-            <h1 className="text-lg font-semibold text-foreground">Book Slot</h1>
-            <p className="text-sm text-muted-foreground">{temple.name}</p>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">Book Slot</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">{temple.name}</p>
           </div>
         </div>
       </header>

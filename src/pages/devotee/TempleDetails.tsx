@@ -73,14 +73,24 @@ const TempleDetails = () => {
   };
 
   // Mock gallery images
-  const galleryImages = [
-    { id: '1', url: temple.image, caption: 'Main Temple View', category: 'temple', date: '2024-01-15' },
+  const galleryImages: Array<{ id: string; url: string; caption: string; category: 'architecture' | 'daily_darshan' | 'event' | 'festival'; date: string }> = [
+    { id: '1', url: temple.image, caption: 'Main Temple View', category: 'architecture', date: '2024-01-15' },
     { id: '2', url: temple.image, caption: 'Festival Celebration', category: 'festival', date: '2024-01-10' },
-    { id: '3', url: temple.image, caption: 'Morning Darshan', category: 'darshan', date: '2024-01-08' },
-    { id: '4', url: temple.image, caption: 'Temple Architecture', category: 'temple', date: '2024-01-05' },
-    { id: '5', url: temple.image, caption: 'Evening Aarti', category: 'darshan', date: '2024-01-03' },
-    { id: '6', url: temple.image, caption: 'Gopuram Detail', category: 'temple', date: '2024-01-01' },
+    { id: '3', url: temple.image, caption: 'Morning Darshan', category: 'daily_darshan', date: '2024-01-08' },
+    { id: '4', url: temple.image, caption: 'Temple Architecture', category: 'architecture', date: '2024-01-05' },
+    { id: '5', url: temple.image, caption: 'Evening Aarti', category: 'daily_darshan', date: '2024-01-03' },
+    { id: '6', url: temple.image, caption: 'Gopuram Detail', category: 'architecture', date: '2024-01-01' },
   ];
+
+  // Mock temple history
+  const templeHistory = {
+    originStory: `${temple.name} has a rich history dating back several centuries. According to legend, this sacred site was established by divine intervention.`,
+    deitySignificance: `The presiding deity ${temple.deity} is believed to bestow blessings upon devotees who visit with sincere devotion.`,
+    famousMiracles: ['Answered prayers of childless couples', 'Miraculous healings reported by devotees'],
+    pastKumbabishekams: [{ year: 2020, description: 'Grand renovation and consecration ceremony' }],
+    famousPoojas: ['Abhishekam', 'Archana', 'Homam'],
+    architecturalSignificance: 'The temple showcases traditional Dravidian architecture with intricate carvings and towering gopurams.'
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -386,13 +396,13 @@ const TempleDetails = () => {
               <LiveDarshan templeId={temple.id} templeName={temple.name} />
 
               {/* Temple Music Player */}
-              <TempleMusicPlayer templeId={temple.id} templeName={temple.name} />
+              <TempleMusicPlayer templeName={temple.name} tracks={[]} />
 
               {/* Photo Gallery */}
               <TempleGallery images={galleryImages} templeName={temple.name} templeId={temple.id} />
 
               {/* Temple History */}
-              <TempleHistory templeId={temple.id} templeName={temple.name} />
+              <TempleHistory history={templeHistory} templeName={temple.name} templeId={temple.id} />
             </TabsContent>
 
             {/* Updates Tab */}

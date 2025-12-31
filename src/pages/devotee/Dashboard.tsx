@@ -34,7 +34,7 @@ const Dashboard = () => {
   const [firstName, setFirstName] = useState(user?.name?.split(' ')[0] || '');
   const [lastName, setLastName] = useState(user?.name?.split(' ').slice(1).join(' ') || '');
   const [email, setEmail] = useState(user?.email || '');
-  const [phone, setPhone] = useState(user?.phone || '');
+  const [phone, setPhone] = useState('');
 
   const followedTempleDetails = temples.filter(t => followedTemples.includes(t.id));
   
@@ -45,10 +45,9 @@ const Dashboard = () => {
       ...d, 
       type: 'recurring' as const,
       amount: d.amount,
-      createdAt: d.startDate
+      createdAt: d.createdAt
     }))
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
   const filteredDonations = donationFilter === 'all' 
     ? allDonations 
     : allDonations.filter(d => d.type === donationFilter);
@@ -369,9 +368,9 @@ const Dashboard = () => {
                           </div>
                           <div>
                             <p className="font-medium text-foreground">{booking.templeName}</p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <Clock className="w-3 h-3" />
-                              {format(new Date(booking.date), 'MMM d, yyyy')} at {booking.timeSlot.time}
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {format(new Date(booking.date), 'MMM d, yyyy')} at {booking.timeSlot}
                             </div>
                           </div>
                         </div>

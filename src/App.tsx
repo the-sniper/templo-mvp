@@ -11,42 +11,45 @@ import { BookingProvider } from "@/context/BookingContext";
 import { PoojaProvider } from "@/context/PoojaContext";
 import { RecurringDonationProvider } from "@/context/RecurringDonationContext";
 import { LanguageProvider } from "@/context/LanguageContext";
-import Index from "./pages/Index";
-import Temples from "./pages/Temples";
-import TempleDetails from "./pages/TempleDetails";
-import HowTo from "./pages/HowTo";
-import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Ancestral Temple Flow
-import AncestralIntro from "./pages/ancestral/AncestralIntro";
-import AncestralForm from "./pages/ancestral/AncestralForm";
-import AncestralSearching from "./pages/ancestral/AncestralSearching";
-import AncestralResults from "./pages/ancestral/AncestralResults";
-import AddAncestralTemple from "./pages/ancestral/AddAncestralTemple";
-import AncestralConfirmation from "./pages/ancestral/AncestralConfirmation";
+// Devotee Pages
+import Index from "./pages/devotee/Index";
+import Temples from "./pages/devotee/Temples";
+import TempleDetails from "./pages/devotee/TempleDetails";
+import HowTo from "./pages/devotee/HowTo";
+import NotFound from "./pages/devotee/NotFound";
+import Dashboard from "./pages/devotee/Dashboard";
 
-// Auth Pages
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import ForgotPassword from "./pages/auth/ForgotPassword";
+// Devotee - Ancestral Temple Flow
+import AncestralIntro from "./pages/devotee/ancestral/AncestralIntro";
+import AncestralForm from "./pages/devotee/ancestral/AncestralForm";
+import AncestralSearching from "./pages/devotee/ancestral/AncestralSearching";
+import AncestralResults from "./pages/devotee/ancestral/AncestralResults";
+import AddAncestralTemple from "./pages/devotee/ancestral/AddAncestralTemple";
+import AncestralConfirmation from "./pages/devotee/ancestral/AncestralConfirmation";
 
-// Donation Flow
-import DonatePage from "./pages/donation/DonatePage";
-import DonationReceipt from "./pages/donation/DonationReceipt";
-import RecurringDonatePage from "./pages/donation/RecurringDonatePage";
-import RecurringDonationConfirmation from "./pages/donation/RecurringDonationConfirmation";
+// Devotee - Auth Pages
+import Login from "./pages/devotee/auth/Login";
+import Register from "./pages/devotee/auth/Register";
+import ForgotPassword from "./pages/devotee/auth/ForgotPassword";
 
-// Booking Flow
-import BookSlotPage from "./pages/booking/BookSlotPage";
-import BookingConfirmation from "./pages/booking/BookingConfirmation";
+// Devotee - Donation Flow
+import DonatePage from "./pages/devotee/donation/DonatePage";
+import DonationReceipt from "./pages/devotee/donation/DonationReceipt";
+import RecurringDonatePage from "./pages/devotee/donation/RecurringDonatePage";
+import RecurringDonationConfirmation from "./pages/devotee/donation/RecurringDonationConfirmation";
 
-// Pooja Flow
-import RequestPoojaPage from "./pages/pooja/RequestPoojaPage";
-import PoojaConfirmation from "./pages/pooja/PoojaConfirmation";
+// Devotee - Booking Flow
+import BookSlotPage from "./pages/devotee/booking/BookSlotPage";
+import BookingConfirmation from "./pages/devotee/booking/BookingConfirmation";
 
-// Dashboard
-import Dashboard from "./pages/Dashboard";
+// Devotee - Pooja Flow
+import RequestPoojaPage from "./pages/devotee/pooja/RequestPoojaPage";
+import PoojaConfirmation from "./pages/devotee/pooja/PoojaConfirmation";
+
+// Admin Pages (placeholder for future implementation)
+// import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +69,11 @@ const App = () => (
                     <BrowserRouter>
                       <ScrollToTop />
                       <Routes>
+                        {/* ==================== */}
+                        {/* DEVOTEE ROUTES */}
+                        {/* ==================== */}
+                        
+                        {/* Main Pages */}
                         <Route path="/" element={<Index />} />
                         <Route path="/temples" element={<Temples />} />
                         <Route path="/temple/:id" element={<TempleDetails />} />
@@ -100,7 +108,17 @@ const App = () => (
                         {/* Pooja Flow */}
                         <Route path="/pooja/:id" element={<RequestPoojaPage />} />
                         <Route path="/pooja/confirmation/:id" element={<PoojaConfirmation />} />
+
+                        {/* ==================== */}
+                        {/* ADMIN ROUTES */}
+                        {/* ==================== */}
+                        {/* Admin routes will be added here when admin module is built */}
+                        {/* <Route path="/admin" element={<AdminDashboard />} /> */}
+                        {/* <Route path="/admin/temples" element={<AdminTemples />} /> */}
+                        {/* <Route path="/admin/donations" element={<AdminDonations />} /> */}
+                        {/* <Route path="/admin/bookings" element={<AdminBookings />} /> */}
                         
+                        {/* 404 */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </BrowserRouter>

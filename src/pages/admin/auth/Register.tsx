@@ -152,6 +152,7 @@ const AdminRegister = () => {
                     <SelectItem value="head_priest">Head Priest</SelectItem>
                     <SelectItem value="priest">Priest</SelectItem>
                     <SelectItem value="manager">Temple Manager</SelectItem>
+                    <SelectItem value="inventory_manager">Inventory Manager</SelectItem>
                     <SelectItem value="staff">Temple Staff</SelectItem>
                   </SelectContent>
                 </Select>

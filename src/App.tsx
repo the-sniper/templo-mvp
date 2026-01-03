@@ -48,8 +48,11 @@ import BookingConfirmation from "./pages/devotee/booking/BookingConfirmation";
 import RequestPoojaPage from "./pages/devotee/pooja/RequestPoojaPage";
 import PoojaConfirmation from "./pages/devotee/pooja/PoojaConfirmation";
 
-// Admin Pages (placeholder for future implementation)
-// import AdminDashboard from "./pages/admin/Dashboard";
+// Admin Pages
+import AdminIndex from "./pages/admin/Index";
+import AdminLogin from "./pages/admin/auth/Login";
+import AdminRegister from "./pages/admin/auth/Register";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -112,11 +115,10 @@ const App = () => (
                         {/* ==================== */}
                         {/* ADMIN ROUTES */}
                         {/* ==================== */}
-                        {/* Admin routes will be added here when admin module is built */}
-                        {/* <Route path="/admin" element={<AdminDashboard />} /> */}
-                        {/* <Route path="/admin/temples" element={<AdminTemples />} /> */}
-                        {/* <Route path="/admin/donations" element={<AdminDonations />} /> */}
-                        {/* <Route path="/admin/bookings" element={<AdminBookings />} /> */}
+                        <Route path="/admin" element={<AdminIndex />} />
+                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/admin/register" element={<AdminRegister />} />
+                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
                         
                         {/* 404 */}
                         <Route path="*" element={<NotFound />} />

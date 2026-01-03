@@ -416,6 +416,35 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Temple Owner / Priest CTA */}
+      <section className="py-12 sm:py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
+            <CardContent className="p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <Badge variant="outline" className="mb-2 border-primary/30 text-primary">
+                  <Building2 className="w-3 h-3 mr-1" />
+                  For Temple Owners & Priests
+                </Badge>
+                <h3 className="font-serif text-xl font-bold text-foreground mb-1">
+                  Are you a Temple Owner or Priest?
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Bring your temple online and connect with devotees worldwide
+                </p>
+              </div>
+              <Link to="/admin">
+                <Button size="lg" variant="outline" className="rounded-full px-6 gap-2 border-primary/30 hover:bg-primary/10">
+                  <Building2 className="w-5 h-5" />
+                  Temple Admin Portal
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="py-16 sm:py-20 bg-gradient-to-b from-background to-primary/5">
         <div className="container mx-auto px-4 text-center">

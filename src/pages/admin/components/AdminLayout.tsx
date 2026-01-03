@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AdminUser, rolePermissions, hasPermission } from '../types';
-
+import { loadAdminUser } from '../utils/adminAuth';
 interface AdminLayoutProps {
   children: React.ReactNode;
   title: string;
@@ -22,13 +22,13 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('adminUser');
-    if (stored) {
-      setAdminUser(JSON.parse(stored));
+    const user = loadAdminUser();
+    if (user) {
+      setAdminUser(user);
     } else {
       navigate('/admin/login');
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('adminUser');
@@ -108,7 +108,8 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
     if (!item.permission) {
       // Special cases
       if (item.label === 'Inventory') {
-        return adminUser.role === 'inventory_manager' || adminUser.role === 'temple_owner' || adminUser.role === 'manager';
+        const role = (adminUser.role as unknown as string) || '';
+        return role === 'inventory_manager' || role === 'temple_owner' || role === 'manager' || role === 'admin';
       }
       return true;
     }
@@ -119,7 +120,7 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
     return null;
   }
 
-  const roleLabel = rolePermissions[adminUser.role]?.label || adminUser.role;
+  const roleLabel = rolePermissions[(adminUser.role as unknown as any)]?.label || rolePermissions.temple_owner.label;
 
   return (
     <div className="min-h-screen bg-background flex">

@@ -57,6 +57,11 @@ import AdminDonations from "@/pages/admin/Donations";
 import AdminBookings from "@/pages/admin/Bookings";
 import AdminAnnouncements from "@/pages/admin/Announcements";
 import AdminProfile from "@/pages/admin/Profile";
+import AdminDevotees from "@/pages/admin/Devotees";
+import AdminGallery from "@/pages/admin/Gallery";
+import AdminInventory from "@/pages/admin/Inventory";
+import AdminStaff from "@/pages/admin/Staff";
+import AdminSettings from "@/pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -127,6 +132,11 @@ const App = () => (
                         <Route path="/admin/bookings" element={<AdminBookings />} />
                         <Route path="/admin/announcements" element={<AdminAnnouncements />} />
                         <Route path="/admin/profile" element={<AdminProfile />} />
+                        <Route path="/admin/devotees" element={<AdminDevotees />} />
+                        <Route path="/admin/gallery" element={<AdminGallery />} />
+                        <Route path="/admin/inventory" element={<AdminInventory />} />
+                        <Route path="/admin/staff" element={<AdminStaff />} />
+                        <Route path="/admin/settings" element={<AdminSettings />} />
                         {/* 404 */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>

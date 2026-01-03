@@ -1,11 +1,12 @@
 // Admin Role Types
 export type AdminRole = 
-  | 'temple_owner'      // Full access to all features
-  | 'head_priest'       // Manage bookings, poojas, announcements
-  | 'priest'            // View bookings, manage their poojas
-  | 'manager'           // Donations, inventory, bookings
-  | 'staff'             // Limited view-only access
-  | 'inventory_manager'; // Manage temple inventory/supplies
+  | 'temple_owner'       // Full access to all features
+  | 'head_priest'        // Manage bookings, poojas, announcements
+  | 'priest'             // View bookings, manage their poojas
+  | 'manager'            // Donations, inventory, bookings
+  | 'staff'              // Limited view-only access
+  | 'inventory_manager'  // Manage temple inventory/supplies
+  | 'admin';             // Legacy demo role (maps to temple_owner access)
 
 export interface AdminUser {
   id: string;
@@ -103,17 +104,28 @@ export const rolePermissions: Record<AdminRole, {
     staff: { view: false, manage: false },
     settings: { view: false, edit: false },
   },
+  // Legacy demo role: treat as full temple owner access
+  admin: {
+    label: 'Admin (Legacy)',
+    donations: { view: true, manage: true, reconcile: true },
+    bookings: { view: true, manage: true },
+    poojas: { view: true, manage: true },
+    announcements: { view: true, create: true, edit: true, delete: true },
+    templeProfile: { view: true, edit: true },
+    gallery: { view: true, upload: true, delete: true },
+    devotees: { view: true },
+    staff: { view: true, manage: true },
+    settings: { view: true, edit: true },
+  },
 };
 
 // Check if user has permission
 export const hasPermission = (
-  role: AdminRole,
+  role: AdminRole | string,
   module: keyof typeof rolePermissions['temple_owner'],
   action: string
 ): boolean => {
-  const permissions = rolePermissions[role];
-  if (!permissions) return false;
-  
+  const permissions = (rolePermissions as Record<string, typeof rolePermissions.temple_owner>)[role] ?? rolePermissions.temple_owner;
   const modulePerms = permissions[module] as Record<string, boolean>;
   return modulePerms?.[action] ?? false;
 };

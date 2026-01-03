@@ -24,10 +24,15 @@ const AdminLogin = () => {
     // Simulate login - replace with actual auth
     setTimeout(() => {
       if (formData.email === 'admin@temple.com' && formData.password === '12345678') {
-        localStorage.setItem('adminUser', JSON.stringify({ 
-          email: formData.email, 
+        localStorage.setItem('adminUser', JSON.stringify({
+          id: 'demo-admin',
+          email: formData.email,
           name: 'Temple Admin',
-          role: 'admin'
+          phone: '+91 98765 43210',
+          templeName: 'Demo Temple',
+          templeId: 'demo-temple',
+          role: 'temple_owner',
+          createdAt: new Date().toISOString(),
         }));
         toast({
           title: 'Welcome back!',

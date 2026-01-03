@@ -9,17 +9,17 @@ import {
   Gift, CalendarDays, Users, TrendingUp, Clock, CheckCircle, XCircle, 
   Eye, IndianRupee, ChevronRight
 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { AdminUser } from './types';
+import { loadAdminUser } from './utils/adminAuth';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('adminUser');
-    if (stored) {
-      setAdminUser(JSON.parse(stored));
+    const user = loadAdminUser();
+    if (user) {
+      setAdminUser(user);
     } else {
       navigate('/admin/login');
     }

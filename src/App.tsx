@@ -53,6 +53,10 @@ import AdminIndex from "@/pages/admin/Index";
 import AdminLogin from "@/pages/admin/auth/Login";
 import AdminRegister from "@/pages/admin/auth/Register";
 import AdminDashboard from "@/pages/admin/Dashboard";
+import AdminDonations from "@/pages/admin/Donations";
+import AdminBookings from "@/pages/admin/Bookings";
+import AdminAnnouncements from "@/pages/admin/Announcements";
+import AdminProfile from "@/pages/admin/Profile";
 
 const queryClient = new QueryClient();
 
@@ -119,7 +123,10 @@ const App = () => (
                         <Route path="/admin/login" element={<AdminLogin />} />
                         <Route path="/admin/register" element={<AdminRegister />} />
                         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                        
+                        <Route path="/admin/donations" element={<AdminDonations />} />
+                        <Route path="/admin/bookings" element={<AdminBookings />} />
+                        <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+                        <Route path="/admin/profile" element={<AdminProfile />} />
                         {/* 404 */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>

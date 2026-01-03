@@ -49,10 +49,10 @@ import RequestPoojaPage from "./pages/devotee/pooja/RequestPoojaPage";
 import PoojaConfirmation from "./pages/devotee/pooja/PoojaConfirmation";
 
 // Admin Pages
-import AdminIndex from "./pages/admin/Index";
-import AdminLogin from "./pages/admin/auth/Login";
-import AdminRegister from "./pages/admin/auth/Register";
-import AdminDashboard from "./pages/admin/Dashboard";
+import AdminIndex from "@/pages/admin/Index";
+import AdminLogin from "@/pages/admin/auth/Login";
+import AdminRegister from "@/pages/admin/auth/Register";
+import AdminDashboard from "@/pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 

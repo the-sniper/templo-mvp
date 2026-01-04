@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TempleCard from '@/components/TempleCard';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -236,39 +237,9 @@ const Dashboard = () => {
                 </Link>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {followedTempleDetails.map(temple => (
-                  <Card key={temple.id} className="overflow-hidden border-border/50 hover:shadow-lg transition-all duration-300 group">
-                    <div className="aspect-video relative overflow-hidden">
-                      <img 
-                        src={temple.image} 
-                        alt={temple.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-foreground mb-1">{temple.name}</h3>
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {temple.location}
-                      </div>
-                      <div className="flex gap-2">
-                        <Link to={`/temple/${temple.id}`} className="flex-1">
-                          <Button variant="outline" size="sm" className="w-full rounded-full">
-                            View Details
-                          </Button>
-                        </Link>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => toggleFollowTemple(temple.id)}
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full"
-                        >
-                          Unfollow
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <TempleCard key={temple.id} temple={temple} />
                 ))}
               </div>
             )}

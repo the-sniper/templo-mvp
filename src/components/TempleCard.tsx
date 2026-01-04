@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Heart, Clock, Users, Star } from 'lucide-react';
+import { MapPin, Heart, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTemple } from '@/context/TempleContext';
@@ -15,10 +15,6 @@ interface TempleCardProps {
 const TempleCard = ({ temple, variant = 'default', showActions = true }: TempleCardProps) => {
   const { toggleFollowTemple, isFollowing } = useTemple();
   const following = isFollowing(temple.id);
-
-  // Mock data for enhanced display
-  const isOpen = true; // Could be computed from temple.timings
-  const followerCount = Math.floor(Math.random() * 500) + 100;
 
   if (variant === 'horizontal') {
     return (
@@ -136,51 +132,31 @@ const TempleCard = ({ temple, variant = 'default', showActions = true }: TempleC
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
           
-          {/* Top badges row */}
-          <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-            {/* Status badge */}
-            <Badge 
+          {/* Follow Button - top right */}
+          {showActions && (
+            <Button
+              variant="ghost"
+              size="icon"
               className={cn(
-                "backdrop-blur-md border-0 px-2.5 py-1 text-xs font-medium shadow-sm",
-                isOpen 
-                  ? "bg-green-500/90 text-white" 
-                  : "bg-muted/90 text-muted-foreground"
+                "absolute right-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-md shadow-sm hover:bg-background hover:scale-110 transition-all",
+                following && "text-primary bg-primary/10"
               )}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFollowTemple(temple.id);
+              }}
             >
-              <span className={cn("w-1.5 h-1.5 rounded-full mr-1.5", isOpen ? "bg-white animate-pulse" : "bg-muted-foreground")} />
-              {isOpen ? "Open Now" : "Closed"}
-            </Badge>
-            
-            {/* Follow Button */}
-            {showActions && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "h-9 w-9 rounded-full bg-background/80 backdrop-blur-md shadow-sm hover:bg-background hover:scale-110 transition-all",
-                  following && "text-primary bg-primary/10"
-                )}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  toggleFollowTemple(temple.id);
-                }}
-              >
-                <Heart className={cn("h-4.5 w-4.5 transition-all", following && "fill-primary text-primary scale-110")} />
-              </Button>
-            )}
-          </div>
+              <Heart className={cn("h-4 w-4 transition-all", following && "fill-primary text-primary scale-110")} />
+            </Button>
+          )}
           
-          {/* Bottom info overlay */}
-          <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+          {/* Deity badge - bottom left */}
+          <div className="absolute bottom-3 left-3">
             <Badge className="bg-background/90 text-foreground backdrop-blur-md border-0 px-2.5 py-1 text-xs font-medium shadow-sm">
+              <Flame className="w-3 h-3 mr-1.5 text-primary" />
               {temple.deity}
             </Badge>
-            
-            <div className="flex items-center gap-1.5 text-background/90 text-xs">
-              <Users className="h-3.5 w-3.5" />
-              <span>{followerCount}+ following</span>
-            </div>
           </div>
         </div>
       </Link>
@@ -198,24 +174,12 @@ const TempleCard = ({ temple, variant = 'default', showActions = true }: TempleC
           <span className="text-sm line-clamp-1">{temple.location}</span>
         </div>
 
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 flex-grow mb-4">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 flex-grow">
           {temple.description}
         </p>
         
-        {/* Quick info row */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4 pb-4 border-b border-border/50">
-          <div className="flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5 text-primary" />
-            <span>5:00 AM - 9:00 PM</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-            <span className="font-medium text-foreground">4.8</span>
-          </div>
-        </div>
-        
         {/* CTA Button */}
-        <Link to={`/temple/${temple.id}`} className="mt-auto">
+        <Link to={`/temple/${temple.id}`} className="mt-4">
           <Button 
             className="w-full rounded-full font-medium transition-all"
           >

@@ -4,8 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Building2, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Building2, Mail, Lock, ArrowLeft, Eye, EyeOff, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+
+// Demo accounts for different roles
+const demoAccounts = [
+  { email: 'owner@temple.com', password: '12345678', role: 'temple_owner', name: 'Temple Owner', label: 'Full Access' },
+  { email: 'headpriest@temple.com', password: '12345678', role: 'head_priest', name: 'Head Priest', label: 'Bookings & Pooja' },
+  { email: 'priest@temple.com', password: '12345678', role: 'priest', name: 'Priest', label: 'View Bookings' },
+  { email: 'staff@temple.com', password: '12345678', role: 'staff', name: 'Temple Staff', label: 'Limited View' },
+  { email: 'inventory@temple.com', password: '12345678', role: 'inventory_manager', name: 'Inventory Manager', label: 'Inventory Only' },
+];
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -21,33 +31,45 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login - replace with actual auth
+    // Check against demo accounts
     setTimeout(() => {
-      if (formData.email === 'admin@temple.com' && formData.password === '12345678') {
+      const account = demoAccounts.find(
+        acc => acc.email === formData.email && acc.password === formData.password
+      );
+
+      // Also accept legacy admin@temple.com
+      const isLegacyAdmin = formData.email === 'admin@temple.com' && formData.password === '12345678';
+
+      if (account || isLegacyAdmin) {
+        const userData = account || demoAccounts[0]; // Default to owner for legacy
         localStorage.setItem('adminUser', JSON.stringify({
-          id: 'demo-admin',
-          email: formData.email,
-          name: 'Temple Admin',
+          id: `demo-${userData.role}`,
+          email: userData.email,
+          name: userData.name,
           phone: '+91 98765 43210',
           templeName: 'Demo Temple',
           templeId: 'demo-temple',
-          role: 'temple_owner',
+          role: userData.role,
           createdAt: new Date().toISOString(),
         }));
         toast({
-          title: 'Welcome back!',
-          description: 'You have successfully logged in.',
+          title: `Welcome, ${userData.name}!`,
+          description: `Logged in as ${userData.label}`,
         });
         navigate('/admin/dashboard');
       } else {
         toast({
           title: 'Login failed',
-          description: 'Invalid email or password. Try admin@temple.com / 12345678',
+          description: 'Invalid email or password. Try one of the demo accounts below.',
           variant: 'destructive',
         });
       }
       setIsLoading(false);
-    }, 1000);
+    }, 800);
+  };
+
+  const fillDemoCredentials = (email: string, password: string) => {
+    setFormData({ email, password });
   };
 
   return (
@@ -58,7 +80,7 @@ const AdminLogin = () => {
         <div className="absolute bottom-20 right-10 w-64 h-64 bg-secondary/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-lg relative z-10">
         {/* Back Link */}
         <Link 
           to="/admin" 
@@ -138,10 +160,34 @@ const AdminLogin = () => {
               </p>
             </div>
 
-            {/* Demo credentials hint */}
-            <div className="mt-4 p-3 bg-muted/50 rounded-lg text-center">
-              <p className="text-xs text-muted-foreground">
-                Demo: admin@temple.com / 12345678
+            {/* Demo accounts section */}
+            <div className="mt-6 pt-4 border-t border-border/50">
+              <div className="flex items-center gap-2 mb-3">
+                <Users className="w-4 h-4 text-muted-foreground" />
+                <p className="text-sm font-medium text-foreground">Demo Accounts</p>
+              </div>
+              <div className="space-y-2">
+                {demoAccounts.map((account) => (
+                  <button
+                    key={account.email}
+                    type="button"
+                    onClick={() => fillDemoCredentials(account.email, account.password)}
+                    className="w-full flex items-center justify-between p-2.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-left group"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                        {account.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">{account.email}</p>
+                    </div>
+                    <Badge variant="secondary" className="text-xs shrink-0 ml-2">
+                      {account.label}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground text-center mt-3">
+                Password for all: <code className="bg-muted px-1 rounded">12345678</code>
               </p>
             </div>
           </CardContent>

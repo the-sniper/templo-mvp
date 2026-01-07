@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AdminLayout from './components/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,9 +9,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { 
   Settings, Bell, Lock, CreditCard, Globe, Save, Shield,
-  Mail, Smartphone, Moon, Sun
+  Mail, Smartphone, Moon, Sun, Copy, Check, QrCode
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 
 const AdminSettings = () => {
   const { toast } = useToast();
@@ -24,10 +32,76 @@ const AdminSettings = () => {
     weeklyReport: true,
   });
 
+  // Dark mode state
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // 2FA state
+  const [is2FADialogOpen, setIs2FADialogOpen] = useState(false);
+  const [twoFAStep, setTwoFAStep] = useState<'setup' | 'verify'>('setup');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [secretKey] = useState('JBSWY3DPEHPK3PXP');
+  const [copied, setCopied] = useState(false);
+
+  // Initialize dark mode from document
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+  }, []);
+
+  const toggleDarkMode = (enabled: boolean) => {
+    setIsDarkMode(enabled);
+    if (enabled) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+    toast({
+      title: enabled ? 'Dark mode enabled' : 'Light mode enabled',
+      description: 'Theme has been updated.',
+    });
+  };
+
   const handleSave = (section: string) => {
     toast({
       title: 'Settings saved',
       description: `${section} settings have been updated.`
+    });
+  };
+
+  const copySecretKey = () => {
+    navigator.clipboard.writeText(secretKey);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleVerify2FA = () => {
+    // Simulate verification - in real app, verify against server
+    if (verificationCode.length === 6) {
+      setIs2FAEnabled(true);
+      setIs2FADialogOpen(false);
+      setTwoFAStep('setup');
+      setVerificationCode('');
+      toast({
+        title: '2FA Enabled',
+        description: 'Two-factor authentication has been enabled for your account.',
+      });
+    } else {
+      toast({
+        title: 'Invalid code',
+        description: 'Please enter a valid 6-digit code.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const disable2FA = () => {
+    setIs2FAEnabled(false);
+    toast({
+      title: '2FA Disabled',
+      description: 'Two-factor authentication has been disabled.',
     });
   };
 
@@ -185,10 +259,20 @@ const AdminSettings = () => {
                 </h4>
                 <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Enable 2FA</p>
-                    <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {is2FAEnabled ? '2FA is enabled' : 'Enable 2FA'}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {is2FAEnabled 
+                        ? 'Your account is protected with two-factor authentication' 
+                        : 'Add an extra layer of security to your account'}
+                    </p>
                   </div>
-                  <Button variant="outline">Setup 2FA</Button>
+                  {is2FAEnabled ? (
+                    <Button variant="outline" onClick={disable2FA}>Disable 2FA</Button>
+                  ) : (
+                    <Button variant="outline" onClick={() => setIs2FADialogOpen(true)}>Setup 2FA</Button>
+                  )}
                 </div>
               </div>
 
@@ -230,7 +314,7 @@ const AdminSettings = () => {
                   </div>
                   <div>
                     <p className="text-muted-foreground">Status</p>
-                    <p className="text-green-600 font-medium">Active</p>
+                    <p className="text-primary font-medium">Active</p>
                   </div>
                 </div>
               </div>
@@ -281,14 +365,17 @@ const AdminSettings = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                      <Moon className="w-5 h-5" />
+                      {isDarkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                     </div>
                     <div>
                       <p className="text-sm font-medium text-foreground">Dark Mode</p>
                       <p className="text-sm text-muted-foreground">Switch between light and dark themes</p>
                     </div>
                   </div>
-                  <Switch />
+                  <Switch 
+                    checked={isDarkMode}
+                    onCheckedChange={toggleDarkMode}
+                  />
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -335,6 +422,93 @@ const AdminSettings = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* 2FA Setup Dialog */}
+      <Dialog open={is2FADialogOpen} onOpenChange={setIs2FADialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Setup Two-Factor Authentication</DialogTitle>
+            <DialogDescription>
+              {twoFAStep === 'setup' 
+                ? 'Scan the QR code with your authenticator app or enter the secret key manually.'
+                : 'Enter the 6-digit code from your authenticator app to verify.'}
+            </DialogDescription>
+          </DialogHeader>
+
+          {twoFAStep === 'setup' ? (
+            <div className="space-y-6">
+              {/* QR Code placeholder */}
+              <div className="flex justify-center">
+                <div className="w-48 h-48 bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <QrCode className="w-16 h-16 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-xs text-muted-foreground">QR Code</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Secret Key */}
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">Or enter this key manually:</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    value={secretKey} 
+                    readOnly 
+                    className="font-mono text-sm"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={copySecretKey}
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </Button>
+                </div>
+              </div>
+
+              <Button className="w-full" onClick={() => setTwoFAStep('verify')}>
+                Continue to Verification
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <InputOTP 
+                  maxLength={6} 
+                  value={verificationCode}
+                  onChange={setVerificationCode}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setTwoFAStep('setup')}
+                >
+                  Back
+                </Button>
+                <Button 
+                  className="flex-1"
+                  onClick={handleVerify2FA}
+                  disabled={verificationCode.length !== 6}
+                >
+                  Verify & Enable
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 };

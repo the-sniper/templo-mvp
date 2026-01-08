@@ -14,7 +14,6 @@ const Footer = () => {
             <p className="font-serif text-lg sm:text-xl text-foreground italic leading-relaxed">
               "Where there is faith, there is always a way."
             </p>
-            <p className="text-sm text-muted-foreground mt-2">— Bhagavad Gita</p>
           </div>
         </div>
       </div>

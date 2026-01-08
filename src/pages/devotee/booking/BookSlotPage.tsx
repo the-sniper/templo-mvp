@@ -339,7 +339,7 @@ const BookSlotPage = () => {
               </div>
               <Button 
                 type="submit" 
-                className="w-full h-14 text-lg"
+                className="w-full h-14 text-lg rounded-full gap-2"
                 disabled={isProcessing}
               >
                 {isProcessing ? 'Processing...' : 'Confirm Booking'}

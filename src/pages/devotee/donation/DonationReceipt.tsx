@@ -198,24 +198,24 @@ const DonationReceipt = () => {
         {/* Actions - Hidden in Print */}
         <div className="space-y-3 print:hidden">
           <div className="grid grid-cols-3 gap-3">
-            <Button variant="outline" className="h-12" onClick={handlePrint}>
+            <Button variant="outline" className="h-12 rounded-full" onClick={handlePrint}>
               <Printer className="h-4 w-4 mr-2" />
               Print
             </Button>
-            <Button variant="outline" className="h-12">
+            <Button variant="outline" className="h-12 rounded-full">
               <Download className="h-4 w-4 mr-2" />
-              Download
+              PDF
             </Button>
             <ShareButton
               title={`Donation to ${donation.templeName}`}
               text={`🙏 I donated ₹${donation.amount.toLocaleString()} to ${donation.templeName}. Join me in supporting our temples!`}
               url={window.location.href}
               variant="outline"
-              className="h-12"
+              className="h-12 rounded-full"
             />
           </div>
           <Link to="/" className="block">
-            <Button variant="default" className="w-full h-12">
+            <Button variant="default" className="w-full h-12 rounded-full">
               <Home className="h-4 w-4 mr-2" />
               Back to Home
             </Button>

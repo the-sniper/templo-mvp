@@ -314,13 +314,16 @@ const RecurringDonatePage = () => {
           {/* Submit */}
           <Button 
             type="submit" 
-            className="w-full h-14 text-lg"
+            className="w-full h-14 text-lg rounded-full gap-2"
             disabled={isProcessing}
           >
             {isProcessing ? (
               <>Setting up...</>
             ) : (
-              <>Start ₹{amount}/{frequency === 'daily' ? 'day' : frequency === 'weekly' ? 'week' : 'month'}</>
+              <>
+                <RefreshCw className="h-5 w-5" />
+                Start ₹{amount}/{frequency === 'daily' ? 'day' : frequency === 'weekly' ? 'week' : 'month'}
+              </>
             )}
           </Button>
 

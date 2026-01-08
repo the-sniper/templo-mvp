@@ -283,7 +283,7 @@ const RequestPoojaPage = () => {
           {/* Submit */}
           <Button 
             type="submit" 
-            className="w-full h-14 text-lg"
+            className="w-full h-14 text-lg rounded-full gap-2"
             disabled={isSubmitting || templePriests.length === 0}
           >
             {isSubmitting ? 'Submitting Request...' : 'Request Pooja'}

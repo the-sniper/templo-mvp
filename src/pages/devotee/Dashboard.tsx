@@ -404,11 +404,17 @@ const Dashboard = () => {
           <TabsContent value="settings" className="space-y-6">
             <div>
               <h2 className="font-serif text-xl font-semibold text-foreground">Profile Settings</h2>
-              <p className="text-muted-foreground text-sm mt-1">Manage your account information</p>
+              <p className="text-muted-foreground text-sm mt-1">Manage your account and spiritual profile</p>
             </div>
             
+            {/* Personal Information */}
             <Card className="border-border/50">
               <CardContent className="p-6 space-y-6">
+                <div className="flex items-center gap-3 pb-2 border-b border-border/50">
+                  <User className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Personal Information</h3>
+                </div>
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
@@ -438,45 +444,94 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input 
-                      id="email" 
-                      type="email"
-                      value={email} 
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10"
-                      placeholder="Enter email"
-                    />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input 
+                        id="email" 
+                        type="email"
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="pl-10"
+                        placeholder="Enter email"
+                      />
+                    </div>
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input 
-                      id="phone" 
-                      value={phone} 
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="pl-10"
-                      placeholder="Enter phone number"
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input 
+                        id="phone" 
+                        value={phone} 
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="pl-10"
+                        placeholder="Enter phone number"
+                      />
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                  <Button onClick={handleSaveProfile} className="rounded-full">
-                    Save Changes
-                  </Button>
-                  <Button variant="outline" onClick={handleLogout} className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10">
-                    Logout
-                  </Button>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Spiritual Profile - correlates with admin devotee data */}
+            <Card className="border-border/50">
+              <CardContent className="p-6 space-y-6">
+                <div className="flex items-center gap-3 pb-2 border-b border-border/50">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Spiritual Profile</h3>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="gotra" className="text-sm font-medium">Gotra</Label>
+                    <Input 
+                      id="gotra" 
+                      placeholder="e.g., Bharadwaja, Kashyapa"
+                    />
+                    <p className="text-xs text-muted-foreground">Your family lineage (for rituals)</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nakshatra" className="text-sm font-medium">Nakshatra (Birth Star)</Label>
+                    <Input 
+                      id="nakshatra" 
+                      placeholder="e.g., Rohini, Ashwini"
+                    />
+                    <p className="text-xs text-muted-foreground">Your birth star (for poojas)</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="rashi" className="text-sm font-medium">Rashi (Moon Sign)</Label>
+                    <Input 
+                      id="rashi" 
+                      placeholder="e.g., Mesha, Vrishabha"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nativePlace" className="text-sm font-medium">Native Place</Label>
+                    <Input 
+                      id="nativePlace" 
+                      placeholder="e.g., Chennai, Tamil Nadu"
+                    />
+                    <p className="text-xs text-muted-foreground">Helps connect with ancestral temples</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Save Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <Button onClick={handleSaveProfile} className="rounded-full gap-2">
+                Save Changes
+              </Button>
+              <Button variant="outline" onClick={handleLogout} className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10">
+                Logout
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </main>

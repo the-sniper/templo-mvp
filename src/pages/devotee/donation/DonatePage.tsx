@@ -258,13 +258,16 @@ const DonatePage = () => {
           {/* Submit */}
           <Button 
             type="submit" 
-            className="w-full h-14 text-lg"
+            className="w-full h-14 text-lg rounded-full gap-2"
             disabled={isProcessing}
           >
             {isProcessing ? (
               <>Processing...</>
             ) : (
-              <>Donate ₹{amount.toLocaleString()}</>
+              <>
+                <Heart className="h-5 w-5" />
+                Donate ₹{amount.toLocaleString()}
+              </>
             )}
           </Button>
 

@@ -14,7 +14,7 @@ const BookingConfirmation = () => {
 
   if (!booking) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 overflow-x-hidden">
         <div className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
             <Calendar className="h-8 w-8 text-muted-foreground" />
@@ -45,7 +45,7 @@ const BookingConfirmation = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <main className="container mx-auto px-4 py-6 sm:py-8 max-w-lg">
         {/* Success Header */}
         <div className="text-center mb-6 sm:mb-8">

@@ -113,8 +113,8 @@ const TemplesNearYou = ({ locationGranted, onRequestLocation }: TemplesNearYouPr
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex -left-4" />
-            <CarouselNext className="hidden sm:flex -right-4" />
+            <CarouselPrevious className="hidden sm:flex left-0" />
+            <CarouselNext className="hidden sm:flex right-0" />
           </Carousel>
         </div>
       </div>

@@ -16,7 +16,7 @@ const DonationReceipt = () => {
 
   if (!donation) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
         <Header />
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
@@ -48,7 +48,7 @@ const DonationReceipt = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background print:bg-white">
+    <div className="min-h-screen bg-background print:bg-white overflow-x-hidden">
       <div className="print:hidden">
         <Header />
       </div>

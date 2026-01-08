@@ -79,7 +79,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
         <Header />
         <div className="flex items-center justify-center min-h-[60vh]">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -90,7 +90,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       
       <main className="container mx-auto px-4 py-8 sm:py-12 max-w-6xl">
@@ -109,14 +109,16 @@ const Dashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
-          <TabsList className="inline-flex h-auto p-1.5 bg-muted/50 rounded-full">
-            <TabsTrigger value="overview" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">Overview</TabsTrigger>
-            <TabsTrigger value="temples" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">My Temples</TabsTrigger>
-            <TabsTrigger value="donations" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">Donations</TabsTrigger>
-            <TabsTrigger value="bookings" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">Bookings</TabsTrigger>
-            <TabsTrigger value="festivals" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">Festivals</TabsTrigger>
-            <TabsTrigger value="settings" className="rounded-full px-4 py-2 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm">Settings</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            <TabsList className="inline-flex h-auto p-1.5 bg-muted/50 rounded-full w-max min-w-full sm:min-w-0">
+              <TabsTrigger value="overview" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Overview</TabsTrigger>
+              <TabsTrigger value="temples" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">My Temples</TabsTrigger>
+              <TabsTrigger value="donations" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Donations</TabsTrigger>
+              <TabsTrigger value="bookings" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Bookings</TabsTrigger>
+              <TabsTrigger value="festivals" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Festivals</TabsTrigger>
+              <TabsTrigger value="settings" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Settings</TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-8">

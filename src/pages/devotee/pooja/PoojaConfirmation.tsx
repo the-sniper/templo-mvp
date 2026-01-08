@@ -15,7 +15,7 @@ const PoojaConfirmation = () => {
   // For now, we show a success message
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <main className="container mx-auto px-4 py-6 sm:py-8 max-w-lg">
         <div className="text-center mb-6 sm:mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 mb-4">

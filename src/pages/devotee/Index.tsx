@@ -163,7 +163,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
 
       {/* Hero Section with Image Background */}
@@ -354,8 +354,8 @@ const Index = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-12" />
-            <CarouselNext className="hidden md:flex -right-12" />
+            <CarouselPrevious className="hidden md:flex left-0" />
+            <CarouselNext className="hidden md:flex right-0" />
           </Carousel>
         </div>
       </section>
@@ -410,8 +410,8 @@ const Index = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-12" />
-            <CarouselNext className="hidden md:flex -right-12" />
+            <CarouselPrevious className="hidden md:flex left-0" />
+            <CarouselNext className="hidden md:flex right-0" />
           </Carousel>
         </div>
       </section>

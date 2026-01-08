@@ -20,7 +20,7 @@ const AncestralConfirmation = () => {
 
   if (!selectedTemple) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
         <Header />
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
           <div className="text-center">
@@ -35,7 +35,7 @@ const AncestralConfirmation = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">

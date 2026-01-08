@@ -133,7 +133,7 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
   const userInitials = adminUser.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'AD';
 
   return (
-    <div className="min-h-screen bg-muted/30 flex">
+    <div className="min-h-screen bg-muted/30 flex overflow-x-hidden">
       {/* Sidebar */}
       <aside 
         className={`${sidebarCollapsed ? 'w-16' : 'w-60'} bg-card border-r border-border/50 transition-all duration-300 fixed h-full z-40 flex flex-col`}

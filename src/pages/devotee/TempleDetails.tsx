@@ -30,7 +30,7 @@ const TempleDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
         <Header />
         <div className="container mx-auto px-4 py-8">
           <Skeleton className="mb-6 h-8 w-32" />
@@ -44,7 +44,7 @@ const TempleDetails = () => {
 
   if (!temple) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
         <Header />
         <div className="container mx-auto px-4 py-20 text-center">
           <div className="mb-4 text-6xl">🏛️</div>
@@ -93,7 +93,7 @@ const TempleDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       
       <main>

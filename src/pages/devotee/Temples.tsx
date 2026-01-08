@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 
 const Temples = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       
       {/* Temple List Section */}

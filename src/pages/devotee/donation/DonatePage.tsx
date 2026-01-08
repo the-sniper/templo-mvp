@@ -34,7 +34,7 @@ const DonatePage = () => {
 
   if (!temple) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center overflow-x-hidden">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">Temple not found</p>
           <Link to="/" className="text-primary hover:underline">Go back home</Link>
@@ -97,7 +97,7 @@ const DonatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center gap-3 sm:gap-4">
           <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" onClick={() => navigate(-1)}>

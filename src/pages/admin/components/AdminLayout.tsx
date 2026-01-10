@@ -67,18 +67,6 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
       permission: null
     },
     { 
-      icon: CalendarDays, 
-      label: 'Bookings', 
-      path: '/admin/bookings',
-      permission: { module: 'bookings' as const, action: 'view' }
-    },
-    { 
-      icon: Gift, 
-      label: 'Donations', 
-      path: '/admin/donations',
-      permission: { module: 'donations' as const, action: 'view' }
-    },
-    { 
       icon: Users, 
       label: 'Devotees', 
       path: '/admin/devotees',
@@ -101,12 +89,6 @@ const AdminLayout = ({ children, title, subtitle }: AdminLayoutProps) => {
       label: 'Temple Profile', 
       path: '/admin/profile',
       permission: { module: 'templeProfile' as const, action: 'view' }
-    },
-    { 
-      icon: Package, 
-      label: 'Inventory', 
-      path: '/admin/inventory',
-      permission: null
     },
     { 
       icon: Users, 

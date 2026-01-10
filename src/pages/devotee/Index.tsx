@@ -146,16 +146,6 @@ const Index = () => {
       description: t('discoverTemplesDesc')
     },
     {
-      icon: CalendarDays,
-      title: t('bookDarshan'),
-      description: t('bookDarshanDesc')
-    },
-    {
-      icon: Gift,
-      title: t('makeDonations'),
-      description: t('makeDonationsDesc')
-    },
-    {
       icon: Users,
       title: t('connectPriests'),
       description: t('connectPriestsDesc')

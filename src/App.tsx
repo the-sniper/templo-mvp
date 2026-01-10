@@ -19,6 +19,7 @@ import Temples from "./pages/devotee/Temples";
 import TempleDetails from "./pages/devotee/TempleDetails";
 import HowTo from "./pages/devotee/HowTo";
 import NotFound from "./pages/devotee/NotFound";
+import ComingSoon from "./pages/devotee/ComingSoon";
 import Dashboard from "./pages/devotee/Dashboard";
 
 // Devotee - Ancestral Temple Flow
@@ -107,19 +108,15 @@ const App = () => (
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/my-account" element={<Dashboard />} />
                         
-                        {/* Donation Flow */}
-                        <Route path="/donate/:id" element={<DonatePage />} />
-                        <Route path="/donation/receipt/:id" element={<DonationReceipt />} />
-                        <Route path="/recurring-donate/:id" element={<RecurringDonatePage />} />
-                        <Route path="/recurring-donation/confirmation/:id" element={<RecurringDonationConfirmation />} />
-                        
-                        {/* Booking Flow */}
-                        <Route path="/book/:id" element={<BookSlotPage />} />
-                        <Route path="/booking/confirmation/:id" element={<BookingConfirmation />} />
-                        
-                        {/* Pooja Flow */}
-                        <Route path="/pooja/:id" element={<RequestPoojaPage />} />
-                        <Route path="/pooja/confirmation/:id" element={<PoojaConfirmation />} />
+                        {/* Phase II Features - Coming Soon */}
+                        <Route path="/donate/:id" element={<ComingSoon />} />
+                        <Route path="/donation/receipt/:id" element={<ComingSoon />} />
+                        <Route path="/recurring-donate/:id" element={<ComingSoon />} />
+                        <Route path="/recurring-donation/confirmation/:id" element={<ComingSoon />} />
+                        <Route path="/book/:id" element={<ComingSoon />} />
+                        <Route path="/booking/confirmation/:id" element={<ComingSoon />} />
+                        <Route path="/pooja/:id" element={<ComingSoon />} />
+                        <Route path="/pooja/confirmation/:id" element={<ComingSoon />} />
 
                         {/* ==================== */}
                         {/* ADMIN ROUTES */}

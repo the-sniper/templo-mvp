@@ -152,36 +152,12 @@ const TempleDetails = () => {
         <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md border-b border-border">
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-              <Link to={`/donate/${temple.id}`}>
-                <Button size="lg" className="gap-2 rounded-full shrink-0">
-                  <CreditCard className="h-5 w-5" />
-                  <span className="hidden sm:inline">{t('donate')}</span>
-                </Button>
-              </Link>
-              <Link to={`/book/${temple.id}`}>
-                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
-                  <CalendarCheck className="h-5 w-5" />
-                  <span className="hidden sm:inline">{t('bookSlot')}</span>
-                </Button>
-              </Link>
-              <Link to={`/pooja/${temple.id}`}>
-                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
-                  <Palmtree className="h-5 w-5" />
-                  <span className="hidden sm:inline">{t('requestPooja')}</span>
-                </Button>
-              </Link>
-              <Link to={`/recurring-donate/${temple.id}`}>
-                <Button variant="outline" size="lg" className="gap-2 rounded-full shrink-0">
-                  <RefreshCw className="h-5 w-5" />
-                  <span className="hidden sm:inline text-sm">{t('recurringDonation')}</span>
-                </Button>
-              </Link>
               <Button
                 onClick={() => toggleFollowTemple(temple.id)}
                 variant={following ? "default" : "outline"}
                 size="lg"
                 className={cn(
-                  "gap-2 rounded-full shrink-0 ml-auto",
+                  "gap-2 rounded-full shrink-0",
                   following && "bg-primary text-primary-foreground"
                 )}
               >
@@ -202,7 +178,7 @@ const TempleDetails = () => {
         {/* Main Content Tabs */}
         <div className="container mx-auto px-4 pb-8">
           <Tabs defaultValue="info" className="w-full">
-            <TabsList className="w-full grid grid-cols-4 h-auto p-1 rounded-2xl bg-card mb-6">
+            <TabsList className="w-full grid grid-cols-3 h-auto p-1 rounded-2xl bg-card mb-6">
               <TabsTrigger value="info" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
                 <Clock className="h-4 w-4 mr-2 hidden sm:inline" />
                 Info
@@ -214,10 +190,6 @@ const TempleDetails = () => {
               <TabsTrigger value="updates" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
                 <MessageCircle className="h-4 w-4 mr-2 hidden sm:inline" />
                 Updates
-              </TabsTrigger>
-              <TabsTrigger value="patrons" className="rounded-xl py-3 text-sm sm:text-base data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                <Users className="h-4 w-4 mr-2 hidden sm:inline" />
-                Patrons
               </TabsTrigger>
             </TabsList>
 

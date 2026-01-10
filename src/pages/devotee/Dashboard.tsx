@@ -113,8 +113,6 @@ const Dashboard = () => {
             <TabsList className="inline-flex h-auto p-1.5 bg-muted/50 rounded-full w-max min-w-full sm:min-w-0">
               <TabsTrigger value="overview" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Overview</TabsTrigger>
               <TabsTrigger value="temples" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">My Temples</TabsTrigger>
-              <TabsTrigger value="donations" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Donations</TabsTrigger>
-              <TabsTrigger value="bookings" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Bookings</TabsTrigger>
               <TabsTrigger value="festivals" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Festivals</TabsTrigger>
               <TabsTrigger value="settings" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Settings</TabsTrigger>
             </TabsList>
@@ -123,7 +121,7 @@ const Dashboard = () => {
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-8">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div 
                 className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 onClick={() => handleTabChange('temples')}
@@ -139,38 +137,24 @@ const Dashboard = () => {
               </div>
 
               <div 
-                className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-secondary/30 to-secondary/10 border border-secondary/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                onClick={() => handleTabChange('donations')}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-secondary/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Gift className="w-6 h-6 text-secondary-foreground" />
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-secondary-foreground/50 group-hover:text-secondary-foreground group-hover:translate-x-1 transition-all" />
-                </div>
-                <p className="text-3xl font-bold text-foreground mb-1">{allDonations.length}</p>
-                <p className="text-muted-foreground">Total Donations</p>
-              </div>
-
-              <div 
                 className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-accent/50 to-accent/20 border border-accent/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                onClick={() => handleTabChange('bookings')}
+                onClick={() => handleTabChange('festivals')}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-accent/60 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <CalendarDays className="w-6 h-6 text-accent-foreground" />
+                    <Calendar className="w-6 h-6 text-accent-foreground" />
                   </div>
                   <ArrowRight className="w-5 h-5 text-accent-foreground/50 group-hover:text-accent-foreground group-hover:translate-x-1 transition-all" />
                 </div>
-                <p className="text-3xl font-bold text-foreground mb-1">{bookings.length}</p>
-                <p className="text-muted-foreground">Bookings Made</p>
+                <p className="text-3xl font-bold text-foreground mb-1">{upcomingFestivals.length}</p>
+                <p className="text-muted-foreground">Upcoming Festivals</p>
               </div>
             </div>
 
             {/* Quick Actions */}
             <div className="space-y-4">
               <h2 className="font-serif text-xl font-semibold text-foreground">Quick Actions</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <Link to="/temples" className="group">
                   <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
@@ -187,14 +171,6 @@ const Dashboard = () => {
                     <span className="text-sm font-medium text-foreground">Ancestral Temple</span>
                   </div>
                 </Link>
-                <button onClick={() => handleTabChange('donations')} className="group">
-                  <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center w-full">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
-                      <Gift className="w-5 h-5 text-primary" />
-                    </div>
-                    <span className="text-sm font-medium text-foreground">View Donations</span>
-                  </div>
-                </button>
                 <button onClick={() => handleTabChange('festivals')} className="group">
                   <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center w-full">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">

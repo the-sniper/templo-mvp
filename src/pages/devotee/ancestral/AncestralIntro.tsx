@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Search, Heart, Sparkles } from 'lucide-react';
+import { Search, Heart, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
 
 const AncestralIntro = () => {
@@ -16,14 +17,18 @@ const AncestralIntro = () => {
             <span className="text-4xl sm:text-5xl">🏛️</span>
           </div>
 
+          <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20">
+            Help Us Build Together
+          </Badge>
+
           <h1 className="mb-4 font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-            Discover Your Ancestral Temple
+            Find Your Ancestral Temple
           </h1>
 
           <p className="mb-6 sm:mb-8 text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Every family has a sacred connection to their ancestral temple — a place where generations 
-            have offered prayers and sought blessings. Let us help you identify and reconnect with 
-            your family's spiritual heritage.
+            Every family has a sacred connection to their ancestral temple. We're building India's 
+            first comprehensive ancestral temple database — and we need your help! Share your 
+            roots and help us map family lineages to temples across the nation.
           </p>
 
           {/* Features */}
@@ -32,27 +37,27 @@ const AncestralIntro = () => {
               <div className="mb-3 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
                 <Search className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
-              <h3 className="font-medium text-foreground mb-1">Smart Search</h3>
+              <h3 className="font-medium text-foreground mb-1">Share Your Roots</h3>
               <p className="text-sm text-muted-foreground">
-                We analyze your native village and family details
-              </p>
-            </div>
-            <div className="rounded-2xl border border-border/50 bg-card p-4 sm:p-5 hover:border-primary/30 transition-colors">
-              <div className="mb-3 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
-                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-              </div>
-              <h3 className="font-medium text-foreground mb-1">Auto Identify</h3>
-              <p className="text-sm text-muted-foreground">
-                Get suggestions based on regional temple data
+                Tell us about your native village and family details
               </p>
             </div>
             <div className="rounded-2xl border border-border/50 bg-card p-4 sm:p-5 hover:border-primary/30 transition-colors">
               <div className="mb-3 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
                 <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
-              <h3 className="font-medium text-foreground mb-1">Save & Connect</h3>
+              <h3 className="font-medium text-foreground mb-1">Browse & Select</h3>
               <p className="text-sm text-muted-foreground">
-                Add your ancestral temple to your profile
+                Explore temples or add your own ancestral temple
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border/50 bg-card p-4 sm:p-5 hover:border-primary/30 transition-colors">
+              <div className="mb-3 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              </div>
+              <h3 className="font-medium text-foreground mb-1">Build Together</h3>
+              <p className="text-sm text-muted-foreground">
+                Help future devotees find their heritage
               </p>
             </div>
           </div>
@@ -60,13 +65,22 @@ const AncestralIntro = () => {
           {/* CTA Button */}
           <Link to="/ancestral/form">
             <Button size="lg" className="rounded-full px-8 h-12 sm:h-14 text-base font-medium shadow-lg shadow-primary/20">
-              Find My Ancestral Temple
+              Start Your Journey
             </Button>
           </Link>
 
           <p className="mt-4 text-sm text-muted-foreground">
-            Takes only 2 minutes to complete
+            Takes about 3-5 minutes • More details = better future matching
           </p>
+
+          {/* Info Banner */}
+          <div className="mt-8 p-4 rounded-xl bg-card border border-border/50 text-left">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Why we're collecting this data:</span> We're 
+              building an AI-powered matching system that will automatically connect families to their 
+              ancestral temples. Every submission helps train our system and benefits devotees across India.
+            </p>
+          </div>
         </div>
       </main>
     </div>

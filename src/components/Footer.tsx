@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Sparkles, Heart, Instagram, Youtube, Facebook, Twitter } from 'lucide-react';
+import { Sparkles, Heart, Instagram, Youtube, Facebook, Twitter, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { Button } from '@/components/ui/button';
+import FeedbackPopup, { useFeedbackTrigger } from '@/components/FeedbackPopup';
 
 const Footer = () => {
   const { t } = useLanguage();
-
+  const { isOpen, openFeedback, closeFeedback } = useFeedbackTrigger();
   return (
     <footer className="border-t border-border bg-gradient-to-b from-card to-card/80">
       {/* Spiritual Quote Banner */}
@@ -140,12 +142,26 @@ const Footer = () => {
                 Made with <Heart className="h-4 w-4 text-primary fill-primary" /> for devotees worldwide
               </p>
               
+              {/* Feedback Button */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={openFeedback}
+                className="gap-2 text-muted-foreground hover:text-primary"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Share Feedback
+              </Button>
+              
               {/* Copyright */}
               <p className="text-sm text-muted-foreground">
                 © {new Date().getFullYear()} Templo. All rights reserved.
               </p>
             </div>
           </div>
+
+          {/* Feedback Popup */}
+          <FeedbackPopup isOpen={isOpen} onClose={closeFeedback} />
         </div>
       </div>
     </footer>

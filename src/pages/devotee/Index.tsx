@@ -4,7 +4,7 @@ import FeaturedTemples from '@/components/FeaturedTemples';
 import TemplesNearYou from '@/components/TemplesNearYou';
 import Footer from '@/components/Footer';
 import SpiritualTip from '@/components/SpiritualTip';
-import LiveActivityCounter from '@/components/LiveActivityCounter';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -196,11 +196,6 @@ const Index = () => {
               </Button>
             </Link>
           </div>
-
-          {/* Live Activity Counter */}
-          <div className="mt-12">
-            <LiveActivityCounter />
-          </div>
         </div>
       </section>
 
@@ -216,9 +211,9 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border/50 bg-card/80 backdrop-blur-sm hover:-translate-y-1">
+              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border/50 bg-card/80 backdrop-blur-sm hover:-translate-y-1 w-full sm:w-[280px]">
                 <CardContent className="p-6 text-center">
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                     <feature.icon className="w-7 h-7 text-primary" />

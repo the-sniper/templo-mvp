@@ -11,7 +11,7 @@ export const featureFlags = {
   festivalTracking: true,
   poojaScheduleViewing: true,
   ancestralTemple: true,
-  liveDarshan: true,
+  liveDarshan: false, // Hidden for Phase I - no live streaming yet
   templeMusic: true,
   templeGallery: true,
   templeHistory: true,

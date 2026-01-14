@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, Heart, Clock, Bell, Calendar, Phone, Mail, Globe, ExternalLink, CreditCard, CalendarCheck, Palmtree, RefreshCw, ChevronDown, Users, Play, MessageCircle, Sparkles } from 'lucide-react';
+import { isFeatureEnabled } from '@/config/featureFlags';
 import { useTemple } from '@/context/TempleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
@@ -17,6 +18,7 @@ import TempleMusicPlayer from '@/components/TempleMusicPlayer';
 import LiveDarshan from '@/components/LiveDarshan';
 import TemplePatrons from '@/components/TemplePatrons';
 import TempleChannel from '@/components/TempleChannel';
+import FeedbackPopup from '@/components/FeedbackPopup';
 import { useState } from 'react';
 
 const TempleDetails = () => {
@@ -24,6 +26,7 @@ const TempleDetails = () => {
   const { getTempleById, loading, toggleFollowTemple, isFollowing } = useTemple();
   const { t } = useLanguage();
   const [patronsOpen, setPatronsOpen] = useState(false);
+  const [reviewPopupOpen, setReviewPopupOpen] = useState(false);
   
   const temple = id ? getTempleById(id) : undefined;
   const following = id ? isFollowing(id) : false;
@@ -163,6 +166,15 @@ const TempleDetails = () => {
               >
                 <Heart className={cn("h-5 w-5", following && "fill-current")} />
                 <span>{following ? t('following') : t('follow')}</span>
+              </Button>
+              <Button
+                onClick={() => setReviewPopupOpen(true)}
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full shrink-0"
+              >
+                <MessageCircle className="h-5 w-5" />
+                <span>Share Experience</span>
               </Button>
             </div>
           </div>
@@ -364,9 +376,10 @@ const TempleDetails = () => {
 
             {/* Explore Tab */}
             <TabsContent value="explore" className="mt-0 space-y-8">
-              {/* Live Darshan */}
-              <LiveDarshan templeId={temple.id} templeName={temple.name} />
-
+              {/* Live Darshan - Hidden via feature flag */}
+              {isFeatureEnabled('liveDarshan') && (
+                <LiveDarshan templeId={temple.id} templeName={temple.name} />
+              )}
               {/* Temple Music Player */}
               <TempleMusicPlayer templeName={temple.name} tracks={[]} />
 
@@ -391,6 +404,15 @@ const TempleDetails = () => {
       </main>
 
       <Footer />
+
+      {/* Review/Feedback Popup */}
+      <FeedbackPopup
+        isOpen={reviewPopupOpen}
+        onClose={() => setReviewPopupOpen(false)}
+        defaultTab="review"
+        templeName={temple.name}
+        templeId={temple.id}
+      />
     </div>
   );
 };

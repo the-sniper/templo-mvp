@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, X, Send, Star } from 'lucide-react';
+import { MessageCircle, X, Send, Star, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
   DialogContent,
@@ -15,15 +16,34 @@ import { useToast } from '@/hooks/use-toast';
 interface FeedbackPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultTab?: 'feedback' | 'review';
+  templeName?: string;
+  templeId?: string;
 }
 
-const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
+const FeedbackPopup = ({ isOpen, onClose, defaultTab = 'feedback', templeName, templeId }: FeedbackPopupProps) => {
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState(defaultTab);
+  
+  // Feedback state
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [category, setCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Review state
+  const [reviewRating, setReviewRating] = useState(0);
+  const [hoveredReviewRating, setHoveredReviewRating] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+  const [visitedTemple, setVisitedTemple] = useState('');
+
+  useEffect(() => {
+    setActiveTab(defaultTab);
+    if (templeName) {
+      setVisitedTemple(templeName);
+    }
+  }, [defaultTab, templeName]);
 
   const categories = [
     { id: 'feature', label: 'Feature Request' },
@@ -32,7 +52,7 @@ const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
     { id: 'other', label: 'Other' },
   ];
 
-  const handleSubmit = async () => {
+  const handleSubmitFeedback = async () => {
     if (!feedback.trim()) {
       toast({
         title: "Please share your thoughts",
@@ -44,9 +64,9 @@ const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
 
     setIsSubmitting(true);
     
-    // Store feedback in localStorage for now (ready for Supabase later)
     const feedbackData = {
       id: Date.now().toString(),
+      type: 'feedback',
       rating,
       category,
       feedback,
@@ -58,7 +78,6 @@ const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
     existingFeedback.push(feedbackData);
     localStorage.setItem('templo_feedback', JSON.stringify(existingFeedback));
 
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
     
     setIsSubmitting(false);
@@ -67,12 +86,74 @@ const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
       description: "Your input helps us serve the devotee community better.",
     });
     
-    // Reset form
     setRating(0);
     setFeedback('');
     setCategory('');
     onClose();
   };
+
+  const handleSubmitReview = async () => {
+    if (!reviewText.trim() || reviewRating === 0) {
+      toast({
+        title: "Please complete your review",
+        description: "Add a rating and share your temple experience.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    const reviewData = {
+      id: Date.now().toString(),
+      type: 'temple_review',
+      templeId: templeId || 'general',
+      templeName: visitedTemple || templeName || 'Unknown Temple',
+      rating: reviewRating,
+      review: reviewText,
+      timestamp: new Date().toISOString(),
+    };
+    
+    const existingReviews = JSON.parse(localStorage.getItem('templo_reviews') || '[]');
+    existingReviews.push(reviewData);
+    localStorage.setItem('templo_reviews', JSON.stringify(existingReviews));
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    setIsSubmitting(false);
+    toast({
+      title: "Thank you for your review! 🙏",
+      description: "Your experience helps other devotees discover sacred temples.",
+    });
+    
+    setReviewRating(0);
+    setReviewText('');
+    setVisitedTemple('');
+    onClose();
+  };
+
+  const renderStars = (currentRating: number, hovered: number, setRating: (r: number) => void, setHovered: (r: number) => void) => (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          onClick={() => setRating(star)}
+          onMouseEnter={() => setHovered(star)}
+          onMouseLeave={() => setHovered(0)}
+          className="p-1 transition-transform hover:scale-110"
+        >
+          <Star
+            className={`w-7 h-7 transition-colors ${
+              star <= (hovered || currentRating)
+                ? 'fill-primary text-primary'
+                : 'text-muted-foreground/30'
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -80,84 +161,125 @@ const FeedbackPopup = ({ isOpen, onClose }: FeedbackPopupProps) => {
         <DialogHeader>
           <DialogTitle className="font-serif text-xl flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-primary" />
-            Help Us Improve
+            Share Your Experience
           </DialogTitle>
           <DialogDescription>
-            Your feedback helps us create a better experience for all devotees.
+            Your input helps us improve and helps devotees discover temples.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 py-2">
-          {/* Rating */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">How is your experience so far?</Label>
-            <div className="flex gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoveredRating(star)}
-                  onMouseLeave={() => setHoveredRating(0)}
-                  className="p-1 transition-transform hover:scale-110"
-                >
-                  <Star
-                    className={`w-7 h-7 transition-colors ${
-                      star <= (hoveredRating || rating)
-                        ? 'fill-primary text-primary'
-                        : 'text-muted-foreground/30'
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'feedback' | 'review')} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 h-10">
+            <TabsTrigger value="feedback" className="gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5" />
+              App Feedback
+            </TabsTrigger>
+            <TabsTrigger value="review" className="gap-1.5">
+              <Building2 className="w-3.5 h-3.5" />
+              Temple Review
+            </TabsTrigger>
+          </TabsList>
+
+          {/* App Feedback Tab */}
+          <TabsContent value="feedback" className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">How is your experience so far?</Label>
+              {renderStars(rating, hoveredRating, setRating, setHoveredRating)}
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">What type of feedback?</Label>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setCategory(cat.id)}
+                    className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
+                      category === cat.id
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/50'
                     }`}
-                  />
-                </button>
-              ))}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Category */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">What type of feedback?</Label>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setCategory(cat.id)}
-                  className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
-                    category === cat.id
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-muted/50 text-muted-foreground border-border hover:border-primary/50'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
+            <div className="space-y-2">
+              <Label htmlFor="feedback" className="text-sm font-medium">
+                Share your thoughts
+              </Label>
+              <Textarea
+                id="feedback"
+                placeholder="Tell us what you love, what could be better, or any ideas you have..."
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                className="min-h-[100px] resize-none"
+              />
             </div>
-          </div>
 
-          {/* Feedback Text */}
-          <div className="space-y-2">
-            <Label htmlFor="feedback" className="text-sm font-medium">
-              Share your thoughts
-            </Label>
-            <Textarea
-              id="feedback"
-              placeholder="Tell us what you love, what could be better, or any ideas you have..."
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              className="min-h-[100px] resize-none"
-            />
-          </div>
+            <Button 
+              onClick={handleSubmitFeedback} 
+              disabled={isSubmitting}
+              className="w-full rounded-full gap-2"
+            >
+              {isSubmitting ? 'Sending...' : 'Send Feedback'}
+              <Send className="w-4 h-4" />
+            </Button>
+          </TabsContent>
 
-          {/* Submit Button */}
-          <Button 
-            onClick={handleSubmit} 
-            disabled={isSubmitting}
-            className="w-full rounded-full gap-2"
-          >
-            {isSubmitting ? 'Sending...' : 'Send Feedback'}
-            <Send className="w-4 h-4" />
-          </Button>
-        </div>
+          {/* Temple Review Tab */}
+          <TabsContent value="review" className="space-y-4 mt-4">
+            <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-sm text-muted-foreground">
+              <p>Share your experience visiting temples. Reviews from devoted users help other devotees discover sacred places.</p>
+            </div>
+
+            {!templeName && (
+              <div className="space-y-2">
+                <Label htmlFor="templeName" className="text-sm font-medium">
+                  Which temple did you visit?
+                </Label>
+                <input
+                  id="templeName"
+                  type="text"
+                  placeholder="e.g., Sri Venkateswara Temple, Tirupati"
+                  value={visitedTemple}
+                  onChange={(e) => setVisitedTemple(e.target.value)}
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Your rating</Label>
+              {renderStars(reviewRating, hoveredReviewRating, setReviewRating, setHoveredReviewRating)}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="review" className="text-sm font-medium">
+                Share your temple experience
+              </Label>
+              <Textarea
+                id="review"
+                placeholder="How was your darshan? What made it special? Any tips for other devotees?"
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                className="min-h-[100px] resize-none"
+              />
+            </div>
+
+            <Button 
+              onClick={handleSubmitReview} 
+              disabled={isSubmitting}
+              className="w-full rounded-full gap-2"
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Review'}
+              <Send className="w-4 h-4" />
+            </Button>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
@@ -168,7 +290,6 @@ export const useFeedbackTrigger = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Check if user has dismissed recently (within 24 hours)
     const lastDismissed = localStorage.getItem('templo_feedback_dismissed');
     if (lastDismissed) {
       const dismissedTime = parseInt(lastDismissed);
@@ -178,11 +299,9 @@ export const useFeedbackTrigger = () => {
       }
     }
 
-    // Random trigger between 30-90 seconds after page load
-    const randomDelay = Math.floor(Math.random() * 60000) + 30000; // 30-90 seconds
+    const randomDelay = Math.floor(Math.random() * 60000) + 30000;
     
     const timer = setTimeout(() => {
-      // 20% chance to show popup
       if (Math.random() < 0.2) {
         setIsOpen(true);
       }

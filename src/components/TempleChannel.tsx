@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { MessageCircle, Image, Calendar, Bell, User } from 'lucide-react';
+import { MessageCircle, Image, Calendar, Bell, Share2, Heart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import ShareButton from '@/components/ShareButton';
 
 interface ChannelPost {
   id: string;
@@ -19,7 +20,7 @@ interface TempleChannelProps {
 }
 
 const TempleChannel = ({ templeId, templeName }: TempleChannelProps) => {
-  // Mock channel posts
+  // Mock channel posts - In production, this would come from admin-posted updates
   const [posts] = useState<ChannelPost[]>([
     {
       id: '1',
@@ -75,99 +76,134 @@ const TempleChannel = ({ templeId, templeName }: TempleChannelProps) => {
 
   const getTypeBadge = (type: ChannelPost['type']) => {
     const styles = {
-      announcement: 'bg-primary/10 text-primary',
-      photo: 'bg-accent text-accent-foreground',
-      event: 'bg-secondary text-secondary-foreground',
-      update: 'bg-muted text-muted-foreground',
+      announcement: 'bg-primary/10 text-primary border-primary/20',
+      photo: 'bg-accent text-accent-foreground border-accent',
+      event: 'bg-secondary text-secondary-foreground border-secondary',
+      update: 'bg-muted text-muted-foreground border-border',
     };
     return styles[type];
   };
 
+  const getTypeLabel = (type: ChannelPost['type']) => {
+    const labels = {
+      announcement: 'Announcement',
+      photo: 'Photo Update',
+      event: 'Upcoming Event',
+      update: 'Temple Update',
+    };
+    return labels[type];
+  };
+
   return (
     <section>
-      <div className="flex items-center gap-3 mb-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-          <MessageCircle className="h-5 w-5 text-primary" />
+      {/* Section Header */}
+      <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <MessageCircle className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-foreground">Temple Updates</h2>
+            <p className="text-sm text-muted-foreground">Official announcements from {templeName}</p>
+          </div>
         </div>
-        <div>
-          <h2 className="font-serif text-2xl font-semibold text-foreground">Temple Updates</h2>
-          <p className="text-sm text-muted-foreground">Official announcements from {templeName}</p>
-        </div>
+        <Badge variant="outline" className="gap-1.5 border-primary/30">
+          <Bell className="h-3.5 w-3.5" />
+          {posts.length} Updates
+        </Badge>
       </div>
 
-      {/* Channel Container - WhatsApp-like */}
-      <Card className="border border-border/50 overflow-hidden">
-        {/* Channel Header */}
-        <CardHeader className="bg-primary/5 border-b border-border p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-              <User className="h-6 w-6 text-primary" />
-            </div>
-            <div className="flex-1">
-              <CardTitle className="text-base font-semibold">{templeName} Official</CardTitle>
-              <p className="text-sm text-muted-foreground">Temple Administrator</p>
-            </div>
-            <Badge variant="secondary" className="gap-1">
-              <Bell className="h-3 w-3" />
-              Channel
-            </Badge>
-          </div>
-        </CardHeader>
-
-        {/* Messages Container */}
-        <CardContent className="p-0 max-h-[500px] overflow-y-auto bg-accent/20">
-          <div className="p-4 space-y-4">
-            {posts.length === 0 ? (
-              <div className="py-12 text-center">
-                <MessageCircle className="mx-auto mb-3 h-12 w-12 text-muted-foreground/50" />
-                <p className="text-muted-foreground">No updates yet</p>
-              </div>
-            ) : (
-              posts.map((post) => (
-                <div
-                  key={post.id}
-                  className="flex flex-col max-w-[85%] ml-auto"
-                >
-                  <div className="bg-card rounded-2xl rounded-tr-sm p-4 shadow-sm border border-border/50">
-                    {/* Type Badge */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge className={cn("gap-1 text-xs capitalize", getTypeBadge(post.type))}>
-                        {getTypeIcon(post.type)}
-                        {post.type}
-                      </Badge>
-                    </div>
-                    
-                    {/* Content */}
-                    <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
-                    
-                    {/* Image if present */}
-                    {post.image && (
-                      <div className="mt-3 rounded-xl overflow-hidden">
-                        <img 
-                          src={post.image} 
-                          alt="Post" 
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Timestamp */}
-                    <p className="text-xs text-muted-foreground mt-2 text-right">
-                      {formatTime(post.timestamp)}
-                    </p>
-                  </div>
+      {/* Posts Feed - Full Width Cards */}
+      <div className="space-y-4">
+        {posts.length === 0 ? (
+          <Card className="border border-border/50">
+            <CardContent className="py-12 text-center">
+              <MessageCircle className="mx-auto mb-3 h-12 w-12 text-muted-foreground/50" />
+              <p className="text-muted-foreground">No updates yet</p>
+              <p className="text-sm text-muted-foreground/70 mt-1">Check back soon for temple announcements</p>
+            </CardContent>
+          </Card>
+        ) : (
+          posts.map((post) => (
+            <Card 
+              key={post.id} 
+              className="border border-border/50 overflow-hidden transition-all hover:border-primary/30 hover:shadow-sm"
+            >
+              <CardContent className="p-0">
+                {/* Post Header with Type Badge */}
+                <div className="flex items-center justify-between gap-3 p-4 pb-0">
+                  <Badge 
+                    variant="outline" 
+                    className={cn("gap-1.5 text-xs font-medium capitalize", getTypeBadge(post.type))}
+                  >
+                    {getTypeIcon(post.type)}
+                    {getTypeLabel(post.type)}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground">
+                    {formatTime(post.timestamp)}
+                  </span>
                 </div>
-              ))
-            )}
-          </div>
-        </CardContent>
 
-        {/* Footer Note */}
-        <div className="bg-muted/50 p-3 text-center border-t border-border">
-          <p className="text-xs text-muted-foreground">
-            Only temple administrators can post in this channel
+                {/* Post Content */}
+                <div className="p-4">
+                  <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                    {post.content}
+                  </p>
+                </div>
+                
+                {/* Image if present */}
+                {post.image && (
+                  <div className="px-4 pb-4">
+                    <div className="rounded-xl overflow-hidden bg-muted">
+                      <img 
+                        src={post.image} 
+                        alt="Temple update" 
+                        className="w-full h-56 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/placeholder.svg';
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Post Actions */}
+                <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-muted-foreground hover:text-primary rounded-full">
+                      <Heart className="h-4 w-4" />
+                      <span className="text-xs">Helpful</span>
+                    </Button>
+                  </div>
+                  <ShareButton
+                    title={`${templeName} - ${getTypeLabel(post.type)}`}
+                    text={post.content}
+                    url={window.location.href}
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 gap-1.5 text-muted-foreground hover:text-primary rounded-full"
+                    showLabel={true}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Enable Notifications CTA */}
+      <Card className="mt-6 border-2 border-dashed border-primary/30 bg-primary/5">
+        <CardContent className="py-6 text-center">
+          <Bell className="mx-auto mb-3 h-8 w-8 text-primary/70" />
+          <h3 className="font-medium text-foreground mb-1">Stay Updated</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Get notified when {templeName} posts new updates
           </p>
-        </div>
+          <Button variant="default" size="sm" className="rounded-full gap-2">
+            <Bell className="h-4 w-4" />
+            Enable Notifications
+          </Button>
+        </CardContent>
       </Card>
     </section>
   );

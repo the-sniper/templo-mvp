@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, CreditCard, Smartphone, Building2, Gift, Calendar } from 'lucide-react';
+import { ArrowLeft, Heart, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTemple } from '@/context/TempleContext';
 import { useDonation } from '@/context/DonationContext';
 import { useToast } from '@/hooks/use-toast';
+import { trackEvent } from '@/utils/analytics';
 
-const predefinedAmounts = [101, 251, 501, 1001, 2501, 5001];
+// Culturally appropriate amounts
+const predefinedAmounts = [51, 101, 501, 1001];
+
+// Donation purposes
+const donationPurposes = [
+  { value: 'annadhanam', label: 'Annadhanam (Food Offering)' },
+  { value: 'archana', label: 'Archana' },
+  { value: 'maintenance', label: 'Temple Maintenance' },
+  { value: 'festival', label: 'Festival Contribution' },
+  { value: 'general', label: 'General Donation' },
+];
 
 const DonatePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,22 +32,24 @@ const DonatePage = () => {
   
   const temple = getTempleById(id || '');
   
-  const [amount, setAmount] = useState<number>(501);
+  const [amount, setAmount] = useState<number>(101);
   const [customAmount, setCustomAmount] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'netbanking'>('upi');
+  const [purpose, setPurpose] = useState('general');
   const [donorName, setDonorName] = useState('');
   const [donorPhone, setDonorPhone] = useState('');
-  const [donorEmail, setDonorEmail] = useState('');
-  const [occasion, setOccasion] = useState('');
-  const [inMemoryOf, setInMemoryOf] = useState('');
+  const [dedicationName, setDedicationName] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    trackEvent('page_view', { page: 'donate', templeId: id });
+  }, [id]);
 
   if (!temple) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center overflow-x-hidden">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">Temple not found</p>
-          <Link to="/" className="text-primary hover:underline">Go back home</Link>
+          <Link to="/dashboard" className="text-primary hover:underline">Go to Dashboard</Link>
         </div>
       </div>
     );
@@ -77,9 +89,16 @@ const DonatePage = () => {
       return;
     }
 
+    trackEvent('donate_initiated', {
+      templeId: temple.id,
+      templeName: temple.name,
+      amount,
+      purpose,
+    });
+
     setIsProcessing(true);
     
-    // Simulate payment processing
+    // Simulate UPI payment processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     const donation = addDonation({
@@ -88,8 +107,13 @@ const DonatePage = () => {
       amount,
       donorName: donorName.trim(),
       donorPhone: donorPhone.trim(),
-      donorEmail: donorEmail.trim() || undefined,
-      paymentMethod,
+      paymentMethod: 'upi',
+    });
+
+    trackEvent('donate_success', {
+      templeId: temple.id,
+      amount,
+      donationId: donation.id,
     });
     
     setIsProcessing(false);
@@ -104,30 +128,37 @@ const DonatePage = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="min-w-0 flex-1">
-            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">Donate</h1>
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">Make an Offering</h1>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">{temple.name}</p>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-6 max-w-lg">
+        {/* Trust Banner */}
+        <div className="mb-6 p-3 rounded-xl bg-primary/5 border border-primary/10 text-center">
+          <p className="text-sm text-foreground">
+            ✅ 100% direct to temple account • UPI supported • Receipt generated
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Amount Selection */}
           <Card>
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
                 <Heart className="h-5 w-5 text-primary" />
                 Select Amount
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-4 gap-2 mb-4">
                 {predefinedAmounts.map((preset) => (
                   <Button
                     key={preset}
                     type="button"
                     variant={amount === preset && !customAmount ? "default" : "outline"}
-                    className="h-12"
+                    className="h-14 text-lg font-semibold"
                     onClick={() => handleAmountSelect(preset)}
                   >
                     ₹{preset}
@@ -135,16 +166,16 @@ const DonatePage = () => {
                 ))}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="customAmount">Or enter custom amount</Label>
+                <Label htmlFor="customAmount">Custom amount</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-lg">₹</span>
                   <Input
                     id="customAmount"
                     type="number"
                     placeholder="Enter amount"
                     value={customAmount}
                     onChange={(e) => handleCustomAmountChange(e.target.value)}
-                    className="pl-8"
+                    className="pl-8 h-12 text-lg"
                     min="1"
                   />
                 </div>
@@ -152,69 +183,30 @@ const DonatePage = () => {
             </CardContent>
           </Card>
 
-          {/* Payment Method */}
+          {/* Purpose Selection */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Payment Method</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Purpose of Donation</CardTitle>
             </CardHeader>
             <CardContent>
-              <RadioGroup value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as typeof paymentMethod)}>
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer">
-                  <RadioGroupItem value="upi" id="upi" />
-                  <Smartphone className="h-5 w-5 text-primary" />
-                  <Label htmlFor="upi" className="flex-1 cursor-pointer">UPI (GPay, PhonePe, Paytm)</Label>
-                </div>
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer">
-                  <RadioGroupItem value="card" id="card" />
-                  <CreditCard className="h-5 w-5 text-primary" />
-                  <Label htmlFor="card" className="flex-1 cursor-pointer">Credit / Debit Card</Label>
-                </div>
-                <div className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-accent/50 cursor-pointer">
-                  <RadioGroupItem value="netbanking" id="netbanking" />
-                  <Building2 className="h-5 w-5 text-primary" />
-                  <Label htmlFor="netbanking" className="flex-1 cursor-pointer">Net Banking</Label>
-                </div>
-              </RadioGroup>
-            </CardContent>
-          </Card>
-
-          {/* Special Occasion / In Memory Of */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Gift className="h-5 w-5 text-primary" />
-                Dedicate This Donation
-              </CardTitle>
-              <CardDescription>Optional: Add a personal touch to your offering</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="occasion">On Occasion Of</Label>
-                <Input
-                  id="occasion"
-                  placeholder="e.g., Birthday, Anniversary, Festival"
-                  value={occasion}
-                  onChange={(e) => setOccasion(e.target.value)}
-                  maxLength={100}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="inMemoryOf">In Loving Memory Of</Label>
-                <Textarea
-                  id="inMemoryOf"
-                  placeholder="Name(s) of departed loved ones"
-                  value={inMemoryOf}
-                  onChange={(e) => setInMemoryOf(e.target.value)}
-                  maxLength={200}
-                  rows={2}
-                />
-              </div>
+              <Select value={purpose} onValueChange={setPurpose}>
+                <SelectTrigger className="h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {donationPurposes.map((p) => (
+                    <SelectItem key={p.value} value={p.value}>
+                      {p.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </CardContent>
           </Card>
 
           {/* Donor Details */}
           <Card>
-            <CardHeader>
+            <CardHeader className="pb-3">
               <CardTitle className="text-base">Your Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -226,7 +218,7 @@ const DonatePage = () => {
                   value={donorName}
                   onChange={(e) => setDonorName(e.target.value)}
                   required
-                  maxLength={100}
+                  className="h-12"
                 />
               </div>
               <div className="space-y-2">
@@ -238,19 +230,21 @@ const DonatePage = () => {
                   value={donorPhone}
                   onChange={(e) => setDonorPhone(e.target.value)}
                   required
-                  maxLength={15}
+                  className="h-12"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="donorEmail">Email (optional)</Label>
+                <Label htmlFor="dedicationName">Dedication Name (optional)</Label>
                 <Input
-                  id="donorEmail"
-                  type="email"
-                  placeholder="Enter email for receipt"
-                  value={donorEmail}
-                  onChange={(e) => setDonorEmail(e.target.value)}
-                  maxLength={255}
+                  id="dedicationName"
+                  placeholder="In the name of..."
+                  value={dedicationName}
+                  onChange={(e) => setDedicationName(e.target.value)}
+                  className="h-12"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Name to be mentioned during the offering
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -265,14 +259,14 @@ const DonatePage = () => {
               <>Processing...</>
             ) : (
               <>
-                <Heart className="h-5 w-5" />
-                Donate ₹{amount.toLocaleString()}
+                <Smartphone className="h-5 w-5" />
+                Pay ₹{amount.toLocaleString()} via UPI
               </>
             )}
           </Button>
 
           <p className="text-xs text-center text-muted-foreground">
-            Your donation is secure. A receipt will be generated after successful payment.
+            Secure payment • Receipt will be generated after payment
           </p>
         </form>
       </main>

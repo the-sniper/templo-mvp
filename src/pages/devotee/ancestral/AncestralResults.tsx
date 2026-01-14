@@ -1,36 +1,110 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Search, Plus, Info } from 'lucide-react';
+import { ArrowLeft, MapPin, Search, Plus, Sparkles, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useAncestral, SuggestedTemple } from '@/context/AncestralContext';
 import Header from '@/components/Header';
+import FamilyConfirmationModal from '@/components/FamilyConfirmationModal';
+import { trackEvent } from '@/utils/analytics';
+
+// Confidence scoring based on matching criteria
+const getConfidenceLevel = (temple: SuggestedTemple, formData: any): { level: 'high' | 'medium' | 'low', reason: string } => {
+  let score = 0;
+  const reasons: string[] = [];
+  
+  // Check district match
+  if (formData.district && temple.location.toLowerCase().includes(formData.district.toLowerCase())) {
+    score += 2;
+    reasons.push('district');
+  }
+  
+  // Check state match
+  if (formData.state && temple.location.toLowerCase().includes(formData.state.toLowerCase())) {
+    score += 1;
+    reasons.push('state');
+  }
+  
+  // Check deity match (simulated - in real app would check temple.deity)
+  if (formData.deityName) {
+    score += 1;
+    reasons.push('deity');
+  }
+  
+  // Random boost for demo (remove in production)
+  score += Math.floor(Math.random() * 2);
+  
+  if (score >= 3) {
+    return { level: 'high', reason: `Matches ${reasons.join(' + ')}` };
+  } else if (score >= 2) {
+    return { level: 'medium', reason: `Matches ${reasons.join(' + ')}` };
+  } else {
+    return { level: 'low', reason: 'Nearby location' };
+  }
+};
+
+const confidenceBadgeStyles = {
+  high: 'bg-green-500/10 text-green-700 border-green-500/20',
+  medium: 'bg-amber-500/10 text-amber-700 border-amber-500/20',
+  low: 'bg-muted text-muted-foreground border-border',
+};
 
 const AncestralResults = () => {
   const navigate = useNavigate();
-  const { suggestedTemples, setSelectedTemple, formData } = useAncestral();
+  const { suggestedTemples, setSelectedTemple, formData, saveAncestralTemple } = useAncestral();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingTemple, setPendingTemple] = useState<SuggestedTemple | null>(null);
 
-  // Filter temples by user's state if available
-  const templesInState = formData.state 
-    ? suggestedTemples.filter(t => t.location.toLowerCase().includes(formData.state.toLowerCase()))
-    : suggestedTemples;
+  useEffect(() => {
+    trackEvent('page_view', { page: 'ancestral_results' });
+  }, []);
 
-  const filteredTemples = (templesInState.length > 0 ? templesInState : suggestedTemples).filter((temple) =>
-    temple.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    temple.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter and sort temples by confidence
+  const processedTemples = suggestedTemples
+    .map(temple => ({
+      ...temple,
+      confidence: getConfidenceLevel(temple, formData),
+    }))
+    .filter(temple =>
+      temple.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      temple.location.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const order = { high: 0, medium: 1, low: 2 };
+      return order[a.confidence.level] - order[b.confidence.level];
+    })
+    .slice(0, 5); // Show top 5 matches
 
-  const handleSelectTemple = (temple: SuggestedTemple) => {
-    setSelectedTemple({
-      id: temple.id,
-      name: temple.name,
-      location: temple.location,
-      image: temple.image,
-      isCustom: false,
+  const handleSelectTemple = (temple: SuggestedTemple & { confidence: { level: string; reason: string } }) => {
+    trackEvent('ancestral_save_temple', {
+      templeId: temple.id,
+      templeName: temple.name,
+      confidence: temple.confidence.level,
     });
-    navigate('/ancestral/confirmation');
+    
+    setPendingTemple(temple);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmTemple = () => {
+    if (pendingTemple) {
+      const templeData = {
+        id: pendingTemple.id,
+        name: pendingTemple.name,
+        location: pendingTemple.location,
+        image: pendingTemple.image,
+        isCustom: false,
+      };
+      
+      setSelectedTemple(templeData);
+      saveAncestralTemple(templeData);
+      
+      navigate('/dashboard');
+      
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -39,49 +113,27 @@ const AncestralResults = () => {
 
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 py-4">
-        <Link to="/ancestral/form" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <Link to="/ancestral/start" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" />
-          Back to Form
+          Edit Details
         </Link>
       </div>
 
       <main className="container mx-auto px-4 pb-8">
-        <div className="mx-auto max-w-2xl">
-          {/* Always show "building database" message in Phase I */}
-          <div className="text-center mb-8">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-              <span className="text-4xl">🏗️</span>
+        <div className="mx-auto max-w-lg">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+              <Sparkles className="h-8 w-8 text-primary" />
             </div>
             
-            <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20">
-              Phase I - Building Database
-            </Badge>
-            
-            <h1 className="mb-4 font-serif text-xl sm:text-2xl font-bold text-foreground">
-              We're Still Building Our Ancestral Temple Database
+            <h1 className="mb-2 font-serif text-xl sm:text-2xl font-bold text-foreground">
+              Possible Ancestral Temples
             </h1>
             
-            <p className="mb-6 text-muted-foreground">
-              Thank you for sharing your details! We're collecting information from devotees 
-              like you to build an AI-powered matching system. In the meantime, you can 
-              browse temples below or add your own.
+            <p className="text-sm text-muted-foreground">
+              Based on {formData.nativeVillage}, {formData.district}
             </p>
-
-            {/* Contribution Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border/50 text-sm">
-              <span className="text-primary">✓</span>
-              <span className="text-muted-foreground">Your details have been recorded</span>
-            </div>
-          </div>
-
-          {/* Info Box */}
-          <div className="mb-6 p-4 rounded-xl bg-card border border-primary/20 flex gap-3">
-            <Info className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-            <div className="text-sm text-muted-foreground">
-              <p className="font-medium text-foreground mb-1">How this helps:</p>
-              <p>Every submission trains our AI to better match families with their ancestral temples. 
-              You're helping build something that will benefit devotees across India!</p>
-            </div>
           </div>
 
           {/* Search */}
@@ -89,62 +141,65 @@ const AncestralResults = () => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder={`Search temples${formData.state ? ` in ${formData.state}` : ''}...`}
+                placeholder="Search temples..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12"
               />
             </div>
-            {formData.state && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                Showing temples near {formData.state}. Search to find more.
-              </p>
-            )}
           </div>
 
-          {/* Temple List */}
-          <div className="mb-6 space-y-3">
-            {filteredTemples.length === 0 ? (
+          {/* Temple List with Confidence Scores */}
+          <div className="space-y-4 mb-6">
+            {processedTemples.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-muted-foreground mb-4">No temples found matching your search.</p>
-                <Link to="/ancestral/add-temple">
-                  <Button variant="outline" className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Add Your Ancestral Temple
-                  </Button>
-                </Link>
               </div>
             ) : (
-              filteredTemples.map((temple) => (
+              processedTemples.map((temple) => (
                 <div
                   key={temple.id}
-                  className="overflow-hidden rounded-xl border border-border bg-card hover:border-primary/30 transition-all"
+                  className="overflow-hidden rounded-2xl border border-border bg-card hover:border-primary/30 transition-all"
                 >
-                  <div className="flex flex-col sm:flex-row">
+                  <div className="flex">
                     <img
                       src={temple.image}
                       alt={temple.name}
-                      className="h-32 w-full object-cover sm:h-auto sm:w-32"
+                      className="h-32 w-28 object-cover shrink-0"
                       onError={(e) => {
                         e.currentTarget.src = '/placeholder.svg';
                       }}
                     />
-                    <div className="flex flex-1 flex-col justify-between p-4">
-                      <div>
-                        <h3 className="mb-1 font-serif text-lg font-bold text-foreground">
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="flex-1">
+                        <h3 className="font-serif text-base font-bold text-foreground leading-tight mb-1">
                           {temple.name}
                         </h3>
-                        <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <p className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
                           <MapPin className="h-3 w-3" />
                           {temple.location}
                         </p>
+                        
+                        {/* Confidence Badge */}
+                        <Badge 
+                          variant="outline" 
+                          className={`text-xs ${confidenceBadgeStyles[temple.confidence.level]}`}
+                        >
+                          {temple.confidence.level === 'high' && '🎯 '}
+                          {temple.confidence.level.toUpperCase()} MATCH
+                        </Badge>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {temple.confidence.reason}
+                        </p>
                       </div>
+                      
                       <Button
                         onClick={() => handleSelectTemple(temple)}
-                        variant="outline"
-                        className="mt-3 w-full sm:w-auto"
+                        size="sm"
+                        className="mt-3 rounded-full gap-1"
                       >
-                        Select as Ancestral Temple
+                        <CheckCircle className="h-4 w-4" />
+                        Save as My Temple
                       </Button>
                     </div>
                   </div>
@@ -153,23 +208,41 @@ const AncestralResults = () => {
             )}
           </div>
 
-          {/* Add Custom Temple CTA */}
-          <div className="rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5 p-6 text-center">
+          {/* Didn't Find CTA */}
+          <div className="rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5 p-6 text-center">
             <h3 className="font-medium text-foreground mb-2">
-              Can't find your ancestral temple?
+              Didn't find your temple?
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Help us grow the database by adding it yourself!
+              Add more details or manually add your ancestral temple
             </p>
-            <Link to="/ancestral/add-temple">
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Your Ancestral Temple
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <Link to="/ancestral/start">
+                <Button variant="outline" size="sm" className="rounded-full w-full sm:w-auto">
+                  Improve Details
+                </Button>
+              </Link>
+              <Link to="/ancestral/add-temple">
+                <Button size="sm" className="rounded-full gap-1 w-full sm:w-auto">
+                  <Plus className="h-4 w-4" />
+                  Add Temple
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
+
+      {/* Family Confirmation Modal */}
+      {pendingTemple && (
+        <FamilyConfirmationModal
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          templeName={pendingTemple.name}
+          templeLocation={pendingTemple.location}
+          onConfirm={handleConfirmTemple}
+        />
+      )}
     </div>
   );
 };

@@ -94,8 +94,9 @@ const App = () => (
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/how-to" element={<HowTo />} />
                         
-                        {/* Ancestral Temple Flow */}
+                        {/* Ancestral Temple Flow - MVP Primary */}
                         <Route path="/ancestral" element={<AncestralIntro />} />
+                        <Route path="/ancestral/start" element={<AncestralForm />} />
                         <Route path="/ancestral/form" element={<AncestralForm />} />
                         <Route path="/ancestral/searching" element={<AncestralSearching />} />
                         <Route path="/ancestral/results" element={<AncestralResults />} />
@@ -108,9 +109,11 @@ const App = () => (
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/my-account" element={<Dashboard />} />
                         
+                        {/* MVP Donation Flow - Enabled */}
+                        <Route path="/donate/:id" element={<DonatePage />} />
+                        <Route path="/donation/receipt/:id" element={<DonationReceipt />} />
+                        
                         {/* Phase II Features - Coming Soon */}
-                        <Route path="/donate/:id" element={<ComingSoon />} />
-                        <Route path="/donation/receipt/:id" element={<ComingSoon />} />
                         <Route path="/recurring-donate/:id" element={<ComingSoon />} />
                         <Route path="/recurring-donation/confirmation/:id" element={<ComingSoon />} />
                         <Route path="/book/:id" element={<ComingSoon />} />
@@ -134,6 +137,7 @@ const App = () => (
                         <Route path="/admin/inventory" element={<AdminInventory />} />
                         <Route path="/admin/staff" element={<AdminStaff />} />
                         <Route path="/admin/settings" element={<AdminSettings />} />
+                        <Route path="/admin/metrics" element={<AdminMetrics />} />
                         {/* 404 */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>

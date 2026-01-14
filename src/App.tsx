@@ -63,6 +63,7 @@ import AdminGallery from "@/pages/admin/Gallery";
 import AdminInventory from "@/pages/admin/Inventory";
 import AdminStaff from "@/pages/admin/Staff";
 import AdminSettings from "@/pages/admin/Settings";
+import AdminMetrics from "@/pages/admin/Metrics";
 
 const queryClient = new QueryClient();
 

@@ -1,23 +1,25 @@
-// Feature flags for Phase I / Phase II rollout
-// Phase I: Temple discovery, following, channel updates, ancestral search (data collection)
-// Phase II: Donations, bookings, pooja requests, inventory, patrons
+// Feature flags for Phase I Tamil Nadu MVP
+// Focus: Ancestral temple completion, WhatsApp sharing, festival reminders, UPI donations
 
 export const featureFlags = {
-  // Phase I Features - ENABLED
-  templeDiscovery: true,
-  templeDetails: true,
-  templeFollowing: true,
-  templeChannel: true,
-  festivalTracking: true,
-  poojaScheduleViewing: true,
+  // Phase 1 MVP - Core Features ENABLED
   ancestralTemple: true,
-  liveDarshan: false, // Hidden for Phase I - no live streaming yet
-  templeMusic: true,
-  templeGallery: true,
-  templeHistory: true,
+  templeFollowing: true,
+  festivalTracking: true,
+  donations: true,              // Enable for MVP validation
+  templeDetails: true,
+  poojaScheduleViewing: true,
+  templeChannel: true,
+  
+  // Phase 1 MVP - Non-Core Features DISABLED
+  templeMusic: false,           // Hide for MVP
+  templeGallery: false,         // Hide for MVP
+  templeHistory: false,         // Hide for MVP
+  liveDarshan: false,           // No live streaming
+  genericTempleBrowsing: false, // De-emphasize generic browsing
+  templeDiscovery: false,       // Focus on ancestral, not discovery
   
   // Phase II Features - DISABLED
-  donations: false,
   recurringDonations: false,
   slotBooking: false,
   poojaRequests: false,

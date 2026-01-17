@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { CheckCircle, Download, Home, Printer, Receipt, Building2, User, Phone, Mail, CreditCard, Calendar, Hash } from 'lucide-react';
+import { CheckCircle, Download, Home, Printer, Receipt, Building2, User, Phone, CreditCard, Calendar, Hash, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useDonation } from '@/context/DonationContext';
-import ShareButton from '@/components/ShareButton';
 import Header from '@/components/Header';
+import { trackEvent } from '@/utils/analytics';
 
 const DonationReceipt = () => {
   const { id } = useParams<{ id: string }>();
   const { donations } = useDonation();
   
   const donation = donations.find(d => d.id === id);
+
+  useEffect(() => {
+    if (donation) {
+      trackEvent('donate_success', { 
+        amount: donation.amount,
+        templeName: donation.templeName,
+        receiptId: donation.receiptNumber
+      });
+    }
+  }, [donation]);
 
   if (!donation) {
     return (
@@ -23,8 +33,8 @@ const DonationReceipt = () => {
             <Receipt className="mx-auto mb-4 h-16 w-16 text-muted-foreground opacity-50" />
             <h2 className="mb-2 text-xl font-semibold text-foreground">Receipt not found</h2>
             <p className="text-muted-foreground mb-4">The donation receipt you're looking for doesn't exist.</p>
-            <Link to="/">
-              <Button>Go back home</Button>
+            <Link to="/dashboard">
+              <Button>Go to Dashboard</Button>
             </Link>
           </div>
         </div>
@@ -47,13 +57,38 @@ const DonationReceipt = () => {
     window.print();
   };
 
+  const handleShareWhatsApp = () => {
+    const message = encodeURIComponent(
+      `🙏 Donation Receipt\n\n` +
+      `Temple: ${donation.templeName}\n` +
+      `Amount: ₹${donation.amount.toLocaleString()}\n` +
+      `Receipt: ${donation.receiptNumber}\n` +
+      `Date: ${formattedDate}\n\n` +
+      `Thank you for your offering!`
+    );
+    window.open(`https://wa.me/?text=${message}`, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-background print:bg-white overflow-x-hidden">
       <div className="print:hidden">
         <Header />
       </div>
       
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-lg">
+        {/* Success Header */}
+        <div className="text-center mb-8 print:hidden">
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+            <CheckCircle className="h-10 w-10 text-green-600" />
+          </div>
+          <h1 className="font-serif text-2xl font-bold text-foreground mb-2">
+            Donation Successful
+          </h1>
+          <p className="text-muted-foreground">
+            Thank you for your generous offering
+          </p>
+        </div>
+
         {/* Receipt Card */}
         <Card className="mb-6 overflow-hidden border-2 print:border print:shadow-none">
           {/* Receipt Header */}
@@ -63,7 +98,7 @@ const DonationReceipt = () => {
               <span className="font-semibold text-foreground">Templo</span>
             </div>
             <h2 className="text-lg font-bold text-foreground">DONATION RECEIPT</h2>
-            <p className="text-sm text-muted-foreground mt-1">Official Receipt for Tax Purposes</p>
+            <p className="text-sm text-muted-foreground mt-1">Official Receipt</p>
           </div>
 
           <CardContent className="p-6">
@@ -72,7 +107,7 @@ const DonationReceipt = () => {
               <p className="text-sm text-muted-foreground mb-1">Amount Donated</p>
               <p className="text-4xl font-bold text-primary">₹{donation.amount.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-2">
-                {donation.amount > 0 && `(${numberToWords(donation.amount)} Rupees Only)`}
+                ({numberToWords(donation.amount)} Rupees Only)
               </p>
             </div>
 
@@ -81,13 +116,13 @@ const DonationReceipt = () => {
             {/* Temple Details */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Temple Details
+                Temple
               </h3>
               <div className="flex items-start gap-3 p-4 bg-accent/30 rounded-lg">
                 <Building2 className="h-5 w-5 text-primary mt-0.5" />
                 <div>
                   <p className="font-semibold text-foreground">{donation.templeName}</p>
-                  <p className="text-sm text-muted-foreground">Registered Temple</p>
+                  <p className="text-sm text-muted-foreground">Verified Temple</p>
                 </div>
               </div>
             </div>
@@ -95,49 +130,33 @@ const DonationReceipt = () => {
             {/* Donor Details */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Donor Information
+                Donor
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Name:</span>
                   <span className="font-medium text-foreground">{donation.donorName}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Phone:</span>
-                  <span className="font-medium text-foreground">{donation.donorPhone}</span>
+                  <span className="text-foreground">{donation.donorPhone}</span>
                 </div>
-                {donation.donorEmail && (
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Email:</span>
-                    <span className="font-medium text-foreground">{donation.donorEmail}</span>
-                  </div>
-                )}
               </div>
             </div>
 
             {/* Payment Details */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                Payment Details
+                Payment
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <CreditCard className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Method:</span>
-                  <span className="font-medium text-foreground uppercase">{donation.paymentMethod}</span>
+                  <span className="text-foreground uppercase">{donation.paymentMethod}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Date:</span>
-                  <span className="font-medium text-foreground">{formattedDate}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Time:</span>
-                  <span className="font-medium text-foreground">{formattedTime}</span>
+                  <span className="text-foreground">{formattedDate} at {formattedTime}</span>
                 </div>
               </div>
             </div>
@@ -149,7 +168,7 @@ const DonationReceipt = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Hash className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Receipt Number</span>
+                  <span className="text-sm text-muted-foreground">Receipt No.</span>
                 </div>
                 <span className="font-mono font-medium text-foreground">{donation.receiptNumber}</span>
               </div>
@@ -158,24 +177,24 @@ const DonationReceipt = () => {
                   <Hash className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">Transaction ID</span>
                 </div>
-                <span className="font-mono font-medium text-foreground">{donation.transactionId}</span>
+                <span className="font-mono font-medium text-foreground text-xs">{donation.transactionId}</span>
               </div>
             </div>
 
-            {/* Occasion/Dedication */}
+            {/* Purpose/Dedication */}
             {(donation.occasion || donation.inMemoryOf) && (
               <>
                 <Separator className="my-6" />
                 <div className="space-y-2">
                   {donation.occasion && (
                     <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Occasion</span>
-                      <span className="font-medium text-foreground">{donation.occasion}</span>
+                      <span className="text-sm text-muted-foreground">Purpose</span>
+                      <span className="font-medium text-foreground capitalize">{donation.occasion}</span>
                     </div>
                   )}
                   {donation.inMemoryOf && (
                     <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">In Memory Of</span>
+                      <span className="text-sm text-muted-foreground">Dedication</span>
                       <span className="font-medium text-foreground">{donation.inMemoryOf}</span>
                     </div>
                   )}
@@ -187,44 +206,34 @@ const DonationReceipt = () => {
           {/* Receipt Footer */}
           <div className="bg-accent/30 p-4 text-center border-t border-border">
             <p className="text-xs text-muted-foreground">
-              This is a computer-generated receipt and does not require a signature.
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
               100% of your donation goes directly to the temple.
             </p>
           </div>
         </Card>
 
-        {/* Actions - Hidden in Print */}
+        {/* Actions */}
         <div className="space-y-3 print:hidden">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <Button variant="outline" className="h-12 rounded-full" onClick={handlePrint}>
               <Printer className="h-4 w-4 mr-2" />
               Print
             </Button>
-            <Button variant="outline" className="h-12 rounded-full">
-              <Download className="h-4 w-4 mr-2" />
-              PDF
+            <Button 
+              variant="outline" 
+              className="h-12 rounded-full bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/20"
+              onClick={handleShareWhatsApp}
+            >
+              <MessageCircle className="h-4 w-4 mr-2" />
+              WhatsApp
             </Button>
-            <ShareButton
-              title={`Donation to ${donation.templeName}`}
-              text={`🙏 I donated ₹${donation.amount.toLocaleString()} to ${donation.templeName}. Join me in supporting our temples!`}
-              url={window.location.href}
-              variant="outline"
-              className="h-12 rounded-full"
-            />
           </div>
-          <Link to="/" className="block">
+          <Link to="/dashboard" className="block">
             <Button variant="default" className="w-full h-12 rounded-full">
               <Home className="h-4 w-4 mr-2" />
-              Back to Home
+              Back to Dashboard
             </Button>
           </Link>
         </div>
-
-        <p className="text-xs text-center text-muted-foreground mt-6 print:hidden">
-          For any queries regarding this donation, please contact the temple administration.
-        </p>
       </main>
     </div>
   );

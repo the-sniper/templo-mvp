@@ -10,6 +10,7 @@ export type PMFEvent =
   | 'reminder_opt_in'           // User opts into festival reminders
   | 'donate_initiated'          // User clicks "Pay via UPI"
   | 'donate_success'            // Payment completed
+  | 'dashboard_view'            // User views dashboard
   | 'page_view';                // Page view tracking
 
 interface AnalyticsEvent {
@@ -77,23 +78,42 @@ export const getPMFMetrics = () => {
   const showMatches = getEventsByType('ancestral_show_matches').length;
   const saveTemple = getEventsByType('ancestral_save_temple').length;
   const whatsappShares = getEventsByType('ancestral_whatsapp_share').length;
+  const skipShares = getEventsByType('ancestral_skip_share').length;
   const reminderOptIns = getEventsByType('reminder_opt_in').length;
   const donateInitiated = getEventsByType('donate_initiated').length;
   const donateSuccess = getEventsByType('donate_success').length;
+  const dashboardViews = getEventsByType('dashboard_view').length;
 
   return {
     totalUsers: uniqueUsers,
+    totalEvents: events.length,
+    
+    // Funnel counts
     ancestralStarts,
+    showMatches,
+    saveTemple,
+    whatsappShares,
+    skipShares,
+    reminderOptIns,
+    donateInitiated,
+    donateSuccess,
+    dashboardViews,
+    
+    // Conversion rates
     flowCompletionRate: ancestralStarts > 0 ? Math.round((saveTemple / ancestralStarts) * 100) : 0,
     whatsappShareRate: saveTemple > 0 ? Math.round((whatsappShares / saveTemple) * 100) : 0,
+    shareSkipRate: saveTemple > 0 ? Math.round((skipShares / saveTemple) * 100) : 0,
     reminderOptInRate: saveTemple > 0 ? Math.round((reminderOptIns / saveTemple) * 100) : 0,
     donationConversionRate: saveTemple > 0 ? Math.round((donateSuccess / saveTemple) * 100) : 0,
     donationInitiatedRate: saveTemple > 0 ? Math.round((donateInitiated / saveTemple) * 100) : 0,
+    
+    // Funnel visualization data
     funnel: {
       start: ancestralStarts,
       showMatches,
       saveTemple,
       whatsappShare: whatsappShares,
+      reminderOptIn: reminderOptIns,
       donate: donateSuccess,
     }
   };

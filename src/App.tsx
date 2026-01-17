@@ -21,6 +21,7 @@ import HowTo from "./pages/devotee/HowTo";
 import NotFound from "./pages/devotee/NotFound";
 import ComingSoon from "./pages/devotee/ComingSoon";
 import Dashboard from "./pages/devotee/Dashboard";
+import FamilyDashboard from "./pages/devotee/FamilyDashboard";
 
 // Devotee - Ancestral Temple Flow
 import AncestralIntro from "./pages/devotee/ancestral/AncestralIntro";
@@ -93,6 +94,7 @@ const App = () => (
                         <Route path="/temple/:id" element={<TempleDetails />} />
                         <Route path="/following" element={<Dashboard />} />
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/family-dashboard" element={<FamilyDashboard />} />
                         <Route path="/how-to" element={<HowTo />} />
                         
                         {/* Ancestral Temple Flow - MVP Primary */}

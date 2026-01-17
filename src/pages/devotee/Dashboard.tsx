@@ -1,78 +1,82 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TempleCard from '@/components/TempleCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Heart, Gift, Calendar, MapPin, ArrowRight, Bell, 
-  Loader2, Sparkles, TreePine, Check, Share2, Clock,
-  MessageCircle
-} from 'lucide-react';
-import { useAncestral } from '@/context/AncestralContext';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Heart, Gift, CalendarDays, Calendar, MapPin, ArrowRight, Clock, User, Mail, Phone, Loader2, Sparkles, TreePine } from 'lucide-react';
+import { useTemple } from '@/context/TempleContext';
 import { useDonation } from '@/context/DonationContext';
+import { useRecurringDonation } from '@/context/RecurringDonationContext';
+import { useBooking } from '@/context/BookingContext';
 import { useAuth } from '@/context/AuthContext';
+import { useAncestral } from '@/context/AncestralContext';
 import { format } from 'date-fns';
-import { trackEvent } from '@/utils/analytics';
 import { useToast } from '@/hooks/use-toast';
-
-// Mock upcoming festivals for Tamil Nadu temples
-const upcomingFestivals = [
-  { name: 'Thai Pongal', date: new Date('2025-01-14'), description: 'Harvest festival' },
-  { name: 'Maha Shivaratri', date: new Date('2025-02-26'), description: 'Night of Shiva' },
-  { name: 'Panguni Uthiram', date: new Date('2025-03-30'), description: 'Celestial wedding' },
-];
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { savedAncestralTemples, selectedTemple } = useAncestral();
+  const { temples, followedTemples, toggleFollowTemple, loading } = useTemple();
   const { donations } = useDonation();
-  const { user } = useAuth();
+  const { recurringDonations } = useRecurringDonation();
+  const { bookings } = useBooking();
+  const { user, logout } = useAuth();
+  const { savedAncestralTemples, selectedTemple } = useAncestral();
   const { toast } = useToast();
   
-  const [reminderEnabled, setReminderEnabled] = useState(() => {
-    return localStorage.getItem('festival_reminder_enabled') === 'true';
-  });
-  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [donationFilter, setDonationFilter] = useState<'all' | 'one-time' | 'recurring'>('all');
+  
+  // Profile form state
+  const [firstName, setFirstName] = useState(user?.name?.split(' ')[0] || '');
+  const [lastName, setLastName] = useState(user?.name?.split(' ').slice(1).join(' ') || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [phone, setPhone] = useState('');
 
-  // Get the saved family temple
+  const followedTempleDetails = temples.filter(t => followedTemples.includes(t.id));
   const familyTemple = selectedTemple || savedAncestralTemples[0] || null;
+  
+  // Combined donations for display
+  const allDonations = [
+    ...donations.map(d => ({ ...d, type: 'one-time' as const })),
+    ...recurringDonations.map(d => ({ 
+      ...d, 
+      type: 'recurring' as const,
+      amount: d.amount,
+      createdAt: d.createdAt
+    }))
+  ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const filteredDonations = donationFilter === 'all' 
+    ? allDonations 
+    : allDonations.filter(d => d.type === donationFilter);
 
-  // Recent donations for this user
-  const recentDonations = donations.slice(0, 3);
+  // Mock festivals data
+  const upcomingFestivals = [
+    { name: 'Pongal', date: new Date('2025-01-14'), temple: 'Meenakshi Amman Temple' },
+    { name: 'Maha Shivaratri', date: new Date('2025-02-26'), temple: 'Kashi Vishwanath Temple' },
+    { name: 'Holi', date: new Date('2025-03-14'), temple: 'All Temples' },
+    { name: 'Ram Navami', date: new Date('2025-04-06'), temple: 'Siddhivinayak Temple' },
+  ];
 
-  useEffect(() => {
-    trackEvent('page_view', { page: 'dashboard' });
-    // Simulate loading
-    const timer = setTimeout(() => setLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
 
-  const handleEnableReminders = () => {
-    trackEvent('reminder_opt_in', { templeName: familyTemple?.name });
-    localStorage.setItem('festival_reminder_enabled', 'true');
-    setReminderEnabled(true);
-    
-    // Open WhatsApp with pre-filled message
-    const message = encodeURIComponent(
-      `🔔 I want to receive festival reminders for ${familyTemple?.name || 'my Kuladeivam temple'} from Templo.`
-    );
-    window.open(`https://wa.me/?text=${message}`, '_blank');
-    
+  const handleSaveProfile = () => {
     toast({
-      title: "Reminders Enabled",
-      description: "You'll receive WhatsApp reminders for upcoming festivals.",
+      title: "Profile Updated",
+      description: "Your profile has been saved successfully.",
     });
   };
 
-  const handleShareTemple = () => {
-    if (!familyTemple) return;
-    
-    const message = encodeURIComponent(
-      `🙏 My family's Kuladeivam temple is ${familyTemple.name}, ${familyTemple.location}. Find your ancestral temple at ${window.location.origin}/ancestral`
-    );
-    window.open(`https://wa.me/?text=${message}`, '_blank');
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   if (loading) {
@@ -87,256 +91,330 @@ const Dashboard = () => {
     );
   }
 
-  // If no temple saved, show CTA to start ancestral flow
-  if (!familyTemple) {
-    return (
-      <div className="min-h-screen bg-background overflow-x-hidden">
-        <Header />
-        <main className="container mx-auto px-4 py-8 sm:py-12 max-w-2xl">
-          <div className="text-center mb-8">
-            <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20 px-3 py-1">
-              <Sparkles className="w-3 h-3 mr-1.5" />
-              Your Spiritual Home
-            </Badge>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              My Family Temple
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Connect with your ancestral roots
-            </p>
-          </div>
-
-          {/* Empty State Card */}
-          <Card className="p-8 text-center border-2 border-dashed border-primary/30 bg-primary/5">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
-              <TreePine className="h-10 w-10 text-primary" />
-            </div>
-            <h2 className="font-serif text-xl font-semibold text-foreground mb-3">
-              Find Your Kuladeivam
-            </h2>
-            <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
-              Discover your family's ancestral temple and receive festival reminders, make offerings, and stay connected.
-            </p>
-            <Link to="/ancestral/start">
-              <Button size="lg" className="rounded-full px-8 gap-2">
-                <TreePine className="w-5 h-5" />
-                Start Your Search
-              </Button>
-            </Link>
-          </Card>
-
-          {/* Trust Banner */}
-          <div className="mt-8 p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-            <p className="text-sm text-muted-foreground">
-              🛕 UPI supported • 📄 Receipt provided • 💳 Direct to temple
-            </p>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       
-      <main className="container mx-auto px-4 py-8 sm:py-12 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 sm:py-12 max-w-6xl">
         {/* Welcome Header */}
-        <div className="mb-8">
+        <div className="mb-10">
           <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20 px-3 py-1">
-            <Heart className="w-3 h-3 mr-1.5 fill-primary" />
-            Your Kuladeivam
+            <Sparkles className="w-3 h-3 mr-1.5" />
+            Your Spiritual Journey
           </Badge>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-2">
-            My Family Temple
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-3">
+            {user ? `Namaste, ${user.name}` : 'My Dashboard'}
           </h1>
-          <p className="text-muted-foreground">
-            {user ? `Welcome back, ${user.name}` : 'Stay connected with your roots'}
+          <p className="text-muted-foreground text-lg">
+            Manage your temple connections, donations, and bookings
           </p>
         </div>
 
-        {/* Saved Temple Card */}
-        <Card className="mb-6 overflow-hidden border-primary/20">
-          <div className="h-32 bg-gradient-to-br from-primary/20 to-primary/5 relative">
-            {familyTemple.image && (
-              <img 
-                src={familyTemple.image} 
-                alt={familyTemple.name}
-                className="w-full h-full object-cover opacity-60"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/placeholder.svg';
-                }}
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
+          <div className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            <TabsList className="inline-flex h-auto p-1.5 bg-muted/50 rounded-full w-max min-w-full sm:min-w-0">
+              <TabsTrigger value="overview" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Overview</TabsTrigger>
+              <TabsTrigger value="family" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Family Temple</TabsTrigger>
+              <TabsTrigger value="temples" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">My Temples</TabsTrigger>
+              <TabsTrigger value="festivals" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Festivals</TabsTrigger>
+              <TabsTrigger value="settings" className="rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm whitespace-nowrap">Settings</TabsTrigger>
+            </TabsList>
           </div>
-          <CardContent className="p-6 -mt-8 relative">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h2 className="font-serif text-xl font-semibold text-foreground mb-1">
-                  {familyTemple.name}
-                </h2>
-                <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-                  <MapPin className="w-4 h-4" />
-                  {familyTemple.location}
-                </div>
-              </div>
-              <Badge className="bg-green-100 text-green-800 border-green-200">
-                <Check className="w-3 h-3 mr-1" />
-                Saved
-              </Badge>
-            </div>
-            
-            {familyTemple.primaryDeity && (
-              <p className="text-sm text-primary mb-4">
-                Primary Deity: {familyTemple.primaryDeity}
-              </p>
-            )}
 
-            <div className="flex gap-3">
-              <Link to="/donate" className="flex-1">
-                <Button className="w-full rounded-full gap-2">
-                  <Gift className="w-4 h-4" />
-                  Donate Now
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-8">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Family Temple Card */}
+              {familyTemple && (
+                <div 
+                  className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                  onClick={() => handleTabChange('family')}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <TreePine className="w-6 h-6 text-primary" />
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <p className="text-lg font-semibold text-foreground mb-1 line-clamp-1">{familyTemple.name}</p>
+                  <p className="text-muted-foreground text-sm">Family Temple</p>
+                </div>
+              )}
+
+              <div 
+                className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                onClick={() => handleTabChange('temples')}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Heart className="w-6 h-6 text-primary" />
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-primary/50 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                </div>
+                <p className="text-3xl font-bold text-foreground mb-1">{followedTemples.length}</p>
+                <p className="text-muted-foreground">Temples Following</p>
+              </div>
+
+              <div 
+                className="group cursor-pointer p-6 rounded-2xl bg-gradient-to-br from-accent/50 to-accent/20 border border-accent/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                onClick={() => handleTabChange('festivals')}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/60 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Calendar className="w-6 h-6 text-accent-foreground" />
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-accent-foreground/50 group-hover:text-accent-foreground group-hover:translate-x-1 transition-all" />
+                </div>
+                <p className="text-3xl font-bold text-foreground mb-1">{upcomingFestivals.length}</p>
+                <p className="text-muted-foreground">Upcoming Festivals</p>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="space-y-4">
+              <h2 className="font-serif text-xl font-semibold text-foreground">Quick Actions</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <Link to="/temples" className="group">
+                  <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                      <MapPin className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Find Temples</span>
+                  </div>
+                </Link>
+                <Link to="/ancestral" className="group">
+                  <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                      <TreePine className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Ancestral Temple</span>
+                  </div>
+                </Link>
+                <Link to="/family-dashboard" className="group">
+                  <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                      <Gift className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Family Dashboard</span>
+                  </div>
+                </Link>
+                <button onClick={() => handleTabChange('festivals')} className="group">
+                  <div className="p-5 rounded-xl bg-card border border-border/50 hover:border-primary/30 hover:shadow-md transition-all text-center w-full">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                      <Calendar className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">Festivals</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Family Temple Tab */}
+          <TabsContent value="family" className="space-y-6">
+            {familyTemple ? (
+              <div className="max-w-2xl mx-auto">
+                <Card className="overflow-hidden border-primary/20">
+                  <div className="h-40 bg-gradient-to-br from-primary/20 to-primary/5 relative">
+                    {familyTemple.image && (
+                      <img 
+                        src={familyTemple.image} 
+                        alt={familyTemple.name}
+                        className="w-full h-full object-cover opacity-60"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/placeholder.svg';
+                        }}
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
+                  </div>
+                  <CardContent className="p-6 -mt-12 relative">
+                    <Badge className="mb-4 bg-green-100 text-green-800 border-green-200">
+                      ✓ Your Kuladeivam
+                    </Badge>
+                    <h2 className="font-serif text-2xl font-semibold text-foreground mb-2">
+                      {familyTemple.name}
+                    </h2>
+                    <div className="flex items-center gap-1.5 text-muted-foreground mb-4">
+                      <MapPin className="w-4 h-4" />
+                      {familyTemple.location}
+                    </div>
+                    {familyTemple.primaryDeity && (
+                      <p className="text-primary mb-6">Primary Deity: {familyTemple.primaryDeity}</p>
+                    )}
+                    <div className="flex gap-3">
+                      <Link to={`/donate/${familyTemple.id}`} className="flex-1">
+                        <Button className="w-full rounded-full gap-2">
+                          <Gift className="w-4 h-4" />
+                          Donate Now
+                        </Button>
+                      </Link>
+                      <Link to="/family-dashboard">
+                        <Button variant="outline" className="rounded-full">
+                          View Details
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="text-center py-16 px-4">
+                <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
+                  <TreePine className="w-8 h-8 text-muted-foreground/50" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2">No family temple saved</h3>
+                <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+                  Find and save your ancestral Kuladeivam temple
+                </p>
+                <Link to="/ancestral/start">
+                  <Button className="rounded-full gap-2">
+                    Find Your Kuladeivam
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* My Temples Tab */}
+          <TabsContent value="temples" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-serif text-xl font-semibold text-foreground">Temples You Follow</h2>
+                <p className="text-muted-foreground text-sm mt-1">Stay connected with your favorite temples</p>
+              </div>
+              <Link to="/temples">
+                <Button variant="outline" size="sm" className="rounded-full gap-2">
+                  <MapPin className="w-4 h-4" />
+                  Find More
                 </Button>
               </Link>
-              <Button 
-                variant="outline" 
-                className="rounded-full"
-                onClick={handleShareTemple}
-              >
-                <Share2 className="w-4 h-4" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Upcoming Festivals */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-foreground flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                Upcoming Festivals
-              </h3>
             </div>
             
-            <div className="space-y-3 mb-4">
-              {upcomingFestivals.slice(0, 3).map((festival, index) => (
-                <div 
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-xl bg-muted/50"
-                >
-                  <div>
-                    <p className="font-medium text-foreground">{festival.name}</p>
-                    <p className="text-xs text-muted-foreground">{festival.description}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium text-primary">
-                      {format(festival.date, 'MMM d')}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {format(festival.date, 'yyyy')}
-                    </p>
-                  </div>
+            {followedTempleDetails.length === 0 ? (
+              <div className="text-center py-16 px-4">
+                <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-muted-foreground/50" />
                 </div>
-              ))}
-            </div>
-
-            {!reminderEnabled ? (
-              <Button 
-                onClick={handleEnableReminders}
-                variant="outline" 
-                className="w-full rounded-full gap-2 border-primary/30 text-primary hover:bg-primary/10"
-              >
-                <Bell className="w-4 h-4" />
-                Remind Me on WhatsApp
-              </Button>
+                <h3 className="font-semibold text-foreground mb-2">No temples followed yet</h3>
+                <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+                  Explore temples and follow the ones that resonate with your faith
+                </p>
+                <Link to="/temples">
+                  <Button className="rounded-full gap-2">
+                    Explore Temples
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
             ) : (
-              <div className="flex items-center justify-center gap-2 text-green-600 text-sm">
-                <Check className="w-4 h-4" />
-                WhatsApp reminders enabled
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {followedTempleDetails.map(temple => (
+                  <TempleCard key={temple.id} temple={temple} />
+                ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </TabsContent>
 
-        {/* Recent Activity */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary" />
-              Recent Activity
-            </h3>
-            
-            <div className="space-y-3">
-              {/* Temple saved activity */}
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <Check className="w-5 h-5 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">Temple Saved</p>
-                  <p className="text-xs text-muted-foreground">{familyTemple.name}</p>
-                </div>
-              </div>
-
-              {/* Reminder status */}
-              {reminderEnabled && (
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Bell className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">Reminders Enabled</p>
-                    <p className="text-xs text-muted-foreground">Festival notifications active</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Recent donations */}
-              {recentDonations.map((donation, index) => (
-                <Link 
-                  key={index} 
-                  to={`/donate/receipt/${donation.id}`}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Gift className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">
-                      Donated ₹{donation.amount}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {format(new Date(donation.createdAt), 'MMM d, yyyy')}
-                    </p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                </Link>
-              ))}
-
-              {recentDonations.length === 0 && !reminderEnabled && (
-                <div className="text-center py-4">
-                  <p className="text-sm text-muted-foreground">
-                    No donations yet. Support your temple with an offering.
-                  </p>
-                </div>
-              )}
+          {/* Festivals Tab */}
+          <TabsContent value="festivals" className="space-y-6">
+            <div>
+              <h2 className="font-serif text-xl font-semibold text-foreground">Upcoming Festivals</h2>
+              <p className="text-muted-foreground text-sm mt-1">Don't miss important celebrations</p>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Trust Banner */}
-        <div className="p-4 rounded-xl bg-primary/5 border border-primary/20 text-center">
-          <p className="text-sm text-foreground font-medium mb-1">
-            100% Direct to Temple
-          </p>
-          <p className="text-xs text-muted-foreground">
-            💳 UPI supported • 📄 Receipt provided • 🛕 Verified temples
-          </p>
-        </div>
+            <div className="space-y-3">
+              {upcomingFestivals.map((festival, index) => (
+                <div 
+                  key={index}
+                  className="flex items-center justify-between p-4 bg-card rounded-xl border border-border/50"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">{festival.name}</p>
+                      <p className="text-sm text-muted-foreground">{festival.temple}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-primary">{format(festival.date, 'MMM d')}</p>
+                    <p className="text-xs text-muted-foreground">{format(festival.date, 'yyyy')}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <div>
+              <h2 className="font-serif text-xl font-semibold text-foreground">Profile Settings</h2>
+              <p className="text-muted-foreground text-sm mt-1">Manage your account details</p>
+            </div>
+
+            <Card>
+              <CardContent className="p-6 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Enter first name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Enter last name"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter email"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Enter phone number"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <Button onClick={handleSaveProfile} className="rounded-full">
+                    Save Changes
+                  </Button>
+                  {user && (
+                    <Button variant="outline" onClick={handleLogout} className="rounded-full text-destructive hover:text-destructive">
+                      Sign Out
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
       
       <Footer />

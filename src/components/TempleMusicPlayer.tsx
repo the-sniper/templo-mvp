@@ -76,7 +76,7 @@ const TempleMusicPlayer: React.FC<TempleMusicPlayerProps> = ({ templeName, track
 
   // Simulate progress for demo
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isPlaying) {
       interval = setInterval(() => {
         setProgress((prev) => {

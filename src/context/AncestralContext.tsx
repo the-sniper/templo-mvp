@@ -86,7 +86,7 @@ const dummySuggestedTemples: SuggestedTemple[] = [
   {
     id: 'kurichi-mariyamman',
     name: 'Kurichi Mariyamman Temple',
-    location: 'Kurichi, Thanjavur, Tamil Nadu',
+    location: 'Kurichi, Nagapattinam, Tamil Nadu',
     distance: '5 km from your village',
     image: '/temples/kurichi-mariyamman.jpg',
     matchPercentage: 94,

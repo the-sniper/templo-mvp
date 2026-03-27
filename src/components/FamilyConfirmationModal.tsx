@@ -27,17 +27,7 @@ const FamilyConfirmationModal = ({
   const [shared, setShared] = useState(false);
 
   const generateWhatsAppMessage = () => {
-    const message = `🙏 Templo found our possible Kuladeivam temple:
-
-🛕 *${templeName}*
-📍 ${templeLocation}
-
-Is this correct? Please reply:
-✅ Yes
-❌ No  
-🤔 Not sure
-
-Find your ancestral temple: ${window.location.origin}/ancestral`;
+    const message = `Templo found our possible Kuladeivam temple:\n\n${templeName}\n${templeLocation}\n\nIs this correct? Please reply:\nYes\nNo\nNot sure\n\nFind your ancestral temple: ${window.location.origin}/ancestral`;
 
     return encodeURIComponent(message);
   };

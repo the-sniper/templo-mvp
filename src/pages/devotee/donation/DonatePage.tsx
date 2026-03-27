@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTemple } from '@/context/TempleContext';
+import { useAncestral } from '@/context/AncestralContext';
 import { useDonation } from '@/context/DonationContext';
 import { useToast } from '@/hooks/use-toast';
 import { trackEvent } from '@/utils/analytics';
@@ -27,10 +28,28 @@ const DonatePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { getTempleById } = useTemple();
+  const { savedAncestralTemples, selectedTemple } = useAncestral();
   const { addDonation } = useDonation();
   const { toast } = useToast();
   
-  const temple = getTempleById(id || '');
+  // Try regular temples first, then ancestral temples
+  const regularTemple = getTempleById(id || '');
+  const ancestralTemple = !regularTemple 
+    ? savedAncestralTemples.find(t => t.id === id) || (selectedTemple?.id === id ? selectedTemple : null)
+    : null;
+  
+  const temple = regularTemple || (ancestralTemple ? {
+    id: ancestralTemple.id,
+    name: ancestralTemple.name,
+    location: ancestralTemple.location,
+    city: '',
+    state: '',
+    description: ancestralTemple.description || '',
+    image: ancestralTemple.image,
+    deity: ancestralTemple.primaryDeity || '',
+    poojaTimings: [],
+    announcements: [],
+  } : null);
   
   const [amount, setAmount] = useState<number>(101);
   const [customAmount, setCustomAmount] = useState('');

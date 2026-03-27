@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Heart, MessageCircle, Bell, CreditCard, Receipt, CheckCircle2 } from 'lucide-react';
+import { Search, Heart, Users, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
@@ -15,76 +15,82 @@ const AncestralIntro = () => {
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-8 sm:py-12">
         <div className="mx-auto max-w-2xl text-center">
           {/* Decorative Icon */}
-          <div className="mx-auto mb-6 sm:mb-8 flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full bg-primary/10">
+          <div className="mx-auto mb-6 sm:mb-8 flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full bg-muted">
             <span className="text-5xl sm:text-6xl">🛕</span>
           </div>
 
           <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-            கூலதெய்வம் • Kuladeivam
+            Help Us Build Together
           </Badge>
 
           <h1 className="mb-4 font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
             Find Your Ancestral Temple
           </h1>
 
-          <p className="mb-8 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg mx-auto">
-            Discover your family's Kuladeivam, receive festival alerts, and make offerings 
-            to the temple that has blessed your family for generations.
+          <p className="mb-10 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            Every family has a sacred connection to their ancestral temple. We're building India's
+            first comprehensive ancestral temple database — and we need your help! Share your
+            roots and help us map family lineages to temples across the nation.
           </p>
+
+          {/* 3-Step Cards */}
+          <div className="flex flex-wrap justify-center gap-4 mb-10">
+            {[
+              {
+                icon: <Search className="h-6 w-6 text-muted-foreground" />,
+                title: 'Share Your Roots',
+                desc: 'Tell us about your native village and family details',
+              },
+              {
+                icon: <Heart className="h-6 w-6 text-muted-foreground" />,
+                title: 'Browse & Select',
+                desc: 'Explore temples or add your own ancestral temple',
+              },
+              {
+                icon: <Users className="h-6 w-6 text-muted-foreground" />,
+                title: 'Build Together',
+                desc: 'Help future devotees find their heritage',
+              },
+            ].map((card) => (
+              <div
+                key={card.title}
+                className="w-full sm:w-[200px] p-6 rounded-2xl bg-card border border-border/50 flex flex-col items-center text-center"
+              >
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
+                  {card.icon}
+                </div>
+                <h3 className="font-semibold text-foreground text-sm mb-1">{card.title}</h3>
+                <p className="text-xs text-muted-foreground">{card.desc}</p>
+              </div>
+            ))}
+          </div>
 
           {/* Primary CTA */}
           <Link to="/ancestral/start">
-            <Button 
-              size="lg" 
-              className="rounded-full px-10 h-14 text-lg font-medium shadow-lg shadow-primary/20 gap-2"
+            <Button
+              size="lg"
+              className="rounded-full px-12 h-14 text-lg font-medium shadow-lg shadow-primary/20 gap-2"
               onClick={() => trackEvent('ancestral_start')}
             >
-              <Search className="h-5 w-5" />
-              Find My Kuladeivam
+              Start Your Journey
             </Button>
           </Link>
 
-          {/* Secondary CTA */}
-          <div className="mt-4">
-            <Link to="/temples" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              or explore temples →
-            </Link>
-          </div>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Takes about 3-5 minutes • More details = better future matching
+          </p>
 
-          {/* Trust Section */}
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4">
-            <div className="p-4 rounded-2xl bg-card border border-border/50 flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <MessageCircle className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">Tamil Support</span>
-              <span className="text-xs text-muted-foreground">தமிழில் உதவி</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-card border border-border/50 flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <CreditCard className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">UPI Donations</span>
-              <span className="text-xs text-muted-foreground">Direct to temple</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-card border border-border/50 flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <Receipt className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">Receipt Provided</span>
-              <span className="text-xs text-muted-foreground">For tax purposes</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-card border border-border/50 flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <Heart className="h-5 w-5 text-primary" />
-              </div>
-              <span className="text-sm font-medium text-foreground">Family Sharing</span>
-              <span className="text-xs text-muted-foreground">WhatsApp confirmation</span>
-            </div>
+          {/* Why Section */}
+          <div className="mt-10 p-5 rounded-2xl bg-card border border-border/50 text-left max-w-lg mx-auto">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">Why we're collecting this data: </span>
+              We're building an AI-powered matching system that will automatically
+              connect families to their ancestral temples. Every submission helps train our system and benefits
+              devotees across India.
+            </p>
           </div>
 
           {/* How It Works */}
@@ -113,8 +119,8 @@ const AncestralIntro = () => {
           {/* Bottom CTA */}
           <div className="mt-10">
             <Link to="/ancestral/start">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="rounded-full px-8 h-12 gap-2"
                 onClick={() => trackEvent('ancestral_start')}
               >

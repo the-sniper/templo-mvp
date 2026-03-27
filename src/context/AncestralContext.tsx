@@ -1,32 +1,21 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface AncestralFormData {
-  // Core Location (Required)
   nativeVillage: string;
   district: string;
   state: string;
-  
-  // Genealogical Data (Optional - for AI training)
   familySurname: string;
   gotra: string;
   caste: string;
   motherTongue: string;
-  
-  // Temple Hints (Optional)
   knownTempleName: string;
   deityName: string;
   nearbyLandmarks: string;
-  
-  // Additional Context (Optional)
   familyMemberWhoKnows: string;
   approximateTempleAge: string;
   festivalsCelebrated: string[];
   additionalNotes: string;
-  
-  // Supporting Documents
   photoFile: File | null;
-  
-  // Meta
   notSure: boolean;
   consentToStore: boolean;
 }
@@ -37,6 +26,8 @@ export interface SuggestedTemple {
   location: string;
   distance: string;
   image: string;
+  matchPercentage: number;
+  matchReason: string;
 }
 
 export interface SavedAncestralTemple {
@@ -91,21 +82,15 @@ const defaultFormData: AncestralFormData = {
   consentToStore: true,
 };
 
-// Dummy suggested temples for browsing (filtered by state)
 const dummySuggestedTemples: SuggestedTemple[] = [
   {
-    id: 'ancestor-1',
-    name: 'Sri Venkateshwara Temple',
-    location: 'Tirumala, Andhra Pradesh',
-    distance: '12 km from your village',
-    image: '/temples/tirupati.jpg',
-  },
-  {
-    id: 'ancestor-2',
-    name: 'Kashi Vishwanath Temple',
-    location: 'Varanasi, Uttar Pradesh',
-    distance: '45 km from your village',
-    image: '/temples/kashi.jpg',
+    id: 'kurichi-mariyamman',
+    name: 'Kurichi Mariyamman Temple',
+    location: 'Kurichi, Thanjavur, Tamil Nadu',
+    distance: '5 km from your village',
+    image: '/temples/kurichi-mariyamman.jpg',
+    matchPercentage: 94,
+    matchReason: 'Matches district + deity + village proximity',
   },
   {
     id: 'ancestor-3',
@@ -113,6 +98,17 @@ const dummySuggestedTemples: SuggestedTemple[] = [
     location: 'Madurai, Tamil Nadu',
     distance: '28 km from your village',
     image: '/temples/meenakshi.jpg',
+    matchPercentage: 72,
+    matchReason: 'Matches state + deity type',
+  },
+  {
+    id: 'ancestor-1',
+    name: 'Sri Venkateshwara Temple',
+    location: 'Tirumala, Andhra Pradesh',
+    distance: '12 km from your village',
+    image: '/temples/tirupati.jpg',
+    matchPercentage: 58,
+    matchReason: 'Matches family surname records',
   },
   {
     id: 'ancestor-4',
@@ -120,13 +116,8 @@ const dummySuggestedTemples: SuggestedTemple[] = [
     location: 'Mumbai, Maharashtra',
     distance: '15 km from your village',
     image: '/temples/siddhivinayak.jpg',
-  },
-  {
-    id: 'ancestor-5',
-    name: 'Golden Temple',
-    location: 'Amritsar, Punjab',
-    distance: '20 km from your village',
-    image: '/temples/golden-temple.jpg',
+    matchPercentage: 41,
+    matchReason: 'Partial location match',
   },
   {
     id: 'ancestor-6',
@@ -134,6 +125,8 @@ const dummySuggestedTemples: SuggestedTemple[] = [
     location: 'Puri, Odisha',
     distance: '35 km from your village',
     image: '/temples/jagannath.jpg',
+    matchPercentage: 23,
+    matchReason: 'Nearby region',
   },
 ];
 
@@ -160,7 +153,6 @@ export const AncestralProvider: React.FC<{ children: ReactNode }> = ({ children 
   const saveSearchAttempt = (attempt: AncestralSearchAttempt) => {
     const updated = [...searchAttempts, attempt];
     setSearchAttempts(updated);
-    // Store without photoFile (can't serialize File object)
     const attemptForStorage = {
       ...attempt,
       formData: { ...attempt.formData, photoFile: null }
